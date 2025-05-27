@@ -1,8 +1,6 @@
 ﻿using System.Text;
-using BeYou.Utils;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-using BeYou.Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
 using BeYou.Domain.Exceptions;
 using BeYou.Application.Dtos.Request;
@@ -12,6 +10,7 @@ using BeYou.Application.Core.Interfaces;
 using BeYou.Application.Services.Interfaces;
 using BeYou.Application.Dtos.Response.Authentication;
 using BeYou.Application.Configuration.Authentication;
+using BeYou.Domain.Models;
 
 namespace BeYou.Application.Services.Implementations;
 

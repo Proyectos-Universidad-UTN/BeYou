@@ -1,5 +1,5 @@
-﻿using BaseReservation.Application.Dtos.Request;
-using BaseReservation.Application.Dtos.Response.Authentication;
+﻿using BeYou.Application.Dtos.Request;
+using BeYou.Application.Dtos.Response.Authentication;
 
 namespace BeYou.Application.Services.Interfaces;
 

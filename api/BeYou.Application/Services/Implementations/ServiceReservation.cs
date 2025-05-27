@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using System.Globalization;
-using BeYou.Utils;
-using BeYou.Infrastructure;
 using BeYou.Application.Enums;
 using BeYou.Domain.Exceptions;
-using BeYou.Infrastructure.Enums;
 using BeYou.Application.Dtos.Request;
 using BeYou.Application.Dtos.Response;
 using BeYou.Domain.Core.Specifications;
 using BeYou.Application.Core.Interfaces;
 using BeYou.Application.Services.Interfaces;
+using BeYou.Domain.Models;
 
 namespace BeYou.Application.Services.Implementations;
 

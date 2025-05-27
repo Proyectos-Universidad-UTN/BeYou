@@ -1,4 +1,4 @@
-﻿using BaseReservation.Application.Dtos.Response;
+﻿using BeYou.Application.Dtos.Response;
 
 namespace BeYou.Application.Services.Interfaces;
 

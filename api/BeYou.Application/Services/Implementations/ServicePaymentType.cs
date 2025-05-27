@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using BeYou.Infrastructure;
 using BeYou.Application.Dtos.Response;
 using BeYou.Application.Core.Interfaces;
 using BeYou.Application.Services.Interfaces;
+using BeYou.Domain.Models;
 
 namespace BeYou.Application.Services.Implementations;
 

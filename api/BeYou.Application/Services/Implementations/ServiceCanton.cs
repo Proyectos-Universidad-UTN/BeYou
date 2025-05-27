@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using BeYou.Infrastructure;
 using BeYou.Domain.Exceptions;
 using BeYou.Application.Dtos.Response;
 using BeYou.Domain.Core.Specifications;
 using BeYou.Application.Core.Interfaces;
 using BeYou.Application.Services.Interfaces;
+using BeYou.Domain.Models;
 
 
 namespace BeYou.Application.Services.Implementations;
