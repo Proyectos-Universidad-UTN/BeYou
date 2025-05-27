@@ -12,4 +12,4 @@ public record RequestInventoryProductDto : RequestBaseDto
 
     public decimal Maximum { get; set; }
 }
-//*Prueba
+
