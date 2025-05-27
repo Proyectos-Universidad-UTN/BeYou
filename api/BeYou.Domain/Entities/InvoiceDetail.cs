@@ -1,14 +1,12 @@
-﻿using BeYou.Domain.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("InvoiceDetail")]
-[Index("InvoiceId", Name = "IX_InvoiceDetail_InvoiceId")]
-[Index("ServiceId", Name = "IX_InvoiceDetail_ServiceId")]
-public partial class InvoiceDetail : BaseSimpleDto
+public partial class InvoiceDetail
 {
+    public long Id { get; set; }
+
     public long InvoiceId { get; set; }
 
     public long? ServiceId { get; set; }
@@ -19,30 +17,19 @@ public partial class InvoiceDetail : BaseSimpleDto
 
     public short Quantity { get; set; }
 
-    [Column(TypeName = "money")]
     public decimal UnitPrice { get; set; }
 
-    [Column(TypeName = "money")]
     public decimal SubTotal { get; set; }
 
-    [Column(TypeName = "money")]
     public decimal Tax { get; set; }
 
-    [Column(TypeName = "money")]
     public decimal Total { get; set; }
 
-    [InverseProperty("InvoiceDetailIdNavigation")]
+    public virtual Invoice Invoice { get; set; } = null!;
+
     public virtual ICollection<InvoiceDetailProduct> InvoiceDetailProducts { get; set; } = new List<InvoiceDetailProduct>();
 
-    [ForeignKey("InvoiceId")]
-    [InverseProperty("InvoiceDetails")]
-    public virtual Invoice InvoiceIdNavigation { get; set; } = null!;
+    public virtual Product? Product { get; set; }
 
-    [ForeignKey("ProductId")]
-    [InverseProperty("InvoiceDetails")]
-    public virtual Product? ProductIdNavigation { get; set; }
-
-    [ForeignKey("ServiceId")]
-    [InverseProperty("InvoiceDetails")]
-    public virtual Service? ServiceIdNavigation { get; set; }
+    public virtual Service? Service { get; set; }
 }

@@ -1,32 +1,33 @@
-﻿using BeYou.Domain.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-
-[Table("TokenMaster")]
-[Index("UserId", Name = "IX_TokenMaster_UserId")]
-public partial class TokenMaster : BaseEntity
+public partial class TokenMaster
 {
-    [StringLength(250)]
+    public long Id { get; set; }
+
     public string Token { get; set; } = null!;
 
-    [StringLength(250)]
     public string JwtId { get; set; } = null!;
 
-    [Column(TypeName = "datetime")]
     public DateTime CreatedAt { get; set; }
 
-    [Column(TypeName = "datetime")]
     public DateTime ExpireAt { get; set; }
 
     public bool Used { get; set; }
 
     public long UserId { get; set; }
 
-    [ForeignKey("UserId")]
-    [InverseProperty("TokenMasters")]
-    public virtual User UserIdNavigation { get; set; } = null!;
+    public bool Active { get; set; }
+
+    public DateTime Created { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
+
+    public DateTime? Updated { get; set; }
+
+    public string? UpdatedBy { get; set; }
+
+    public virtual User User { get; set; } = null!;
 }

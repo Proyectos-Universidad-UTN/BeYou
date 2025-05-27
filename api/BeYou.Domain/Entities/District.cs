@@ -1,32 +1,23 @@
-﻿using BeYou.Domain.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("District")]
-[Index("CantonId", Name = "IX_District_CantonId")]
-public partial class District : BaseSimpleDto
+public partial class District
 {
-    [StringLength(50)]
+    public long Id { get; set; }
+
     public string Name { get; set; } = null!;
 
     public long CantonId { get; set; }
 
-    [InverseProperty("DistrictIdNavigation")]
-    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
-
-    [ForeignKey("CantonId")]
-    [InverseProperty("Districts")]
-    public virtual Canton CantonIdNavigation { get; set; } = null!;
-
-    [InverseProperty("DistrictIdNavigation")]
-    public virtual ICollection<Vendor> Vendors { get; set; } = new List<Vendor>();
-
-    [InverseProperty("DistrictIdNavigation")]
     public virtual ICollection<Branch> Branches { get; set; } = new List<Branch>();
 
-    [InverseProperty("DistrictIdNavigation")]
+    public virtual Canton Canton { get; set; } = null!;
+
+    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
+
     public virtual ICollection<User> Users { get; set; } = new List<User>();
+
+    public virtual ICollection<Vendor> Vendors { get; set; } = new List<Vendor>();
 }

@@ -1,17 +1,12 @@
-﻿using BeYou.Domain.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Xml.Linq;
 
 namespace BeYou.Domain.Models;
 
-[Table("BranchHoliday")]
-[Index("HolidayId", Name = "IX_BranchHoliday_HolidayId")]
-[Index("BranchId", Name = "IX_BranchHoliday_BranchId")]
-public partial class BranchHoliday : BaseSimpleDto
+public partial class BranchHoliday
 {
+    public long Id { get; set; }
+
     public long HolidayId { get; set; }
 
     public long BranchId { get; set; }
@@ -20,11 +15,7 @@ public partial class BranchHoliday : BaseSimpleDto
 
     public DateOnly Date { get; set; }
 
-    [ForeignKey("HolidayId")]
-    [InverseProperty("BranchHolidays")]
-    public virtual Holiday HolidayIdNavigation { get; set; } = null!;
+    public virtual Branch Branch { get; set; } = null!;
 
-    [ForeignKey("BranchId")]
-    [InverseProperty("BranchHolidays")]
-    public virtual Branch BranchIdNavigation { get; set; } = null!;
+    public virtual Holiday Holiday { get; set; } = null!;
 }

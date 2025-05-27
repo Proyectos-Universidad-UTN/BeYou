@@ -1,18 +1,25 @@
-﻿using BeYou.Domain.Core.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("Category")]
-public partial class Category : BaseEntity
+public partial class Category
 {
-    [StringLength(50)]
+    public long Id { get; set; }
+
     public string Code { get; set; } = null!;
 
-    [StringLength(50)]
     public string Name { get; set; } = null!;
 
-    [InverseProperty("CategoryIdNavigation")]
+    public DateTime Created { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
+
+    public DateTime? Updated { get; set; }
+
+    public string? UpdatedBy { get; set; }
+
+    public bool Active { get; set; }
+
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }

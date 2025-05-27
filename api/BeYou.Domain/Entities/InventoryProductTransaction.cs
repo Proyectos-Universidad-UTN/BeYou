@@ -1,23 +1,27 @@
-﻿using BeYou.Domain.Core.Models;
-using BeYou.Domain.Enums;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
-
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("InventoryProductTransaction")]
-[Index("InventoryProductId", Name = "IX_InventoryProductTransaction_InventoryProductId")]
-public partial class InventoryProductTransaction : BaseEntity
+public partial class InventoryProductTransaction
 {
+    public long Id { get; set; }
+
     public long InventoryProductId { get; set; }
 
-    public TransactionTypeInventory TransactionType { get; set; }
+    public string TransactionType { get; set; } = null!;
 
-    [Column(TypeName = "decimal(18, 2)")]
     public decimal Quantity { get; set; }
 
-    [ForeignKey("InventoryProductId")]
-    [InverseProperty("InventoryProductTransactions")]
-    public virtual InventoryProduct InventoryProductIdNavigation { get; set; } = null!;
+    public DateTime Created { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
+
+    public DateTime? Updated { get; set; }
+
+    public string? UpdatedBy { get; set; }
+
+    public bool Active { get; set; }
+
+    public virtual InventoryProduct InventoryProduct { get; set; } = null!;
 }

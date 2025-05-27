@@ -1,17 +1,15 @@
-﻿using BeYou.Domain.Core.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("TypeService")]
-public partial class TypeService : BaseSimpleDto
+public partial class TypeService
 {
-    [StringLength(50)]
+    public long Id { get; set; }
+
     public string Name { get; set; } = null!;
 
     public TimeOnly BaseDuration { get; set; }
 
-    [InverseProperty("TypeServiceIdNavigation")]
     public virtual ICollection<Service> Services { get; set; } = new List<Service>();
 }

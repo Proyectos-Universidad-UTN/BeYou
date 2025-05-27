@@ -1,18 +1,25 @@
-﻿using BeYou.Domain.Core.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("Role")]
-public partial class Role : BaseEntity
+public partial class Role
 {
-    [StringLength(50)]
+    public long Id { get; set; }
+
     public string Description { get; set; } = null!;
 
-    [StringLength(50)]
     public string Type { get; set; } = null!;
 
-    [InverseProperty("RoleIdNavigation")]
+    public DateTime Created { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
+
+    public DateTime? Updated { get; set; }
+
+    public string? UpdatedBy { get; set; }
+
+    public bool Active { get; set; }
+
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

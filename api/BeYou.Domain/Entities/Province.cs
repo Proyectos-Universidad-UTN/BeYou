@@ -1,15 +1,13 @@
-﻿using BeYou.Domain.Core.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("Province")]
-public partial class Province : BaseSimpleDto
+public partial class Province
 {
-    [StringLength(50)]
+    public long Id { get; set; }
+
     public string Name { get; set; } = null!;
 
-    [InverseProperty("ProvinceIdNavigation")]
     public virtual ICollection<Canton> Cantons { get; set; } = new List<Canton>();
 }

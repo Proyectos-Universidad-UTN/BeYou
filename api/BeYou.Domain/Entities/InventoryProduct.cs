@@ -1,34 +1,37 @@
-﻿using BeYou.Domain.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+
 namespace BeYou.Domain.Models;
 
-[Table("InventoryProduct")]
-[Index("InventoryId", Name = "IX_InventoryProduct_InventoryId")]
-[Index("ProductId", Name = "IX_InventoryProduct_ProductId")]
-public partial class InventoryProduct : BaseEntity
+public partial class InventoryProduct
 {
+    public long Id { get; set; }
+
     public long InventoryId { get; set; }
 
     public long ProductId { get; set; }
 
-    [Column(TypeName = "decimal(18, 2)")]
     public decimal Assignable { get; set; }
 
-    [Column(TypeName = "decimal(18, 2)")]
     public decimal Mininum { get; set; }
 
-    [Column(TypeName = "decimal(18, 2)")]
     public decimal Maximum { get; set; }
 
-    [ForeignKey("InventoryId")]
-    [InverseProperty("InventoryProducts")]
-    public virtual Inventory InventoryIdNavigation { get; set; } = null!;
+    public long IdProducto { get; set; }
 
-    [ForeignKey("IdProducto")]
-    [InverseProperty("InventoryProducts")]
-    public virtual Product ProductIdNavigation { get; set; } = null!;
+    public DateTime Created { get; set; }
 
-    [InverseProperty("InventoryProductIdNavigation")]
+    public string CreatedBy { get; set; } = null!;
+
+    public DateTime? Updated { get; set; }
+
+    public string? UpdatedBy { get; set; }
+
+    public bool Active { get; set; }
+
+    public virtual Product IdProductoNavigation { get; set; } = null!;
+
+    public virtual Inventory Inventory { get; set; } = null!;
+
     public virtual ICollection<InventoryProductTransaction> InventoryProductTransactions { get; set; } = new List<InventoryProductTransaction>();
 }

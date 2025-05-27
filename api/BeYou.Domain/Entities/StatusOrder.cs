@@ -1,15 +1,13 @@
-﻿using BeYou.Domain.Core.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("StatusOrder")]
-public partial class StatusOrder : BaseSimpleDto
+public partial class StatusOrder
 {
-    [StringLength(25)]
+    public long Id { get; set; }
+
     public string Description { get; set; } = null!;
 
-    [InverseProperty("StatusOrderIdNavigation")]
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

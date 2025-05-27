@@ -1,23 +1,27 @@
-﻿using BeYou.Domain.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("ReservationQuestion")]
-[Index("ReservationId", Name = "IX_ReservationQuestion_ReservationId")]
-public partial class ReservationQuestion : BaseEntity
+public partial class ReservationQuestion
 {
+    public long Id { get; set; }
+
     public long ReservationId { get; set; }
 
-    [StringLength(250)]
     public string Question { get; set; } = null!;
 
-    [StringLength(250)]
     public string? Answer { get; set; }
 
-    [ForeignKey("ReservationId")]
-    [InverseProperty("ReservationQuestions")]
-    public virtual Reservation ReservationIdNavigation { get; set; } = null!;
+    public DateTime Created { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
+
+    public DateTime? Updated { get; set; }
+
+    public string? UpdatedBy { get; set; }
+
+    public bool Active { get; set; }
+
+    public virtual Reservation Reservation { get; set; } = null!;
 }

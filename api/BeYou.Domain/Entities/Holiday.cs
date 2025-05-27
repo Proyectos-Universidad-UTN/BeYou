@@ -1,21 +1,27 @@
-﻿using BeYou.Domain.Core.Models;
-using BeYou.Domain.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("Holiday")]
-public partial class Holiday : BaseEntity
+public partial class Holiday
 {
-    [StringLength(80)]
+    public long Id { get; set; }
+
     public string Name { get; set; } = null!;
 
-    [StringLength(25)]
-    public Month Month { get; set; }
+    public string Month { get; set; } = null!;
 
     public byte Day { get; set; }
 
-    [InverseProperty("HolidayIdNavigation")]
+    public DateTime Created { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
+
+    public DateTime? Updated { get; set; }
+
+    public string? UpdatedBy { get; set; }
+
+    public bool Active { get; set; }
+
     public virtual ICollection<BranchHoliday> BranchHolidays { get; set; } = new List<BranchHoliday>();
 }

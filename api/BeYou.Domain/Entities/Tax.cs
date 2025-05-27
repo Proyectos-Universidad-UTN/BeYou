@@ -1,21 +1,27 @@
-﻿using BeYou.Domain.Core.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeYou.Domain.Models;
 
-[Table("Tax")]
-public partial class Tax : BaseEntity
+public partial class Tax
 {
-    [StringLength(40)]
+    public long Id { get; set; }
+
     public string Name { get; set; } = null!;
 
-    [Column(TypeName = "decimal(5, 2)")]
     public decimal Rate { get; set; }
 
-    [InverseProperty("TaxIdNavigation")]
+    public bool Active { get; set; }
+
+    public DateTime Created { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
+
+    public DateTime? Updated { get; set; }
+
+    public string? UpdatedBy { get; set; }
+
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 
-    [InverseProperty("TaxIdNavigation")]
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }
