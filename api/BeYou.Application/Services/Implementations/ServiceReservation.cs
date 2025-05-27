@@ -9,6 +9,8 @@ using BeYou.Domain.Core.Specifications;
 using BeYou.Application.Core.Interfaces;
 using BeYou.Application.Services.Interfaces;
 using BeYou.Domain.Models;
+using BeYou.Utils;
+using BeYou.Domain.Enums;
 
 namespace BeYou.Application.Services.Implementations;
 

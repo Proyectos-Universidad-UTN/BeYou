@@ -1,4 +1,6 @@
 ﻿using BeYou.Domain.Core.Models;
+using BeYou.Domain.Core.Specifications;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace BeYou.Infraestructure.Repositories;

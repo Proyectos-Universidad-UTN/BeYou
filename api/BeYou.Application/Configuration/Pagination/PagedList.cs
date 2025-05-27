@@ -1,4 +1,6 @@
-﻿namespace BeYou.Application.Configuration.Pagination;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BeYou.Application.Configuration.Pagination;
 
 // PagedList<T> handles paginated data for large datasets.
 // - Holds pagination info: CurrentPage, TotalPages, PageSize, TotalCount.

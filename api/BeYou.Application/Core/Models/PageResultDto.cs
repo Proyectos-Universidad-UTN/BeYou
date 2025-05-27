@@ -1,4 +1,5 @@
-﻿using BeYou.Domain.Core.Models;
+﻿using BeYou.Common.Extensions;
+using BeYou.Domain.Core.Models;
 
 namespace BeYou.Application.Core.Models;
 

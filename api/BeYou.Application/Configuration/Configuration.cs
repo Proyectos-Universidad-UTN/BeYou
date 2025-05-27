@@ -2,6 +2,11 @@
 using Microsoft.Extensions.Logging;
 using BeYou.Application.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using BeYou.Application.Core.Services;
+using BeYou.Application.Services.Interfaces;
+using BeYou.Application.Services.Implementations;
+using BeYou.Application.Services.Interfaces.Authorization;
+using BeYou.Application.Services.Implementations.Authorization;
 
 namespace BeYou.Application.Configuration;
 

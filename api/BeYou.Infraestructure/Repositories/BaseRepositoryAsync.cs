@@ -1,12 +1,25 @@
-﻿
+﻿using Dapper;
+using System.Collections;
+using System.Linq.Expressions;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using BeYou.Infraestructure.Data;
+using BeYou.Domain.Core.Models;
+using BeYou.Application.Core.Interfaces;
+using BeYou.Domain.Core.Specifications;
+using Microsoft.EntityFrameworkCore.Query;
+using BeYou.Application.Core.Models;
+using BeYou.Common.Extensions;
+using BeYou.Common.Helper;
 
 namespace BeYou.Infraestructure.Repositories;
 
-public class BaseRepositoryAsync<T>(ILoggerFactory loggerFactory, BaseReservationContext dbContext) : IBaseRepositoryAsync<T> where T : BaseSimpleDto
+public class BaseRepositoryAsync<T>(ILoggerFactory loggerFactory, BeYouContext dbContext) : IBaseRepositoryAsync<T> where T : BaseSimpleDto
 {
     private readonly ILogger<BaseRepositoryAsync<T>> _logger = loggerFactory.CreateLogger<BaseRepositoryAsync<T>>();
 
-    private readonly BaseReservationContext _dbContext = dbContext;
+    private readonly BeYouContext _dbContext = dbContext;
 
     private readonly string[] basicIncludes = [];
 

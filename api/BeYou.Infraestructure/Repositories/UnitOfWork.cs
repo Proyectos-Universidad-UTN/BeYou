@@ -1,7 +1,11 @@
-﻿using BeYou.Domain.Core.Models;
+﻿using BeYou.Application.Core.Interfaces;
+using BeYou.Common.Extensions;
+using BeYou.Domain.Core.Models;
 using BeYou.Domain.Exceptions;
 using BeYou.Infraestructure.Data;
+using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;

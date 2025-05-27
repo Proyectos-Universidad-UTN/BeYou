@@ -1,6 +1,6 @@
-﻿
+﻿using AutoMapper;
+using BeYou.Application.Dtos.Response;
 using BeYou.Domain.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BeYou.Infraestructure.Mappings.Mapper;
 

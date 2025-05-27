@@ -1,6 +1,7 @@
 ﻿using BeYou.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Data;
 
 namespace BeYou.Infraestructure.Data;
 
@@ -84,7 +85,7 @@ public partial class BeYouContext(DbContextOptions<BeYouContext> options) : DbCo
 
     public virtual DbSet<Vendor> Vendors { get; set; }
 
-    
+    public IDbConnection Connection => Database.GetDbConnection();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Branch>(entity =>

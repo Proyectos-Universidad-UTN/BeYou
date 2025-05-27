@@ -1,5 +1,8 @@
 ﻿using BeYou.Domain.Core.Models;
+using BeYou.Domain.Core.Specifications;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
+using BeYou.Application.Core.Models;
 
 namespace BeYou.Application.Core.Interfaces;
 

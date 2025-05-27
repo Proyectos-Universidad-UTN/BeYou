@@ -11,6 +11,7 @@ using BeYou.Application.Services.Interfaces;
 using BeYou.Application.Dtos.Response.Authentication;
 using BeYou.Application.Configuration.Authentication;
 using BeYou.Domain.Models;
+using BeYou.Utils;
 
 namespace BeYou.Application.Services.Implementations;
 
