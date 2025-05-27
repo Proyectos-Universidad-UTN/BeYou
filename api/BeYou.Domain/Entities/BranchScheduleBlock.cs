@@ -1,12 +1,16 @@
-﻿using System;
+﻿using BeYou.Domain.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace BeYou.Domain.Models;
 
-public partial class BranchScheduleBlock
+[Table("BranchScheduleBlock")]
+[Index("BranchScheduleId", Name = "IX_BranchScheduleBlock_BranchSchedule")]
+public partial class BranchScheduleBlock : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long BranchScheduleId { get; set; }
 
     public TimeOnly StartHour { get; set; }
@@ -15,5 +19,7 @@ public partial class BranchScheduleBlock
 
     public bool Active { get; set; }
 
-    public virtual BranchSchedule BranchSchedule { get; set; } = null!;
+    [ForeignKey("BranchScheduleId")]
+    [InverseProperty("BranchScheduleBlocks")]
+    public virtual BranchSchedule BranchScheduleIdNavigation { get; set; } = null!;
 }

@@ -1,37 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeYou.Domain.Models;
 
-public partial class Service
+[Table("Service")]
+[Index("TypeServiceId", Name = "IX_Service_TypeServiceId")]
+public partial class Service : BaseEntity
 {
-    public long Id { get; set; }
-
+    [StringLength(50)]
     public string Name { get; set; } = null!;
 
+    [StringLength(150)]
     public string Description { get; set; } = null!;
 
     public long TypeServiceId { get; set; }
 
+    [Column(TypeName = "money")]
     public decimal Price { get; set; }
 
+    [StringLength(250)]
     public string? Observation { get; set; }
 
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
-
+    [InverseProperty("ServiceIdNavigation")]
     public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
 
+    [InverseProperty("ServiceIdNavigation")]
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
+    [InverseProperty("ServiceIdNavigation")]
     public virtual ICollection<ReservationDetail> ReservationDetails { get; set; } = new List<ReservationDetail>();
 
-    public virtual TypeService TypeService { get; set; } = null!;
+    [ForeignKey("TypeServiceId")]
+    [InverseProperty("Services")]
+    public virtual TypeService TypeServiceIdNavigation { get; set; } = null!;
 }

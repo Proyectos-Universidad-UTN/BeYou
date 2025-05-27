@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeYou.Domain.Models;
 
-public partial class Gender
+[Table("Gender")]
+public partial class Gender : BaseSimpleDto
 {
-    public long Id { get; set; }
-
+    [StringLength(25)]
     public string Name { get; set; } = null!;
 
+    [InverseProperty("GenderIdNavigation")]
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

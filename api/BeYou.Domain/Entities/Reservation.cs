@@ -1,41 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace BeYou.Domain.Models;
 
-public partial class Reservation
+[Table("Reservation")]
+[Index("CustomerId", Name = "IX_Reservation_CustomerId")]
+[Index("BranchId", Name = "IX_Reservation_BranchId")]
+public partial class Reservation : BaseEntity
 {
-    public long Id { get; set; }
-
     public long BranchId { get; set; }
 
     public long CustomerId { get; set; }
 
+    [StringLength(80)]
     public string CustomerName { get; set; } = null!;
 
     public DateOnly Date { get; set; }
 
     public TimeOnly Hour { get; set; }
 
+    [StringLength(1)]
+    [Unicode(false)]
     public string Status { get; set; } = null!;
 
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
-
-    public virtual Branch Branch { get; set; } = null!;
-
-    public virtual Customer Customer { get; set; } = null!;
-
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
+    [InverseProperty("ReservationIdNavigation")]
     public virtual ICollection<ReservationDetail> ReservationDetails { get; set; } = new List<ReservationDetail>();
 
+    [ForeignKey("CustomerId")]
+    [InverseProperty("Reservations")]
+    public virtual Customer CustomerIdNavigation { get; set; } = null!;
+
+    [ForeignKey("BranchId")]
+    [InverseProperty("Reservations")]
+    public virtual Branch BranchIdNavigation { get; set; } = null!;
+
+    [InverseProperty("ReservationIdNavigation")]
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    [InverseProperty("ReservationIdNavigation")]
     public virtual ICollection<ReservationQuestion> ReservationQuestions { get; set; } = new List<ReservationQuestion>();
 }

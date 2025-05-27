@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeYou.Domain.Models;
 
-public partial class Contact
+[Table("Contact")]
+[Index("VendorId", Name = "IX_Contact_VendorId")]
+public partial class Contact : BaseEntity
 {
-    public long Id { get; set; }
-
+    [StringLength(80)]
     public string FirstName { get; set; } = null!;
 
+    [StringLength(80)]
     public string LastName { get; set; } = null!;
 
     public int Telephone { get; set; }
 
+    [StringLength(150)]
     public string Email { get; set; } = null!;
 
     public long VendorId { get; set; }
 
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
-
-    public virtual Vendor Vendor { get; set; } = null!;
+    [ForeignKey("VendorId")]
+    [InverseProperty("Contacts")]
+    public virtual Vendor VendorIdNavigation { get; set; } = null!;
 }

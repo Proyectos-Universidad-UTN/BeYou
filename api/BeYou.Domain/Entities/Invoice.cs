@@ -1,18 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeYou.Domain.Models;
 
-public partial class Invoice
+[Table("Invoice")]
+[Index("CustomerId", Name = "IX_Invoice_CustomerId")]
+[Index("TaxId", Name = "IX_Invoice_TaxId")]
+[Index("OrderId", Name = "IX_Invoice_OrderId")]
+[Index("BranchId", Name = "IX_Invoice_BranchId")]
+[Index("PaymentTypeId", Name = "IX_Invoice_PaymentTypeId")]
+public partial class Invoice : BaseEntity
 {
-    public long Id { get; set; }
-
     public long BranchId { get; set; }
 
     public long? OrderId { get; set; }
 
     public long CustomerId { get; set; }
 
+    [StringLength(160)]
     public string CustomerName { get; set; } = null!;
 
     public DateOnly Date { get; set; }
@@ -23,33 +30,38 @@ public partial class Invoice
 
     public long TaxId { get; set; }
 
+    [Column(TypeName = "decimal(5, 2)")]
     public decimal TaxRate { get; set; }
 
+    [Column(TypeName = "money")]
     public decimal SubTotal { get; set; }
 
+    [Column(TypeName = "money")]
     public decimal Tax { get; set; }
 
+    [Column(TypeName = "money")]
     public decimal Total { get; set; }
 
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
-
-    public virtual Branch Branch { get; set; } = null!;
-
-    public virtual Customer Customer { get; set; } = null!;
-
+    [InverseProperty("InvoiceIdNavigation")]
     public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
 
-    public virtual Order? Order { get; set; }
+    [ForeignKey("CustomerId")]
+    [InverseProperty("Invoices")]
+    public virtual Customer CustomerIdNavigation { get; set; } = null!;
 
-    public virtual PaymentType PaymentType { get; set; } = null!;
+    [ForeignKey("TaxId")]
+    [InverseProperty("Invoices")]
+    public virtual Tax TaxIdNavigation { get; set; } = null!;
 
-    public virtual Tax TaxNavigation { get; set; } = null!;
+    [ForeignKey("OrderId")]
+    [InverseProperty("Invoices")]
+    public virtual Order? OrderIdNavigation { get; set; }
+
+    [ForeignKey("BranchId")]
+    [InverseProperty("Invoices")]
+    public virtual Branch BranchIdNavigation { get; set; } = null!;
+
+    [ForeignKey("PaymentTypeId")]
+    [InverseProperty("Invoices")]
+    public virtual PaymentType PaymentTypeIdNavigation { get; set; } = null!;
 }
