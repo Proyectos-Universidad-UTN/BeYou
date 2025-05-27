@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BeYou.Domain.Models;
 
-public partial class OrderDetail
+[Table("OrderDetail")]
+[Index("OrderId", Name = "IX_OrderDetail_OrderId")]
+[Index("ServiceId", Name = "IX_OrderDetail_ServiceId")]
+public partial class OrderDetail : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long OrderId { get; set; }
 
     public long? ServiceId { get; set; }
@@ -17,19 +19,30 @@ public partial class OrderDetail
 
     public short Quantity { get; set; }
 
+    [Column(TypeName = "money")]
     public decimal UnitPrice { get; set; }
 
+    [Column(TypeName = "money")]
     public decimal SubTotal { get; set; }
 
+    [Column(TypeName = "money")]
     public decimal Tax { get; set; }
 
+    [Column(TypeName = "money")]
     public decimal Total { get; set; }
 
-    public virtual Order Order { get; set; } = null!;
-
+    [InverseProperty("OrderDetailIdNavigation")]
     public virtual ICollection<OrderDetailProduct> OrderDetailProducts { get; set; } = new List<OrderDetailProduct>();
 
-    public virtual Product? Product { get; set; }
+    [ForeignKey("OrderId")]
+    [InverseProperty("OrderDetails")]
+    public virtual Order OrderIdNavigation { get; set; } = null!;
 
-    public virtual Service? Service { get; set; }
+    [ForeignKey("ProductId")]
+    [InverseProperty("OrderDetails")]
+    public virtual Product? ProductIdNavigation { get; set; }
+
+    [ForeignKey("ServiceId")]
+    [InverseProperty("OrderDetails")]
+    public virtual Service? ServiceIdNavigation { get; set; }
 }

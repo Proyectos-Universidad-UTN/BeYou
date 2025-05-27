@@ -1,21 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using BeYou.Domain.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 namespace BeYou.Domain.Models;
 
-public partial class ReservationDetail
+[Table("ReservationDetail")]
+[Index("ReservationId", Name = "IX_ReservationDetail_ReservationId")]
+[Index("ServiceId", Name = "IX_ReservationDetail_ServiceId")]
+public partial class ReservationDetail : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long ReservationId { get; set; }
 
     public long? ServiceId { get; set; }
 
     public long? ProductId { get; set; }
 
-    public virtual Product? Product { get; set; }
+    [ForeignKey("ProductId")]
+    [InverseProperty("ReservationDetails")]
+    public virtual Product? ProductIdNavigation { get; set; }
 
-    public virtual Reservation Reservation { get; set; } = null!;
+    [ForeignKey("ReservationId")]
+    [InverseProperty("ReservationDetails")]
+    public virtual Reservation ReservationIdNavigation { get; set; } = null!;
 
-    public virtual Service? Service { get; set; }
+    [ForeignKey("ServiceId")]
+    [InverseProperty("ReservationDetails")]
+    public virtual Service? ServiceIdNavigation { get; set; }
 }

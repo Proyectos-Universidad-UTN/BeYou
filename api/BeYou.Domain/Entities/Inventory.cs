@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using BeYou.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BeYou.Domain.Models;
 
-public partial class Inventory
+[Table("Inventory")]
+[Index("BranchId", Name = "IX_Inventory_BranchId")]
+public partial class Inventory : BaseEntity
 {
-    public long Id { get; set; }
-
     public long BranchId { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public string TypeInventory { get; set; } = null!;
+    public TypeInventory TypeInventory { get; set; }
 
-    public DateTime Created { get; set; }
+    [ForeignKey("BranchId")]
+    [InverseProperty("Inventories")]
+    public virtual Branch BranchIdNavigation { get; set; } = null!;
 
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
-
-    public virtual Branch Branch { get; set; } = null!;
-
+    [InverseProperty("InventoryIdNavigation")]
     public virtual ICollection<InventoryProduct> InventoryProducts { get; set; } = new List<InventoryProduct>();
 }

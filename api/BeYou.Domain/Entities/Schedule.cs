@@ -1,27 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using BeYou.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BeYou.Domain.Models;
 
-public partial class Schedule
+[Table("Schedule")]
+public partial class Schedule : BaseEntity
 {
-    public long Id { get; set; }
-
-    public string Day { get; set; } = null!;
+    public WeekDay Day { get; set; }
 
     public TimeOnly StartHour { get; set; }
 
     public TimeOnly EndHour { get; set; }
 
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
-
+    [InverseProperty("ScheduleIdNavigation")]
     public virtual ICollection<BranchSchedule> BranchSchedules { get; set; } = new List<BranchSchedule>();
 }

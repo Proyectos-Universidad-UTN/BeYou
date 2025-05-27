@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeYou.Domain.Models;
 
-public partial class UnitMeasure
+[Table("UnitMeasure")]
+public partial class UnitMeasure : BaseEntity
 {
-    public long Id { get; set; }
-
+    [StringLength(25)]
     public string Name { get; set; } = null!;
 
+    [StringLength(5)]
     public string Symbol { get; set; } = null!;
 
-    public bool Active { get; set; }
-
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
+    [InverseProperty("UnitMeasureIdNavigation")]
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }
