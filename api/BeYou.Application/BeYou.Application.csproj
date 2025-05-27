@@ -7,10 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Response\" />
     <Folder Include="Services\Implementations\" />
     <Folder Include="Services\Interfaces\" />
-    <Folder Include="Validations\" />
   </ItemGroup>
 
   <ItemGroup>
