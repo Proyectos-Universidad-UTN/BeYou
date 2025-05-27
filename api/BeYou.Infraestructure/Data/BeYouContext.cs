@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BeYou.Domain.Models;
+﻿using BeYou.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
