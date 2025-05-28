@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class BranchScheduleBlock
+public partial class BranchScheduleBlock : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long BranchScheduleId { get; set; }
 
     public TimeOnly StartHour { get; set; }

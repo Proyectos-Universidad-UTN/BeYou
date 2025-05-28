@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class Service
+public partial class Service : BaseEntity
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;
@@ -16,16 +13,6 @@ public partial class Service
     public decimal Price { get; set; }
 
     public string? Observation { get; set; }
-
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
 
     public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
 

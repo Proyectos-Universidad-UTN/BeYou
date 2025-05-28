@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
-
-public partial class Canton
+public partial class Canton : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public long ProvinceId { get; set; }

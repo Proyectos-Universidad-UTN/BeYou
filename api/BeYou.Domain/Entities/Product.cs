@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class Product
+public partial class Product : BaseEntity
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;
@@ -20,16 +17,6 @@ public partial class Product
     public string Sku { get; set; } = null!;
 
     public long UnitMeasureId { get; set; }
-
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
 
     public virtual Category Category { get; set; } = null!;
 

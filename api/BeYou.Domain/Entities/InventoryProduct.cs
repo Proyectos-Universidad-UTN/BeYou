@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class InventoryProduct
+public partial class InventoryProduct : BaseEntity
 {
-    public long Id { get; set; }
-
     public long InventoryId { get; set; }
 
     public long ProductId { get; set; }
@@ -18,17 +15,6 @@ public partial class InventoryProduct
     public decimal Maximum { get; set; }
 
     public long IdProducto { get; set; }
-
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
-
     public virtual Product IdProductoNavigation { get; set; } = null!;
 
     public virtual Inventory Inventory { get; set; } = null!;

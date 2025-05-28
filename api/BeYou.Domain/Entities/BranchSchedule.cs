@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
-
-public partial class BranchSchedule
+public partial class BranchSchedule : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long BranchId { get; set; }
 
     public long ScheduleId { get; set; }

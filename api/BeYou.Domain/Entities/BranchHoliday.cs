@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class BranchHoliday
+public partial class BranchHoliday : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long HolidayId { get; set; }
 
     public long BranchId { get; set; }

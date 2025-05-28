@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class TypeService
+public partial class TypeService : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public TimeOnly BaseDuration { get; set; }

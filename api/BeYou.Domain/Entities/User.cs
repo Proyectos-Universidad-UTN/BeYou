@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class User
+public partial class User : BaseEntity
 {
-    public long Id { get; set; }
-
     public string CardId { get; set; } = null!;
 
     public string FirstName { get; set; } = null!;
@@ -30,16 +27,6 @@ public partial class User
     public string? ProfilePictureUrl { get; set; }
 
     public long RoleId { get; set; }
-
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
 
     public virtual District District { get; set; } = null!;
 

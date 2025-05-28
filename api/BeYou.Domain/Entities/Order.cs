@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class Order
+public partial class Order : BaseEntity
 {
-    public long Id { get; set; }
-
     public long BranchId { get; set; }
 
     public long ReservationId { get; set; }
@@ -32,16 +29,6 @@ public partial class Order
     public decimal Total { get; set; }
 
     public long StatusOrderId { get; set; }
-
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
 
     public virtual Branch Branch { get; set; } = null!;
 

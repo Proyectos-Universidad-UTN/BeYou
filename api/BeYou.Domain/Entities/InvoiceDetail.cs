@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class InvoiceDetail
+public partial class InvoiceDetail : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long InvoiceId { get; set; }
 
     public long? ServiceId { get; set; }

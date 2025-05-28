@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class Branch
+public partial class Branch : BaseEntity
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;
@@ -18,16 +15,6 @@ public partial class Branch
     public long DistrictId { get; set; }
 
     public string? Address { get; set; }
-
-    public DateTime Created { get; set; }
-
-    public string CreatedBy { get; set; } = null!;
-
-    public DateTime? Updated { get; set; }
-
-    public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
 
     public virtual ICollection<BranchHoliday> BranchHolidays { get; set; } = new List<BranchHoliday>();
 

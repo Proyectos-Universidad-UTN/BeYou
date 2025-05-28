@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class OrderDetail
+public partial class OrderDetail : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long OrderId { get; set; }
 
     public long? ServiceId { get; set; }

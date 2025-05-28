@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class ReservationDetail
+public partial class ReservationDetail : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public long ReservationId { get; set; }
 
     public long? ServiceId { get; set; }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
 
-public partial class PaymentType
+public partial class PaymentType : BaseSimpleDto
 {
-    public long Id { get; set; }
-
     public string Description { get; set; } = null!;
 
     public string ReferenceNumber { get; set; } = null!;
