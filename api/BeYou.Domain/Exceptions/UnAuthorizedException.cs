@@ -3,8 +3,8 @@ using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace BeYou.Domain.Exceptions;
-[Serializable]
 
+[Serializable]
 public class UnAuthorizedException : BaseException
 {
     public override LogLevel LogLevel { get; set; } = LogLevel.Information;
