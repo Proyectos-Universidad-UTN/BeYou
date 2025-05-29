@@ -4,6 +4,7 @@ using BeYou.Domain.Core.Models;
 using BeYou.Domain.Models;
 using BeYou.Infraestructure.Mappings.ValueResolvers;
 
+
 namespace BeYou.Infraestructure.Mappings.Mapper;
 
 public class DtoToModelApplicationProfile : Profile

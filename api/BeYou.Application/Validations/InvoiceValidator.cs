@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BeYou.Application.Validations;
-
 public class InvoiceValidator : AbstractValidator<Invoice>
 {
     public InvoiceValidator()

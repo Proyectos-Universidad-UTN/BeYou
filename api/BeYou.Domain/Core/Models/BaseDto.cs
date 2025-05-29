@@ -1,7 +1,8 @@
-namespace BeYou.Domain.Core.Models;
-
-public class BaseEntity : BaseSimpleDto
+﻿namespace BeYou.Domain.Core.Models;
+public class BaseDto
 {
+    public long Id { get; set; }
+
     public DateTime Created { get; set; }
 
     public string CreatedBy { get; set; } = null!;
@@ -9,6 +10,4 @@ public class BaseEntity : BaseSimpleDto
     public DateTime? Updated { get; set; }
 
     public string? UpdatedBy { get; set; }
-
-    public bool Active { get; set; }
 }
