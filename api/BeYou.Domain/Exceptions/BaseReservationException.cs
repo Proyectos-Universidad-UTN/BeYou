@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 
 namespace BeYou.Domain.Exceptions;
 
+
 [Serializable]
 //Indica que esta clase puede ser serializada, es decir, convertida a un formato que pueda ser almacenado o
 //transmitido (por ejemplo, a través de la red o en un archivo de log).

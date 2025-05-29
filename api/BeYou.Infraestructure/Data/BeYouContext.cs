@@ -7,6 +7,7 @@ namespace BeYou.Infraestructure.Data;
 
 public partial class BeYouContext(DbContextOptions<BeYouContext> options) : DbContext  (options)
 {
+
     const string CREATEDNAME = "Created";
     const string UPDATEDNAME = "Updated";
 

@@ -3,6 +3,7 @@ using BeYou.Application.Services.Interfaces.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Reflection;
 
+
 namespace BeYou.Application.Services.Implementations.Authorization;
 
 public class ServiceUserContext(IHttpContextAccessor httpContextAccessor) : IServiceUserContext
