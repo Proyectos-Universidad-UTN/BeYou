@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BeYou.Domain.Exceptions;
 [Serializable]
+
 public class UnAuthorizedException : BaseException
 {
     public override LogLevel LogLevel { get; set; } = LogLevel.Information;
