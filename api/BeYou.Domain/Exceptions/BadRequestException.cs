@@ -2,6 +2,7 @@
 using System.Net;
 
 namespace BeYou.Domain.Exceptions;
+
 public class BadRequestException : BaseException
 {
     public override LogLevel LogLevel { get; set; } = LogLevel.Information;
