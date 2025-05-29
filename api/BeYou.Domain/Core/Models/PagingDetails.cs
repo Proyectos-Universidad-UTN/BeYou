@@ -1,4 +1,5 @@
 ﻿namespace BeYou.Domain.Core.Models;
+
 public class PagingDetails
 {
     public int CurrentPage { get; set; }

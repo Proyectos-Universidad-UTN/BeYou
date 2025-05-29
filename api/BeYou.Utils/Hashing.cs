@@ -1,8 +1,8 @@
-﻿
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace BeYou.Utils;
+
 public static class Hashing
 {
     /// <summary>

@@ -6,7 +6,6 @@ using BeYou.Application.Core.Interfaces;
 using BeYou.Application.Services.Interfaces;
 using BeYou.Domain.Models;
 
-
 namespace BeYou.Application.Services.Implementations;
 
 public class ServiceCanton(ICoreService<Canton> coreService, IMapper mapper) : IServiceCanton

@@ -1,4 +1,5 @@
 ﻿namespace BeYou.Application.Enums;
+
 public enum TransactionTypeInventoryApplication
 {
     Entrada = 1,
