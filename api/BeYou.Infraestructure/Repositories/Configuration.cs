@@ -10,6 +10,7 @@ namespace BeYou.Infraestructure.Repositories;
 /// <summary>
 /// Configuration class for the infrastructure layer
 /// </summary>
+
 public static class Configuration
 {
     /// <summary>

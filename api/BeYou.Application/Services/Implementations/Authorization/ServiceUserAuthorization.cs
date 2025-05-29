@@ -4,7 +4,6 @@ using BeYou.Application.Dtos.Response;
 using BeYou.Application.Services.Interfaces;
 using BeYou.Domain.Exceptions;
 
-
 namespace BeYou.Application.Services.Implementations.Authorization;
 
 public class ServiceUserAuthorization(IServiceUserContext serviceUserContext, IServiceUser serviceUser, IMapper mapper) : IServiceUserAuthorization

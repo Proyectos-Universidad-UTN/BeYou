@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace BeYou.Common.Extensions;
 
 /// <summary>
