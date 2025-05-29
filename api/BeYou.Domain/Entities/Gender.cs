@@ -1,6 +1,7 @@
 ﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
+
 public partial class Gender : BaseSimpleDto
 {
     public string Name { get; set; } = null!;
