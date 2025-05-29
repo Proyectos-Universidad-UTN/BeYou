@@ -1,7 +1,6 @@
 ﻿using BeYou.Domain.Models;
 using FluentValidation;
 
-
 namespace BeYou.Application.Validations;
 
 public class BranchScheduleBlockValidator : AbstractValidator<BranchScheduleBlock>
