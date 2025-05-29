@@ -2,7 +2,6 @@
 /// <summary>
 /// Extension methods for FormattableString.
 /// </summary>
-/// 
 
 public static class FormattableStringExpressions
 {
