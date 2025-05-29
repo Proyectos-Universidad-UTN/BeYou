@@ -1,5 +1,4 @@
 ﻿namespace BeYou.Application.Enums;
-
 public enum MonthApplication
 {
     Enero = 1,

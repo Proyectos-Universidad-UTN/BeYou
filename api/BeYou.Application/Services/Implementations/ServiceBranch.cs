@@ -10,6 +10,7 @@ using BeYou.Application.Services.Interfaces;
 using BeYou.Application.Services.Interfaces.Authorization;
 using BeYou.Domain.Models;
 
+
 namespace BeYou.Application.Services.Implementations;
 
 public class ServiceBranch(ICoreService<Branch> coreService, IMapper mapper,

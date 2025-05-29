@@ -1,5 +1,4 @@
 ﻿namespace BeYou.Domain.Enums;
-
 public enum TransactionTypeInventory
 {
     In = 1,

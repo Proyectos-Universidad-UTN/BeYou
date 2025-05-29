@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 
 namespace BeYou.Domain.Enums;
-
 public enum WeekDay
 {
     Lunes = 1,
