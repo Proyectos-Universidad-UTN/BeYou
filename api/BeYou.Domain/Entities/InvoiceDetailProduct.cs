@@ -1,6 +1,7 @@
 ﻿using BeYou.Domain.Core.Models;
 
 namespace BeYou.Domain.Models;
+
 public partial class InvoiceDetailProduct : BaseSimpleDto
 {
     public long InvoiceDetailId { get; set; }
