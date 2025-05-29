@@ -1,4 +1,5 @@
 ﻿namespace BeYou.Domain.Enums;
+
 public enum Month
 {
     Enero = 1,
