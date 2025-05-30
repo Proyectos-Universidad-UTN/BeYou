@@ -27,4 +27,8 @@
     <ProjectReference Include="..\BeYou.Infraestructure\BeYou.Infraestructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
