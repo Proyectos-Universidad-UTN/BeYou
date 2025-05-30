@@ -8,19 +8,19 @@ namespace BeYou.WebAPI.Configuration;
 /// Authorization attribute for controllers
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class BaseReservationAuthorizeAttribute : AuthorizeAttribute
+public class BeYouAuthorizeAttribute : AuthorizeAttribute
 {
     /// <summary>
     /// Default constructor
     /// </summary>
     /// <returns></returns>
-    public BaseReservationAuthorizeAttribute() : base() { }
+    public BeYouAuthorizeAttribute() : base() { }
 
     /// <summary>
     /// Overload constructor to pass list of roles
     /// </summary>
     /// <param name="roles">List of roles</param>
-    public BaseReservationAuthorizeAttribute(params RoleApplication[] roles)
+    public BeYouAuthorizeAttribute(params RoleApplication[] roles)
     {
         var allowedRolesAsStrings = roles.Select(x => StringExtension.Capitalize(Enum.GetName(typeof(RoleApplication), x)!));
         Roles = string.Join(",", allowedRolesAsStrings);
