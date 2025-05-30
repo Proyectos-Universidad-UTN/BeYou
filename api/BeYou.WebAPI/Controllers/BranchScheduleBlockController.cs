@@ -14,7 +14,7 @@ namespace BeYou.WebAPI.Controllers;
 [BeYouAuthorize]
 [ApiVersion("1.0")]
 [Route("api/[controller]")]
-[Authorize(Policy = "Beyou")]
+[Authorize(Policy = "BeYou")]
 public class BranchScheduleBlockController(IServiceBranchScheduleBlock serviceBlock) : ControllerBase
 {
     /// <summary>
