@@ -1,10 +1,11 @@
 ﻿using BeYou.Domain.Core.Models;
+using BeYou.Domain.Enums;
 
 namespace BeYou.Domain.Models;
 
 public partial class Schedule : BaseEntity
 {
-    public string Day { get; set; } = null!;
+    public WeekDay Day { get; set; }
 
     public TimeOnly StartHour { get; set; }
 

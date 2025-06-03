@@ -100,7 +100,7 @@ public class ServiceBranchSchedule(ICoreService<BranchSchedule> coreService, IMa
     /// <inheritdoc />
     public async Task<ResponseBranchScheduleDto> FindByWeekDayAsync(long branchId, WeekDayApplication weekDay)
     {
-        var spec = new BaseSpecification<BranchSchedule>(x => x.BranchId == branchId && x.ScheduleIdNavigation.Day == mapper.Map<WeekDay>(weekDay));
+        var spec = new BaseSpecification<BranchSchedule>(x => x.BranchId == branchId && x.Schedule.Day == mapper.Map<WeekDay>(weekDay));
         var branchSchedule = await coreService.UnitOfWork.Repository<BranchSchedule>().FirstOrDefaultAsync(spec, BranchScheduleWithScheduleAndBlocks);
 
         if (branchSchedule == null) throw new NotFoundException("No se encontró horario en la sucursal.");

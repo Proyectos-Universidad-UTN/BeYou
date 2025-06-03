@@ -45,7 +45,7 @@ public class ServiceInventoryProductTransaction(ICoreService<InventoryProductTra
     /// <inheritdoc />
     public async Task<ICollection<ResponseInventoryProductTransactionDto>> ListAllByInventoryAsync(long inventoryId)
     {
-        var spec = new BaseSpecification<InventoryProductTransaction>(x => x.InventoryProductIdNavigation.InventoryId == inventoryId);
+        var spec = new BaseSpecification<InventoryProductTransaction>(x => x.InventoryProduct.InventoryId == inventoryId);
         var transactions = await coreService.UnitOfWork.Repository<InventoryProductTransaction>().ListAsync(spec);
 
         return mapper.Map<ICollection<ResponseInventoryProductTransactionDto>>(transactions);
@@ -54,7 +54,7 @@ public class ServiceInventoryProductTransaction(ICoreService<InventoryProductTra
     /// <inheritdoc />
     public async Task<ICollection<ResponseInventoryProductTransactionDto>> ListAllByProductAsync(long productId)
     {
-        var spec = new BaseSpecification<InventoryProductTransaction>(x => x.InventoryProductIdNavigation.ProductId == productId);
+        var spec = new BaseSpecification<InventoryProductTransaction>(x => x.InventoryProduct.ProductId == productId);
         var transactions = await coreService.UnitOfWork.Repository<InventoryProductTransaction>().ListAsync(spec);
 
         return mapper.Map<ICollection<ResponseInventoryProductTransactionDto>>(transactions);
