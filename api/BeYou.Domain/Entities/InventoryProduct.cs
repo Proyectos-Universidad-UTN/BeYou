@@ -14,8 +14,7 @@ public partial class InventoryProduct : BaseEntity
 
     public decimal Maximum { get; set; }
 
-    public long IdProducto { get; set; }
-    public virtual Product IdProductoNavigation { get; set; } = null!;
+    public virtual Product Product { get; set; } = null!;
 
     public virtual Inventory Inventory { get; set; } = null!;
 
