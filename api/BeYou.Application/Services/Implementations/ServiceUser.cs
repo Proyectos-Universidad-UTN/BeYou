@@ -11,7 +11,7 @@ namespace BeYou.Application.Services.Implementations;
 
 public class ServiceUser(ICoreService<User> coreService, IMapper mapper) : IServiceUser
 {
-    private readonly string[] UserWithRole = ["RoleIdNavigation"];
+    private readonly string[] UserWithRole = ["Role"];
 
     /// <inheritdoc />
     public async Task<ResponseUserDto> FindByIdAsync(long id)
