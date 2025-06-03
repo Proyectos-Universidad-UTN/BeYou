@@ -1,4 +1,5 @@
 ﻿using BeYou.Domain.Core.Models;
+using BeYou.Domain.Enums;
 
 namespace BeYou.Domain.Models;
 
@@ -6,7 +7,7 @@ public partial class InventoryProductTransaction : BaseEntity
 {
     public long InventoryProductId { get; set; }
 
-    public string TransactionType { get; set; } = null!;
+    public TransactionTypeInventory TransactionType { get; set; }
 
     public decimal Quantity { get; set; }
 

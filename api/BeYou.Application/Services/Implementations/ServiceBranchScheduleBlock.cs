@@ -60,7 +60,7 @@ public class ServiceBranchScheduleBlock(ICoreService<BranchScheduleBlock> coreSe
     /// <inheritdoc />
     public async Task<ICollection<ResponseBranchScheduleBlockDto>> ListAllByBranchAsync(long branchId)
     {
-        var spec = new BaseSpecification<BranchScheduleBlock>(x => x.BranchScheduleIdNavigation.BranchId == branchId);
+        var spec = new BaseSpecification<BranchScheduleBlock>(x => x.BranchSchedule.BranchId == branchId);
         var blocks = await coreService.UnitOfWork.Repository<BranchScheduleBlock>().ListAsync(spec, BranchScheduleBlockWithBranchSchedule);
 
         return mapper.Map<ICollection<ResponseBranchScheduleBlockDto>>(blocks);

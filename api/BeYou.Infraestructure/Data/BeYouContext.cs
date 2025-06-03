@@ -1,4 +1,5 @@
-﻿using BeYou.Domain.Models;
+﻿using BeYou.Domain.Enums;
+using BeYou.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Data;
@@ -255,6 +256,8 @@ public partial class BeYouContext(DbContextOptions<BeYouContext> options) : DbCo
         {
             entity.ToTable("Holiday");
 
+            entity.Property(e => e.Month).HasConversion(t => t.ToString(), s => (Month)Enum.Parse(typeof(Month), s));
+
             entity.Property(e => e.Active).HasDefaultValue(true);
             entity.Property(e => e.Created).HasColumnType("datetime");
             entity.Property(e => e.CreatedBy).HasMaxLength(70);
@@ -269,6 +272,8 @@ public partial class BeYouContext(DbContextOptions<BeYouContext> options) : DbCo
             entity.ToTable("Inventory");
 
             entity.HasIndex(e => e.BranchId, "IX_Inventory_BranchId");
+
+            entity.Property(e => e.TypeInventory).HasConversion(t => t.ToString(), s => (TypeInventory)Enum.Parse(typeof(TypeInventory), s));
 
             entity.Property(e => e.Created).HasColumnType("datetime");
             entity.Property(e => e.CreatedBy).HasMaxLength(70);
@@ -285,8 +290,6 @@ public partial class BeYouContext(DbContextOptions<BeYouContext> options) : DbCo
         {
             entity.ToTable("InventoryProduct");
 
-            entity.HasIndex(e => e.IdProducto, "IX_InventoryProduct_IdProducto");
-
             entity.HasIndex(e => e.InventoryId, "IX_InventoryProduct_InventoryId");
 
             entity.HasIndex(e => e.ProductId, "IX_InventoryProduct_ProductId");
@@ -299,8 +302,8 @@ public partial class BeYouContext(DbContextOptions<BeYouContext> options) : DbCo
             entity.Property(e => e.Updated).HasColumnType("datetime");
             entity.Property(e => e.UpdatedBy).HasMaxLength(70);
 
-            entity.HasOne(d => d.IdProductoNavigation).WithMany(p => p.InventoryProducts)
-                .HasForeignKey(d => d.IdProducto)
+            entity.HasOne(d => d.Product).WithMany(p => p.InventoryProducts)
+                .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_InventoryProduct_Product");
 
@@ -315,6 +318,8 @@ public partial class BeYouContext(DbContextOptions<BeYouContext> options) : DbCo
             entity.ToTable("InventoryProductTransaction");
 
             entity.HasIndex(e => e.InventoryProductId, "IX_InventoryProductTransaction_InventoryProductId");
+
+            entity.Property(e => e.TransactionType).HasConversion(t => t.ToString(), s => (TransactionTypeInventory)Enum.Parse(typeof(TransactionTypeInventory), s));
 
             entity.Property(e => e.Created).HasColumnType("datetime");
             entity.Property(e => e.CreatedBy).HasMaxLength(70);
@@ -672,6 +677,8 @@ public partial class BeYouContext(DbContextOptions<BeYouContext> options) : DbCo
         modelBuilder.Entity<Schedule>(entity =>
         {
             entity.ToTable("Schedule");
+
+            entity.Property(e => e.Day).HasConversion(t => t.ToString(), s => (WeekDay)Enum.Parse(typeof(WeekDay), s));
 
             entity.Property(e => e.Active).HasDefaultValue(true);
             entity.Property(e => e.Created).HasColumnType("datetime");
