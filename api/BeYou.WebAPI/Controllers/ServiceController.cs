@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using BeYou.Application.Dtos.Request;
 using BeYou.Application.Dtos.Response;
+using BeYou.WebAPI.Configuration;
 using BeYou.Application.Enums;
 using BeYou.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -52,7 +53,7 @@ public class ServiceController(IServiceService serviceService) : ControllerBase
     /// <param name="service">Service request model to be added</param>
     /// <returns>IActionResult</returns>
     [HttpPost]
-    [BaseReservationAuthorize(RoleApplication.ADMINISTRADOR)]
+    [BeYouAuthorize(RoleApplication.ADMINISTRADOR)]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ResponseServiceDto))]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity, Type = typeof(ErrorDetailsBeYou))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetailsBeYou))]
@@ -70,7 +71,7 @@ public class ServiceController(IServiceService serviceService) : ControllerBase
     /// <param name="service">Service request model to be updated</param>
     /// <returns>IActionResult</returns>
     [HttpPut("{serviceId}")]
-    [BaseReservationAuthorize(RoleApplication.ADMINISTRADOR)]
+    [BeYouAuthorize(RoleApplication.ADMINISTRADOR)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseServiceDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDetailsBeYou))]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity, Type = typeof(ErrorDetailsBeYou))]

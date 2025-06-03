@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using BeYou.Application.Dtos.Response;
 using BeYou.Application.Services.Interfaces;
+using BeYou.WebAPI.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -3,6 +3,7 @@ using BeYou.Application.Dtos.Request;
 using BeYou.Application.Dtos.Response;
 using BeYou.Application.Enums;
 using BeYou.Application.Services.Interfaces;
+using BeYou.WebAPI.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

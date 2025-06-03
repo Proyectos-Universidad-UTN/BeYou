@@ -2,6 +2,7 @@
 using BeYou.Application.Configuration.Pagination;
 using BeYou.Application.Dtos.Request;
 using BeYou.Application.Dtos.Response;
+using BeYou.WebAPI.Configuration;
 using BeYou.Application.Services.Interfaces;
 using BeYou.Utils;
 using Microsoft.AspNetCore.Authorization;

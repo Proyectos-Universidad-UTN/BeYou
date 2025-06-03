@@ -2,6 +2,7 @@
 using BeYou.Application.Dtos.Response;
 using BeYou.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using BeYou.WebAPI.Configuration;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeYou.WebAPI.Controllers;
