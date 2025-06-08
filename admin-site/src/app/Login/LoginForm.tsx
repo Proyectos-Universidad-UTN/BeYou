@@ -1,13 +1,13 @@
 'use client'; 
-import { useAuth } from "contexts/AuthContext";
 import { useRouter } from "next/navigation"; 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useEffect, useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { FormFieldErrorMessage } from "components/FormFieldErrorMessage";
 import { LoginDefaultValues, LoginSchema, LoginTypeForm } from "./LoginSchema";
 import { isPresent } from "@/utils/util";
+import { FormFieldErrorMessage } from "@/components/FormFieldErrorMessage";
+import { useAuth } from "@/context/AuthContext";
 
 export const LoginForm = () => {
   const formMethods = useForm({

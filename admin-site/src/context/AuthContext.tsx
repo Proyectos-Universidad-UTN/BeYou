@@ -1,14 +1,15 @@
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import { useSnackbar } from 'stores/useSnackbar';
-import { LoginTypeForm } from 'pages/Login/LoginSchema';
-import { UsePostAuthentication } from 'hooks/api-basereservation/authentication/UsePostAuthentication';
 import { createContext, ReactNode, useCallback, useState, useContext, useEffect, useMemo } from 'react';
-import { UsePostRefreshAuthentication } from 'hooks/api-basereservation/authentication/UsePostRefreshAuthentication';
+import { LoginTypeForm } from '@/app/Login/LoginSchema';
+import { useSnackbar } from '@/stores/useSnackbar';
+import { Authentication, ErrorDetailsBeYou } from '@/types/api-beyou';
+import { UsePostAuthentication } from '@/hooks/api-beyou/authentication/UsePostAuthentication';
+import { UsePostRefreshAuthentication } from '@/hooks/api-beyou/authentication/UsePostRefreshAuthentication';
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: (data: LoginTypeForm) => Promise<void>;
+    login: (data: LoginTypeForm) => Promise<void>; // Cambia el tipo de retorno a void y agrega el parámetro data: LoginTypeForm) => Promise<void>;
     logout: () => void;
     refreshTokens: () => void;
     authLoaded: boolean;
