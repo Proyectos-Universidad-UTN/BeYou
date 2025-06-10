@@ -40,7 +40,7 @@ export const LoginForm = () => {
   useEffect(() => {
     if (isAuthenticated) {
       setLoading(false);
-      router.push('/Inicio');
+      router.push('/Dashboard');
     }
   }, [isAuthenticated, router]);
 
