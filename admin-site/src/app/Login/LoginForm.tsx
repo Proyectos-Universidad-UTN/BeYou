@@ -1,22 +1,29 @@
-'use client'; 
-import { useRouter } from "next/navigation"; 
+'use client';
+import { useRouter } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useEffect, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Avatar,
+  FormControlLabel,
+  Checkbox,
+  Link as MuiLink,
+} from "@mui/material";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { LoginDefaultValues, LoginSchema, LoginTypeForm } from "./LoginSchema";
-import { isPresent } from "@/utils/util";
-import { FormFieldErrorMessage } from "@/components/FormFieldErrorMessage";
 import { useAuth } from "@/context/AuthContext";
+import { Lock } from "@mui/icons-material";
 
 export const LoginForm = () => {
   const formMethods = useForm({
     resolver: yupResolver(LoginSchema),
-    defaultValues: LoginDefaultValues,
+    defaultValues: { ...LoginDefaultValues, remember: false },
   });
 
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
     control,
@@ -24,106 +31,157 @@ export const LoginForm = () => {
   } = formMethods;
 
   const { login, isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const createLoginWrapper = useCallback(
-    async (data: LoginTypeForm) => {
-      setLoading(true);
-      try {
-        await login(data); // asumiendo que login es async y devuelve una promesa
-      } finally {
-        setLoading(false);
-      }
-    },
-    [login]
-  );
-
-  useEffect(() => {
-    if (isAuthenticated) {
+  async (data: LoginTypeForm & { remember?: boolean }) => {
+    setLoading(true);
+    try {
+      await login(data);
+      router.push("/Dashboard");
+    } catch (error) {
+      console.error("Error de login:", error);
+    } finally {
       setLoading(false);
-      router.push('/Dashboard');
     }
-  }, [isAuthenticated, router]);
-
+  },
+  [login, router]
+);
   return (
-    <Box
-      sx={{
-        padding: { xs: "2rem", md: "3rem" },
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#e6e6e6",
-        borderRadius: "10px",
-        xs: { width: "calc(100vh - 80px - 2rem)" },
-        md: { width: "calc(100vh - 80px - 10rem)" },
-        minHeight: { xs: "calc(40vh)", md: "calc(40vh)" },
-      }}
-    >
-      <Typography component="h1" variant="h2" sx={{ textAlign: "center" }}>
-        Inicio de sesión
-      </Typography>
-      <FormProvider {...formMethods}>
-        <Box
-          component="form"
-          onSubmit={handleSubmit(createLoginWrapper)}
-          noValidate
-          sx={{ mt: 1 }}
-          width="100%"
+    <Box className="min-h-screen flex items-center justify-center bg-[#ffe4ec] px-4">
+      <Paper
+        elevation={6}
+        sx={{
+          padding: 4,
+          width: "100%",
+          maxWidth: 420,
+          borderRadius: 4,
+          textAlign: "center",
+        }}
+      >
+        <Avatar
+          sx={{
+            bgcolor: "#b8860b",
+            width: 56,
+            height: 56,
+            margin: "0 auto",
+            mb: 2,
+          }}
         >
-          <Box>
+          <Lock />
+        </Avatar>
+
+        <Typography
+          variant="h5"
+          component="h1"
+          fontWeight="bold"
+          color="#b8860b"
+          gutterBottom
+        >
+          Beauty and Style
+        </Typography>
+
+        <Typography variant="subtitle1" gutterBottom>
+          Inicia sesión para continuar
+        </Typography>
+
+        <FormProvider {...formMethods}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(createLoginWrapper)}
+            noValidate
+          >
             <Controller
               name="email"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
                   label="Correo electrónico"
+                  margin="normal"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  autoComplete="email"
                   autoFocus
-                  error={isPresent(errors.email)}
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
                 />
               )}
             />
-            {errors.email?.message && (
-              <FormFieldErrorMessage message={errors.email.message} />
-            )}
-          </Box>
-          <Box>
             <Controller
               name="password"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
                   label="Contraseña"
                   type="password"
-                  error={isPresent(errors.password)}
+                  margin="normal"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  autoComplete="current-password"
+                  error={!!errors.password}
+                  helperText={errors.password?.message}
                 />
               )}
             />
-            {errors.password?.message && (
-              <FormFieldErrorMessage message={errors.password.message} />
-            )}
+
+            {/* Recordarme + Olvidaste tu contraseña (alineados horizontalmente) */}
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={2}
+            >
+              <Controller
+                name="remember"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...field}
+                        checked={field.value}
+                        sx={{
+                          color: "#b8860b",
+                          "&.Mui-checked": { color: "#b8860b" },
+                          p: 0.5,
+                        }}
+                      />
+                    }
+                    label="Recordarme"
+                  />
+                )}
+              />
+
+              <MuiLink
+                href="/recuperar-password"
+                underline="hover"
+                sx={{ fontSize: "0.9rem", color: "#b8860b" }}
+              >
+                ¿Olvidaste tu contraseña?
+              </MuiLink>
+            </Box>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 1,
+                backgroundColor: "#b8860b",
+                "&:hover": { backgroundColor: "#a87407" },
+              }}
+              disabled={loading}
+            >
+              {loading ? "Cargando..." : "Ingresar"}
+            </Button>
           </Box>
-          <Button
-            disabled={loading}
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            {loading ? "Cargando..." : "Ingresar"}
-          </Button>
-        </Box>
-      </FormProvider>
+        </FormProvider>
+      </Paper>
     </Box>
   );
 };

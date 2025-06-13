@@ -1,10 +1,5 @@
-import Sidebar from "@/components/Sidebar/Sidebar";
+import WithLayout from "@/components/Layout/WithLayout";
 
-export default function WithLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <div>
-            <Sidebar />
-            {children}
-        </div>
-    )
+export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
+  return <WithLayout>{children}</WithLayout>;
 }
