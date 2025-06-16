@@ -5,8 +5,8 @@ using System.Runtime.Serialization;
 namespace BeYou.Domain.Exceptions;
 
 [Serializable]
-//Indica que esta clase puede ser serializada, es decir, convertida a un formato que pueda ser almacenado o
-//transmitido (por ejemplo, a través de la red o en un archivo de log).
+// Indicates that this class can be serialized, meaning it can be converted into a format that can be stored or
+// transmitted (for example, over the network or in a log file).
 public class BeYouException : BaseException
 {
     public override LogLevel LogLevel { get; set; } = LogLevel.Information;

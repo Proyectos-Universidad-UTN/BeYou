@@ -2,9 +2,8 @@
 
 public record ResponseMeDto
 {
-    public string Nombre { get; set; } = string.Empty;
-    public string Apellido { get; set; } = string.Empty;
-    public string NombreCompleto { get; set; } = string.Empty;
-    public long RolId { get; set; }
-    public string RolDescripcion { get; set; } = string.Empty;
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string FullName { get; set; } = null!;
+    public ResponseRoleDto Role { get; set; } = null!;
 }

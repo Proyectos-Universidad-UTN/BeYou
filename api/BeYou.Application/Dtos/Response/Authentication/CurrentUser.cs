@@ -6,15 +6,15 @@ public record CurrentUser
 {
     public long UserId { get; init; }
 
-    public string? Email { get; init; }
+    public string? Email { get; init; }  
 
-    public string FirstName { get; init; } = string.Empty;
+    public string? FirstName { get; init; }  
 
-    public string LastName { get; init; } = string.Empty;
+    public string? LastName { get; init; } 
 
     public RoleApplication? Role { get; init; }
 
-    public long RoleId => (long)(Role ?? 0);
+    public long? RoleId => (long?)Role;
 
-    public string RoleDescription => Role?.ToString() ?? string.Empty;
+    public string? RoleDescription => Role?.ToString();
 }

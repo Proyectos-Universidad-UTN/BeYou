@@ -28,21 +28,24 @@ public class ServiceUserContext(IHttpContextAccessor httpContextAccessor) : ISer
         }
     }
 
-    public ResponseMeDto GetCurrentUser()
+    public ResponseMeDto? GetCurrentUser()
     {
         var httpContextItems = httpContextAccessor.HttpContext?.Items;
         if (httpContextItems != null && httpContextItems["CurrentUser"] is CurrentUser currentUser)
         {
             return new ResponseMeDto
             {
-                Nombre = currentUser.FirstName,
-                Apellido = currentUser.LastName,
-                NombreCompleto = $"{currentUser.FirstName} {currentUser.LastName}",
-                RolId = currentUser.RoleId,
-                RolDescripcion = currentUser.RoleDescription
+                FirstName = currentUser.FirstName,
+                LastName = currentUser.LastName,
+                FullName = $"{currentUser.FirstName} {currentUser.LastName}",
+                Role = new ResponseRoleDto
+                {
+                    Id = currentUser.RoleId.GetValueOrDefault(),  
+                    Description = currentUser.RoleDescription ?? string.Empty
+                }
             };
         }
 
-        return new ResponseMeDto(); // vacío si no está presente
+        return null;
     }
 }
