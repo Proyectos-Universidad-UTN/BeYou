@@ -8,7 +8,6 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
-  IconButton,
 } from "@mui/material";
 import { usePathname } from "next/navigation";
 import {
@@ -24,10 +23,9 @@ import {
   Security,
   ExpandLess,
   ExpandMore,
-  Menu, 
 } from "@mui/icons-material";
 import Link from "next/link";
-import { useMediaQuery, useTheme } from "@mui/material"; 
+import { useIsMobile } from "@/hooks/UseIsMobile";
 
 interface MenuItem {
   label: string;
@@ -36,10 +34,9 @@ interface MenuItem {
   children?: MenuItem[];
 }
 
-
 interface SidebarProps {
-  isOpen?: boolean; 
-  onClose?: () => void; 
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const iconMap: { [key: string]: React.ReactNode } = {
@@ -84,8 +81,7 @@ const menuItems: MenuItem[] = [
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const isSmallScreen = useIsMobile();
 
   const [expandedMenus, setExpandedMenus] = useState<{
     [key: string]: boolean;
@@ -95,53 +91,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     setExpandedMenus((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
-  const parentStyles = {
-    cursor: "pointer",
-    padding: "12px 16px",
-    borderRadius: "8px",
-    marginBottom: 1,
-    transition: "background-color 0.3s, color 0.3s",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-  };
-
-  const parentHover = {
-    backgroundColor: "#ffd966",
-    color: "#000000",
-  };
-
-  const childStyles = {
-    fontSize: "0.85rem",
-    borderRadius: "6px",
-    marginBottom: 2,
-    backgroundColor: "transparent",
-    color: "#444444",
-    transition: "background-color 0.3s, color 0.3s",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingLeft: "24px",
-  };
-
-  const childHover = {
-    backgroundColor: "#ffe8a1",
-    color: "#000000",
-  };
-
   const header = (
-    <div
-      style={{
-        fontWeight: "bold",
-        fontSize: "1.25rem",
-        textAlign: "center",
-        padding: "16px 0",
-        color: "#b8860b",
-        backgroundColor: "#ffb3c6",
-        letterSpacing: "1px",
-        borderBottom: "1px solidrgb(255, 255, 255)",
-      }}
-    >
+    <div className="font-bold text-xl text-center py-4 text-yellow-700 bg-pink-300 tracking-wide border-b">
+      {/* Título o logo */}
     </div>
   );
 
@@ -155,25 +107,24 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <React.Fragment key={item.label}>
           <ListItem
             onClick={() => handleToggle(item.label)}
-            sx={{
-              ...parentStyles,
-              backgroundColor:
-                isActive || isExpanded ? "#f9d371" : "transparent",
-              color: isActive || isExpanded ? "#222222" : "#333333",
-              "&:hover": parentHover,
-              userSelect: "none",
-            }}
+            className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
+              isActive || isExpanded
+                ? "bg-yellow-300 text-gray-900"
+                : "text-gray-800 hover:bg-yellow-200 hover:text-black"
+            }`}
           >
             <ListItemIcon
-              sx={{ color: isActive || isExpanded ? "#b8860b" : "#666666" }}
+              className={`${
+                isActive || isExpanded ? "text-yellow-700" : "text-gray-500"
+              }`}
             >
               {icon}
             </ListItemIcon>
             <ListItemText primary={item.label} />
             {isExpanded ? (
-              <ExpandLess sx={{ color: "#b8860b" }} />
+              <ExpandLess className="text-yellow-700" />
             ) : (
-              <ExpandMore sx={{ color: "#b8860b" }} />
+              <ExpandMore className="text-yellow-700" />
             )}
           </ListItem>
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
@@ -188,24 +139,21 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     passHref
                     legacyBehavior
                   >
-                    <a style={{ textDecoration: "none", display: "block" }}>
+                    <a className="no-underline block">
                       <ListItem
-
-                        onClick={isSmallScreen ? onClose : undefined}
-                        sx={{
-                          ...childStyles,
-                          backgroundColor: childActive
-                            ? "#f9d371"
-                            : "transparent",
-                          color: childActive ? "#222222" : "#444444",
-                          "&:hover": childHover,
-                        }}
+                        {...(isSmallScreen && onClose
+                          ? { onClick: onClose }
+                          : {})}
+                        className={`text-sm rounded-md mb-2 pl-6 flex items-center transition-colors duration-300 ${
+                          childActive
+                            ? "bg-yellow-300 text-gray-900"
+                            : "text-gray-600 hover:bg-yellow-100 hover:text-black"
+                        }`}
                       >
                         <ListItemIcon
-                          sx={{
-                            color: childActive ? "#b8860b" : "#888888",
-                            minWidth: 36,
-                          }}
+                          className={`min-w-[36px] ${
+                            childActive ? "text-yellow-700" : "text-gray-500"
+                          }`}
                         >
                           {childIcon}
                         </ListItemIcon>
@@ -226,18 +174,18 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
     return (
       <Link href={item.path!} key={item.label} passHref legacyBehavior>
-        <a style={{ textDecoration: "none" }}>
+        <a className="no-underline">
           <ListItem
-  
-            onClick={isSmallScreen ? onClose : undefined}
-            sx={{
-              ...parentStyles,
-              backgroundColor: isActive ? "#f9d371" : "transparent",
-              color: isActive ? "#222222" : "#333333",
-              "&:hover": parentHover,
-            }}
+            {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
+            className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
+              isActive
+                ? "bg-yellow-300 text-gray-900"
+                : "text-gray-800 hover:bg-yellow-200 hover:text-black"
+            }`}
           >
-            <ListItemIcon sx={{ color: isActive ? "#b8860b" : "#666666" }}>
+            <ListItemIcon
+              className={`${isActive ? "text-yellow-700" : "text-gray-500"}`}
+            >
               {icon}
             </ListItemIcon>
             <ListItemText primary={item.label} />
@@ -251,11 +199,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     return (
       <Drawer
         variant="temporary"
-        open={isOpen} 
-        onClose={onClose} 
+        open={isOpen}
+        onClose={onClose}
         className="md:hidden"
         classes={{ paper: "w-64" }}
-        PaperProps={{ style: { backgroundColor: "#ffb3c6", width: "75%" } }}
+        PaperProps={{ className: "bg-pink-300 w-3/4" }}
       >
         {header}
         <List>{menuItems.map(renderMenuItem)}</List>
@@ -264,10 +212,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   }
 
   return (
-    <div
-      className="fixed h-full shadow w-64" 
-      style={{ backgroundColor: "#ffe4ec" }}
-    >
+    <div className="fixed h-full shadow w-64 bg-pink-100">
       {header}
       <List>{menuItems.map(renderMenuItem)}</List>
     </div>
