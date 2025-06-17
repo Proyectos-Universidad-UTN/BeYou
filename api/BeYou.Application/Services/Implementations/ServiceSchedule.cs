@@ -69,7 +69,7 @@ public class ServiceSchedule(ICoreService<Schedule> coreService, IMapper mapper,
         var schedule = await coreService.UnitOfWork.Repository<Schedule>().FirstOrDefaultAsync(spec, ScheduleWithBranchSchedules);
         schedule!.Active = false;
 
-        if (schedule.BranchSchedules.Count > 0) throw new BaseReservationException("Horario asignado en sucursales.");
+        if (schedule.BranchSchedules.Count > 0) throw new BeYouException("Horario asignado en sucursales.");
 
         coreService.UnitOfWork.Repository<Schedule>().Update(schedule);
         await coreService.UnitOfWork.SaveChangesAsync();

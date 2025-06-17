@@ -34,7 +34,7 @@ public class ServiceInventory(ICoreService<Inventory> coreService, IMapper mappe
         var spec = new BaseSpecification<Inventory>(x => x.Id == id);
         var inventory = await coreService.UnitOfWork.Repository<Inventory>().FirstOrDefaultAsync(spec);
 
-        if (inventory!.InventoryProducts.Any(m => m.Assignable != 0)) throw new BaseReservationException("No puede eliminar un inventario con productos disponibles, asegurese que todos los productos tengan cantidad 0 antes de eliminar el inventario");
+        if (inventory!.InventoryProducts.Any(m => m.Assignable != 0)) throw new BeYouException("No puede eliminar un inventario con productos disponibles, asegurese que todos los productos tengan cantidad 0 antes de eliminar el inventario");
 
         inventory.Active = false;
         coreService.UnitOfWork.Repository<Inventory>().Update(inventory);

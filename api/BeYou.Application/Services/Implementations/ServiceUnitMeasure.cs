@@ -93,7 +93,7 @@ public class ServiceUnitMeasure(ICoreService<UnitMeasure> coreService, IMapper m
         var unitMeasure = mapper.Map<UnitMeasure>(requestUnitMeasureDto);
         await unitMeasureValidator.ValidateAndThrowAsync(unitMeasure);
 
-        if (await ExistsBySymbolAsync(id, unitMeasure.Symbol)) throw new BaseReservationException("Ya existe una unidad de medida con el mismo símbolo.");
+        if (await ExistsBySymbolAsync(id, unitMeasure.Symbol)) throw new BeYouException("Ya existe una unidad de medida con el mismo símbolo.");
         unitMeasure.Id = id;
         unitMeasure.Active = true;
 

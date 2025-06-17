@@ -33,7 +33,7 @@ public class ServiceIdentity(AuthenticationConfiguration authenticationConfigura
     {
         var response = new AuthenticationResult();
         var authResponse = await GetRefreshTokenAsync(request.Token, request.RefreshToken);
-        if (!authResponse.Success) throw new BaseReservationException("No se pudo obtener el token actualizado");
+        if (!authResponse.Success) throw new BeYouException("No se pudo obtener el token actualizado");
 
         response.Token = authResponse.Token;
         response.RefreshToken = authResponse.RefreshToken;
