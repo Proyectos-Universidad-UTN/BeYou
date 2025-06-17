@@ -19,7 +19,7 @@ import {
 } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useIsMobile } from "@/hooks/UseIsMobile"; // asegúrate que la ruta sea correcta
+import { useIsMobile } from "@/hooks/UseIsMobile";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -45,18 +45,17 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
   return (
     <div className="flex items-center justify-between h-16 px-4 shadow-sm bg-white border-b border-gray-200">
-      {/* Menu icon only visible on mobile */}
-      <IconButton
-        edge="start"
-        aria-label="menu"
-        onClick={onMenuClick}
-        className="md:hidden"
-        sx={{ mr: 2, color: "#b8860b" }}
-      >
-        <MenuIcon />
-      </IconButton>
+      {isMobile && (
+        <IconButton
+          edge="start"
+          aria-label="menu"
+          onClick={onMenuClick}
+          sx={{ mr: 2, color: "#b8860b" }}
+        >
+          <MenuIcon />
+        </IconButton>
+      )}
 
-      {/* Logo or title */}
       <div className="flex-grow flex items-center">
         <Link href="/" passHref>
           <Typography
@@ -77,10 +76,8 @@ export default function Header({ onMenuClick }: HeaderProps) {
         </Link>
       </div>
 
-      {/* Spacer only for large screens to balance layout */}
       <div className="hidden md:flex flex-grow mx-4" />
 
-      {/* Right-side icons */}
       <div className="flex items-center">
         <IconButton sx={{ color: "#666" }}>
           <NotificationsIcon />
