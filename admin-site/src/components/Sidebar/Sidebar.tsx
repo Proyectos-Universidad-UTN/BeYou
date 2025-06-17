@@ -142,7 +142,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         borderBottom: "1px solidrgb(255, 255, 255)",
       }}
     >
-
     </div>
   );
 

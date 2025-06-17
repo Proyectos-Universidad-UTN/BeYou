@@ -4,13 +4,12 @@ import { useTokenStore } from '@/stores/UseTokenStore'
 import { useSnackbar } from '@/stores/useSnackbar'
 import { UsePostAuthentication } from '@/hooks/api-beyou/authentication/UsePostAuthentication'
 import { UsePostRefreshAuthentication } from '@/hooks/api-beyou/authentication/UsePostRefreshAuthentication'
-import { UseGetProfileLogged } from '@/hooks/api-beyou/user/UseGetProfileLogged' 
-import { LoginUserRequest, Authentication, ErrorDetailsBeYou, UserProfile } from '@/types/api-beyou'
+import { LoginUserRequest, Authentication, ErrorDetailsBeYou, UserProfile  } from '@/types/api-beyou'
+import { UseGetProfileLogged } from '@/hooks/api-beyou/UseGetProfileLogged'
 
 export const useAuthProvider = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [authLoaded, setAuthLoaded] = useState(false)
-
   const { accessToken, setTokens, clearTokens } = useTokenStore()
   const setSnackbarMessage = useSnackbar((state) => state.setMessage)
 
@@ -19,25 +18,37 @@ export const useAuthProvider = () => {
   const { data, isLoading, isError } = UseGetProfileLogged()
 
   const { mutate: postAuthenticationUser } = UsePostAuthentication({
-    onSuccess: (data: Authentication) => {
-      setSnackbarMessage('Inicio de sesión válido', 'success')
-      setTokens(data.access_token, data.refresh_token)
-    },
-    onError: (error: ErrorDetailsBeYou) => {
-      setSnackbarMessage(error.message || 'Error en inicio de sesión', 'error')
+  onSuccess: (data: Authentication) => {
+    if (data.token && data.refreshToken) {
+      setTokens(data.token, data.refreshToken)
+    } else {
+      console.error('Token o refreshToken no válidos:', data)
+      setSnackbarMessage('Error al iniciar sesión. Tokens inválidos.', 'error')
       logout()
-    },
-  })
+    }
+  },
+  onError: (error: ErrorDetailsBeYou) => {
+    setSnackbarMessage(error.message || 'Error en inicio de sesión', 'error')
+    logout()
+  },
+})
+
 
   const { mutate: postRefreshAuthentication } = UsePostRefreshAuthentication({
-    onSuccess: (data: Authentication) => {
-      setTokens(data.access_token, data.refresh_token)
-    },
-    onError: (error: ErrorDetailsBeYou) => {
-      setSnackbarMessage(error.message || 'Error al actualizar sesión', 'error')
+  onSuccess: (data: Authentication) => {
+    if (data.token && data.refreshToken) {
+      setTokens(data.token, data.refreshToken)
+    } else {
+      setSnackbarMessage('Token inválido recibido del servidor', 'error')
       logout()
-    },
-  })
+    }
+  },
+  onError: (error: ErrorDetailsBeYou) => {
+    setSnackbarMessage(error.message || 'Error al actualizar sesión', 'error')
+    logout()
+  },
+})
+
 
   const login = useCallback((data: LoginUserRequest) => {
     postAuthenticationUser(data)
@@ -53,7 +64,7 @@ export const useAuthProvider = () => {
       const refreshToken = Cookies.get('lexobot_refresh_token')
       if (!refreshToken) throw new Error('No hay token de refresco')
 
-      postRefreshAuthentication({ refresh_token: refreshToken })
+      postRefreshAuthentication({ refreshToken: refreshToken })
       return true
     } catch (error) {
       setSnackbarMessage('Error al actualizar sesión, por favor inicia sesión nuevamente', 'error')
