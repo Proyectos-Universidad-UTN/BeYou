@@ -43,7 +43,7 @@ public class ServiceUser(ICoreService<User> coreService, IMapper mapper) : IServ
         }
 
         RoleApplication roleEnum;
-        if (!Enum.TryParse(role, out roleEnum)) throw new BaseReservationException("Rol Inválido");
+        if (!Enum.TryParse(role, out roleEnum)) throw new BeYouException("Rol Inválido");
 
         var spec = new BaseSpecification<User>(x => x.RoleId == (long)roleEnum);
         var listFilter = await coreService.UnitOfWork.Repository<User>().ListAsync(spec);

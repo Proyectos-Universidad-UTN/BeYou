@@ -81,7 +81,7 @@ public class ServiceTax(ICoreService<Tax> coreService, IMapper mapper, IValidato
         var tax = mapper.Map<Tax>(requestTaxDto);
         await taxValidator.ValidateAndThrowAsync(tax);
 
-        if (await ExistsByRateAsync(id, tax.Rate)) throw new BaseReservationException("Ya existe un impuesto con la misma tasa.");
+        if (await ExistsByRateAsync(id, tax.Rate)) throw new BeYouException("Ya existe un impuesto con la misma tasa.");
         tax.Id = id;
         tax.Active = true;
 

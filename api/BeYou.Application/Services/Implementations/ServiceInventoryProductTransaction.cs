@@ -23,16 +23,16 @@ public class ServiceInventoryProductTransaction(ICoreService<InventoryProductTra
         if (inventoryProduct == null) throw new NotFoundException("Inventario producto no creado.");
 
         if (inventoryProductTransaction.TransactionType == TransactionTypeInventory.Out && inventoryProduct.Assignable - inventoryProductTransaction.Quantity < 0)
-            throw new BaseReservationException("No puede generar un movimiento de inventario con una cantidad mayor a la disponible.");
+            throw new BeYouException("No puede generar un movimiento de inventario con una cantidad mayor a la disponible.");
 
         var newAssignableQuantity = inventoryProductTransactionDto.TransactionType == Enums.TransactionTypeInventoryApplication.Entrada ?
                             inventoryProductTransaction.Quantity : inventoryProductTransaction.Quantity * -1 + inventoryProduct.Assignable;
 
         if (newAssignableQuantity > inventoryProduct.Maximum)
-            throw new BaseReservationException("Cantidad nueva disponible excede el máximo asignado.");
+            throw new BeYouException("Cantidad nueva disponible excede el máximo asignado.");
 
         if (newAssignableQuantity < inventoryProduct.Minimum)
-            throw new BaseReservationException("Cantidad nueva disponible es menor al mínimo asignado.");
+            throw new BeYouException("Cantidad nueva disponible es menor al mínimo asignado.");
 
         var result = await coreService.UnitOfWork.Repository<InventoryProductTransaction>().AddAsync(inventoryProductTransaction);
         await coreService.UnitOfWork.SaveChangesAsync();

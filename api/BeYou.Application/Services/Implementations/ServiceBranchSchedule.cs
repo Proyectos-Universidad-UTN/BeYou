@@ -71,7 +71,7 @@ public class ServiceBranchSchedule(ICoreService<BranchSchedule> coreService, IMa
             catch
             {
                 await transaction.RollbackAsync();
-                throw new BaseReservationException("Se ha presentado un error al momento de asignar los horarios en la sucursal.");
+                throw new BeYouException("Se ha presentado un error al momento de asignar los horarios en la sucursal.");
             }
         });
 

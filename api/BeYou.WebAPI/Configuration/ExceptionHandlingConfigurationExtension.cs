@@ -52,7 +52,7 @@ public static class ExceptionHandlingConfigurationExtension
                 httpStatusCode = d.HttpStatusCode;
                 logLevel = d.LogLevel;
                 break;
-            case BaseReservationException e:
+            case BeYouException e:
                 httpStatusCode = e.HttpStatusCode;
                 logLevel = e.LogLevel;
                 break;
