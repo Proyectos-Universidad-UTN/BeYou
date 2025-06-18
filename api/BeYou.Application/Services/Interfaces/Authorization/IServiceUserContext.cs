@@ -3,5 +3,5 @@
 public interface IServiceUserContext
 {
     string? UserId { get; }
-    ResponseMeDto? GetCurrentUser(); 
+    Task<ResponseMeDto> GetCurrentUserAsync(); 
 }

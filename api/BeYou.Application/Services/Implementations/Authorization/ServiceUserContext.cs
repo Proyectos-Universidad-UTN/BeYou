@@ -1,12 +1,13 @@
 ﻿using BeYou.Application.Dtos.Response;
 using BeYou.Application.Dtos.Response.Authentication;
-using BeYou.Application.Services.Interfaces.Authorization;
+using BeYou.Application.Services.Interfaces;
+using BeYou.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using System.Reflection;
 
 namespace BeYou.Application.Services.Implementations.Authorization;
 
-public class ServiceUserContext(IHttpContextAccessor httpContextAccessor) : IServiceUserContext
+public class ServiceUserContext(IHttpContextAccessor httpContextAccessor, IServiceUser serviceUser) : IServiceUserContext
 {
     public string? UserId
     {
@@ -28,24 +29,25 @@ public class ServiceUserContext(IHttpContextAccessor httpContextAccessor) : ISer
         }
     }
 
-    public ResponseMeDto? GetCurrentUser()
+    public async Task<ResponseMeDto> GetCurrentUserAsync()
     {
         var httpContextItems = httpContextAccessor.HttpContext?.Items;
         if (httpContextItems != null && httpContextItems["CurrentUser"] is CurrentUser currentUser)
         {
+            var user = await serviceUser.FindByIdAsync(currentUser.UserId);
             return new ResponseMeDto
             {
-                FirstName = currentUser.FirstName,
-                LastName = currentUser.LastName,
-                FullName = $"{currentUser.FirstName} {currentUser.LastName}",
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Role = new ResponseRoleDto
                 {
-                    Id = currentUser.RoleId.GetValueOrDefault(),  
-                    Description = currentUser.RoleDescription ?? string.Empty
+                    Id = user.RoleId,
+                    Description = user.Role.Description,
+                    Type = user.Role.Type
                 }
             };
         }
 
-        return null;
+        throw new UnAuthorizedException("User not found in context or unauthorized access.");
     }
 }

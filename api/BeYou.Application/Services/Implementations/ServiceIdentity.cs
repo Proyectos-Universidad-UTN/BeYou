@@ -85,7 +85,7 @@ public class ServiceIdentity(AuthenticationConfiguration authenticationConfigura
             new Claim("LastName", user.LastName),
             new Claim("FullName", $"{user.FirstName} {user.LastName}"),
             new Claim("Email", user.Email),
-            new Claim(ClaimTypes.Role, user.Role.Description),
+            new Claim(ClaimTypes.Role, user.Role.Type),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         });
     }
