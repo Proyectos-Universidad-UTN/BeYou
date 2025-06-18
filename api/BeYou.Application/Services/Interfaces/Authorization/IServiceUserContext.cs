@@ -1,10 +1,7 @@
-﻿namespace BeYou.Application.Services.Interfaces.Authorization;
+﻿using BeYou.Application.Dtos.Response;
 
 public interface IServiceUserContext
 {
-    /// <summary>
-    /// User email base on context sent from context
-    /// </summary>
-    /// <value>string</value>
     string? UserId { get; }
+    Task<ResponseMeDto> GetCurrentUserAsync(); 
 }

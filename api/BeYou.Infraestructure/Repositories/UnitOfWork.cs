@@ -96,7 +96,7 @@ public class UnitOfWork(ILoggerFactory loggerFactory, BeYouContext dbContext) : 
     public async Task<int> SaveChangesAsync()
     {
         int rowsAffected = await _dbContext.SaveChangesAsync();
-        if (rowsAffected == 0) throw new BaseReservationException("Proceso no se ha podido completar.");
+        if (rowsAffected == 0) throw new BeYouException("Proceso no se ha podido completar.");
 
         return rowsAffected;
     }

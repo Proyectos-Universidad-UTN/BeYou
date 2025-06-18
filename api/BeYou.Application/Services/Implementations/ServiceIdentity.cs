@@ -33,7 +33,7 @@ public class ServiceIdentity(AuthenticationConfiguration authenticationConfigura
     {
         var response = new AuthenticationResult();
         var authResponse = await GetRefreshTokenAsync(request.Token, request.RefreshToken);
-        if (!authResponse.Success) throw new BaseReservationException("No se pudo obtener el token actualizado");
+        if (!authResponse.Success) throw new BeYouException("No se pudo obtener el token actualizado");
 
         response.Token = authResponse.Token;
         response.RefreshToken = authResponse.RefreshToken;
@@ -85,7 +85,7 @@ public class ServiceIdentity(AuthenticationConfiguration authenticationConfigura
             new Claim("LastName", user.LastName),
             new Claim("FullName", $"{user.FirstName} {user.LastName}"),
             new Claim("Email", user.Email),
-            new Claim(ClaimTypes.Role, user.Role.Description),
+            new Claim(ClaimTypes.Role, user.Role.Type),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         });
     }
