@@ -1,5 +1,7 @@
+'use client'
+
 import { paths } from '@/api/clients/beyou/api';
-import Cookies from 'js-cookie';
+import { useTokenStore } from '@/stores/UseTokenStore';
 import { Fetcher, Middleware, type TypedFetch } from "openapi-typescript-fetch";
 
 const getHeaders = (disableAuth: boolean, token: string): Record<string, string> => {
@@ -36,12 +38,12 @@ export const UseTypedApiClientBY = <
     method: MethodT;
     disableAuth?: boolean;
 }): TypedFetch<paths[PathT][MethodT]> => {
-    const token = Cookies.get('access_token');
+    const {accessToken} = useTokenStore();
     const fetcher = Fetcher.for<paths>();
     fetcher.configure({
         baseUrl: process.env.NEXT_PUBLIC_API_BEYOU_BASE_URL,
         init: {
-            headers: getHeaders(disableAuth, token ?? ''),
+            headers: getHeaders(disableAuth, accessToken ?? ''),
         },
         use: [arrayWrapperMiddleware],
     });

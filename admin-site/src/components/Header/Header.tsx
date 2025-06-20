@@ -20,6 +20,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks/UseIsMobile";
+import { useAuthProvider } from "@/context/useAuthProvider"; 
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -29,6 +30,10 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const isMobile = useIsMobile();
+
+  const { userProfile } = useAuthProvider(); 
+  console.log("Perfil cargado:", userProfile);
+
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -90,7 +95,9 @@ export default function Header({ onMenuClick }: HeaderProps) {
           aria-haspopup="true"
           onClick={handleMenu}
         >
-          <Avatar sx={{ bgcolor: "#ffb3c6", color: "#b8860b" }}>U</Avatar>
+          <Avatar sx={{ bgcolor: "#ffb3c6", color: "#b8860b" }}>
+            {userProfile?.fullName?.charAt(0).toUpperCase() ?? "U"}
+          </Avatar>
         </IconButton>
 
         <Menu
@@ -102,18 +109,20 @@ export default function Header({ onMenuClick }: HeaderProps) {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>
+          <MenuItem disabled>
             <ListItemIcon>
               <Person fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Mi Perfil" />
+            <ListItemText primary={userProfile?.fullName ?? "Usuario"} />
           </MenuItem>
+
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <SettingsIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Configuración" />
           </MenuItem>
+
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />

@@ -12,6 +12,7 @@ const PROFILE_METHOD = "get" as const;
 
 export const UseGetProfileLogged = (): UseQueryResult<UserProfile | null, ApiError> => {
   const {accessToken}= useTokenStore() //destructurar
+    console.log("Hook UseGetProfileLogged ejecutado. Token:", accessToken); // 👈
   // Crear función fetch para el endpoint perfil
   const fetchProfile = UseTypedApiClientBY({
     path: PROFILE_PATH,
@@ -22,6 +23,7 @@ export const UseGetProfileLogged = (): UseQueryResult<UserProfile | null, ApiErr
     queryKey: ["profile-logged"],
     queryFn: async () => {
       const {data} = await fetchProfile(castRequestBody({},PROFILE_PATH,PROFILE_METHOD));
+         console.log("✅ Perfil recibido desde API:", data); // 👈
       return data;
     },
     staleTime: 0,

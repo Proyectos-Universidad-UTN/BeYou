@@ -3,6 +3,8 @@ import { components } from "@/api/clients/beyou/api";
 type SchemaTypes = keyof components['schemas'];
 export type SchemaData = components['schemas'][SchemaTypes];
 
+export type Roles = 'Administrator'
+
 export type ErrorDetailsBeYou = components['schemas']['ErrorDetailsBeYou']
 
 export type UserProfile = components['schemas']['ResponseMeDto']

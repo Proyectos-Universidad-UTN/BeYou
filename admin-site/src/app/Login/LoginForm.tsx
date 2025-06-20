@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useRouter } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useEffect, useState } from "react";
@@ -35,19 +35,23 @@ export const LoginForm = () => {
   const [loading, setLoading] = useState(false);
 
   const createLoginWrapper = useCallback(
-  async (data: LoginTypeForm & { remember?: boolean }) => {
-    setLoading(true);
-    try {
+    async (data: LoginTypeForm & { remember?: boolean }) => {
+      setLoading(true);
       await login(data);
-      router.push("/Dashboard");
-    } catch (error) {
-      console.error("Error de login:", error);
-    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 200);
+    },
+    [login, router]
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
       setLoading(false);
+      router.push("/Dashboard");
     }
-  },
-  [login, router]
-);
+  }, [isAuthenticated, router]);
+
   return (
     <Box className="min-h-screen flex items-center justify-center bg-[#ffe4ec] px-4">
       <Paper
