@@ -46,7 +46,7 @@ export const useAuthProvider = () => {
   });
 
   const login = useCallback(
-    (data: LoginUserRequest) => {
+    async(data: LoginUserRequest) => {
       postAuthenticationUser(data);
     },
     [postAuthenticationUser]
@@ -57,7 +57,7 @@ export const useAuthProvider = () => {
     setUserProfile(null);
   }, [clearTokens]);
 
-  const refreshToken = useCallback(() => {
+  const refreshToken = useCallback(async() => {
     try {
       const { refreshToken } = useTokenStore();
       if (!refreshToken) throw new Error("No hay token de refresco");

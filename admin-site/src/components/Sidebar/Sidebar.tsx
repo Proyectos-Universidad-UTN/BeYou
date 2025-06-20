@@ -3,7 +3,7 @@
 import { useIsMobile } from "@/hooks/UseIsMobile";
 import MobileSidebar from "./MobileSidebar";
 import DesktopSidebar from "./DesktopSidebar";
-import { MenuItem } from "./types";
+import { MenuItem } from "./Types";
 
 const menuItems: MenuItem[] = [
   { label: "Inicio", path: "/" },

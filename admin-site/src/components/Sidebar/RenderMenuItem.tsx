@@ -14,7 +14,7 @@ import {
   ExpandMore,
 } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
-import { MenuItem } from "./types";
+import { MenuItem } from "./Types";
 
 const iconMap: { [key: string]: React.ReactNode } = {
   Inicio: <span className="material-icons"></span>,
@@ -88,9 +88,7 @@ export function renderMenuItem(
                   href={child.path!}
                   key={child.label}
                   passHref
-                  legacyBehavior
                 >
-                  <a className="no-underline block">
                     <ListItem
                       {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
                       className={`text-sm rounded-md mb-2 pl-6 flex items-center transition-colors duration-300 ${
@@ -108,10 +106,8 @@ export function renderMenuItem(
                       </ListItemIcon>
                       <ListItemText
                         primary={child.label}
-                        primaryTypographyProps={{ fontSize: "0.85rem" }}
                       />
                     </ListItem>
-                  </a>
                 </Link>
               );
             })}
@@ -122,8 +118,7 @@ export function renderMenuItem(
   }
 
   return (
-    <Link href={item.path!} key={item.label} passHref legacyBehavior>
-      <a className="no-underline">
+    <Link href={item.path!} key={item.label} passHref >
         <ListItem
           {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
           className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
@@ -139,7 +134,6 @@ export function renderMenuItem(
           </ListItemIcon>
           <ListItemText primary={item.label} />
         </ListItem>
-      </a>
     </Link>
   );
 }

@@ -20,7 +20,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks/UseIsMobile";
-import { useAuthProvider } from "@/context/useAuthProvider"; 
+import { useAuth } from "@/context/AuthContext";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -30,10 +30,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const isMobile = useIsMobile();
-
-  const { userProfile } = useAuthProvider(); 
-  console.log("Perfil cargado:", userProfile);
-
+  const { userProfile, logout} = useAuth(); 
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -45,7 +42,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
   const handleLogout = () => {
     handleClose();
-    router.push("/Login");
+    logout();
   };
 
   return (
@@ -65,7 +62,6 @@ export default function Header({ onMenuClick }: HeaderProps) {
         <Link href="/" passHref>
           <Typography
             variant="h6"
-            component="a"
             sx={{
               fontWeight: "bold",
               color: "#b8860b",

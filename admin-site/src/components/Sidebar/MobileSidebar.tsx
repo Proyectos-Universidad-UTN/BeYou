@@ -1,8 +1,8 @@
 "use client";
 
 import { Drawer, List } from "@mui/material";
-import { MenuItem } from "./types";
-import { renderMenuItem } from "./renderMenuItem";
+import { MenuItem } from "./Types";
+import { renderMenuItem } from "./RenderMenuItem";
 
 interface MobileSidebarProps {
   isOpen?: boolean;

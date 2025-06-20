@@ -3,6 +3,7 @@
 import { paths } from '@/api/clients/beyou/api';
 import { useTokenStore } from '@/stores/UseTokenStore';
 import { Fetcher, Middleware, type TypedFetch } from "openapi-typescript-fetch";
+import { createAuthMiddleware } from './middleware/authMiddleware';
 
 const getHeaders = (disableAuth: boolean, token: string): Record<string, string> => {
     if (disableAuth) {
@@ -38,14 +39,15 @@ export const UseTypedApiClientBY = <
     method: MethodT;
     disableAuth?: boolean;
 }): TypedFetch<paths[PathT][MethodT]> => {
-    const {accessToken} = useTokenStore();
+    const {getAccessToken} = useTokenStore();
     const fetcher = Fetcher.for<paths>();
     fetcher.configure({
         baseUrl: process.env.NEXT_PUBLIC_API_BEYOU_BASE_URL,
         init: {
-            headers: getHeaders(disableAuth, accessToken ?? ''),
+            headers: getHeaders(disableAuth, getAccessToken() ?? ''),
         },
-        use: [arrayWrapperMiddleware],
+        use: [arrayWrapperMiddleware, createAuthMiddleware(process.env.NEXT_PUBLIC_API_BEYOU_BASE_URL!)],
+        
     });
 
     return fetcher.path(path).method(method).create({}) as TypedFetch<paths[PathT][MethodT]>;
