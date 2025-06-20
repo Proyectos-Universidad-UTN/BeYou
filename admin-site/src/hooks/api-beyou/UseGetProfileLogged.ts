@@ -1,30 +1,31 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { paths } from '@/api/clients/beyou/api';
-import { UseTypedApiClientBS } from '@/hooks/api-beyou/UseTypedApiClientBS';
+"use client";
+
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { UserProfile } from "@/types/api-beyou";
+import { useTokenStore } from "@/stores/UseTokenStore";
+import { castRequestBody, UseTypedApiClientBY } from "../UseTypedApiClientBY";
+import { ApiError } from "openapi-typescript-fetch";
 
 // Ajusta el path y método exacto según tu API
-const PROFILE_PATH = '/auth/profile' as const;
-const PROFILE_METHOD = 'get' as const;
+const PROFILE_PATH = "/api/Me" as const;
+const PROFILE_METHOD = "get" as const;
 
-// Tipo de la respuesta (ajustar según tu spec)
-type UserProfile = paths[typeof PROFILE_PATH][typeof PROFILE_METHOD]['responses'][200]['content']['application/json'];
-
-export const UseGetProfileLogged = (): UseQueryResult<UserProfile, Error> => {
+export const UseGetProfileLogged = (): UseQueryResult<UserProfile | null, ApiError> => {
+  const {accessToken}= useTokenStore() //destructurar
   // Crear función fetch para el endpoint perfil
-  const fetchProfile = UseTypedApiClientBS({
+  const fetchProfile = UseTypedApiClientBY({
     path: PROFILE_PATH,
     method: PROFILE_METHOD,
   });
 
-  return useQuery<UserProfile, Error>(
-    ['profile-logged'],
-    async () => {
-      const response = await fetchProfile();
-      return response;
+  return useQuery({
+    queryKey: ["profile-logged"],
+    queryFn: async () => {
+      const {data} = await fetchProfile(castRequestBody({},PROFILE_PATH,PROFILE_METHOD));
+      return data;
     },
-    {
-      staleTime: 5 * 60 * 1000, 
-      retry: false,
-    }
-  );
+    staleTime: 0,
+    retry: false,
+    enabled: !!accessToken
+  });
 };

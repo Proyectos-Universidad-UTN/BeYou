@@ -3171,6 +3171,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves information about the currently authenticated user. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: {
+                    "x-api-version"?: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ResponseMeDto"];
+                        "application/json": components["schemas"]["ResponseMeDto"];
+                        "text/json": components["schemas"]["ResponseMeDto"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Order": {
         parameters: {
             query?: never;
@@ -5770,7 +5821,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/User/ByRol/{rol}": {
+    "/api/User/ByRol/{role}": {
         parameters: {
             query?: never;
             header?: never;
@@ -5780,15 +5831,13 @@ export interface paths {
         /** Get list of all users by role */
         get: {
             parameters: {
-                query?: {
-                    /** @description Role to look for */
-                    role?: string;
-                };
+                query?: never;
                 header?: {
                     "x-api-version"?: string;
                 };
                 path: {
-                    rol: string;
+                    /** @description Role to look for */
+                    role: string;
                 };
                 cookie?: never;
             };
@@ -6288,6 +6337,16 @@ export interface components {
          * @enum {integer}
          */
         MonthApplication: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+        ProblemDetails: {
+            type?: string | null;
+            title?: string | null;
+            /** Format: int32 */
+            status?: number | null;
+            detail?: string | null;
+            instance?: string | null;
+        } & {
+            [key: string]: unknown;
+        };
         RequestBranchDto: {
             name?: string | null;
             description?: string | null;
@@ -6865,6 +6924,12 @@ export interface components {
             updated?: string | null;
             updatedBy?: string | null;
             active?: boolean;
+        };
+        ResponseMeDto: {
+            firstName?: string | null;
+            lastName?: string | null;
+            readonly fullName?: string | null;
+            role?: components["schemas"]["ResponseRoleDto"];
         };
         ResponseOrderDetailDto: {
             /** Format: int64 */

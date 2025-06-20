@@ -1,8 +1,11 @@
 import { components } from "@/api/clients/beyou/api";
 
-
 type SchemaTypes = keyof components['schemas'];
 export type SchemaData = components['schemas'][SchemaTypes];
+
+export type ErrorDetailsBeYou = components['schemas']['ErrorDetailsBeYou']
+
+export type UserProfile = components['schemas']['ResponseMeDto']
 
 export type Branch = components['schemas']['ResponseBranchDto']
 export type BranchRequest = components['schemas']['RequestBranchDto']
@@ -24,8 +27,6 @@ export type ScheduleRequest = components['schemas']['RequestScheduleDto']
 export type LoginUserRequest = components['schemas']['RequestUserLoginDto']
 export type UserTokenRefreshRequest = components['schemas']['TokenModel']
 export type Authentication = components['schemas']['AuthenticationResult']
-
-export type ErrorDetailsBeYou = components['schemas']['ErrorDetailsBeYou']
 
 export type Holiday = components['schemas']['ResponseHolidayDto']
 export type HolidayRequest = components['schemas']['RequestHolidayDto']

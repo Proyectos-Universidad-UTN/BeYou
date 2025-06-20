@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 
-const ACCESS_COOKIE = 'lexobot_access_token';
-const REFRESH_COOKIE = 'lexobot_refresh_token';
+const ACCESS_COOKIE = 'beyou_access_token';
+const REFRESH_COOKIE = 'beyou_refresh_token';
 
 interface TokenStore {
     accessToken: string | null;

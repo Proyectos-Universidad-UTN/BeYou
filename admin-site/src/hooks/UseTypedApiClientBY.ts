@@ -24,7 +24,7 @@ const arrayWrapperMiddleware: Middleware = async (url, init, next) => {
     return next(url, init);
 };
 
-export const UseTypedApiClientBS = <
+export const UseTypedApiClientBY = <
     PathT extends keyof paths,
     MethodT extends keyof paths[PathT],
 >({
