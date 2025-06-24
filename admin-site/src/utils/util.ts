@@ -1,6 +1,27 @@
+/**
+ * Utility functions for data formatting, validation, error handling, and date manipulation.
+ * 
+ * This module provides reusable helpers such as:
+ * - Regex patterns for time and telephone formats
+ * - Date formatting and translation to Spanish
+ * - Currency formatting
+ * - Error transformation for API responses
+ * - Utility helpers for arrays, strings, and nested fields
+ * 
+ * Intended to be used throughout the BeYou application for consistent data handling.
+ */
+
 import { isNil } from "lodash";
 import { ApiError } from "openapi-typescript-fetch";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { ErrorDetailsBeYou, MonthName, WeeklyDay } from "@/types/api-beyou";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export const timeRegex = /^([01]?\d|2[0-3]):([0-5]?\d)$/;
 export const telephoneMaskRegex = /^\d{4}-\d{4}$/;
@@ -31,9 +52,11 @@ export const months: Record<MonthName, string> = {
   11: "Noviembre",
   12: "Diciembre",
 };
+
 export const isPresent = <T>(t: T): t is NonNullable<T> => {
   return t !== null && t !== undefined;
 };
+
 export const convertToArray = <T>(value: T | readonly T[] | undefined): T[] => {
   if (!value) return [];
   if (Array.isArray(value)) {
@@ -41,10 +64,12 @@ export const convertToArray = <T>(value: T | readonly T[] | undefined): T[] => {
   }
   return [value as T];
 };
+
 export const removePhoneMask = (phone: string): number => {
   const unmaskedPhone = phone.replace(/[^\d]/g, "");
   return parseInt(unmaskedPhone, 10);
 };
+
 export const applyPhoneMask = (phone: string): string => {
   const numericPhone = phone.replace(/\D/g, "");
   if (numericPhone.length !== 8) {
@@ -52,11 +77,13 @@ export const applyPhoneMask = (phone: string): string => {
   }
   return `${numericPhone.slice(0, 4)}-${numericPhone.slice(4)}`;
 };
+
 const toCamelCase = (str: string): string => {
   return str
     .replace(/([A-Z])/g, (match) => `_${match.toLowerCase()}`)
     .replace(/^_/, "");
 };
+
 export const transformErrorKeys = (
   error: Record<string, any>
 ): Record<string, any> => {
@@ -68,22 +95,26 @@ export const transformErrorKeys = (
   }
   return transformedError;
 };
+
 export const getErrorMessage = (error: ApiError) => {
   const errorDetail = transformErrorKeys(error.data as ErrorDetailsBeYou);
   return errorDetail.message;
 };
+
 export const getDayInSpanish = (day: WeeklyDay | undefined): string => {
   if (isNil(day)) {
     return "";
   }
   return weekDaysSpanish[day] ?? "";
 };
+
 export const getMonthInSpanish = (month: MonthName | undefined): string => {
   if (isNil(month)) {
     return "";
   }
   return months[month] ?? "";
 };
+
 export const getNestedField = (obj: any, field: string) => {
   return field
     .split(".")
@@ -91,4 +122,83 @@ export const getNestedField = (obj: any, field: string) => {
       (acc, part) => (acc && acc[part] !== undefined ? acc[part] : null),
       obj
     );
+};
+
+export const getInitials = (fullName?: string): string => {
+  if (!fullName) return "US";
+  const names = fullName.trim().split(" ");
+  const initials = names
+    .slice(0, 2)
+    .map((n) => n.charAt(0).toUpperCase())
+    .join("");
+  return initials || "US";
+};
+
+export const formatErrorMessage = (error: ErrorDetailsBeYou): string => {
+  const { detail, message } = error;
+
+  if (Array.isArray(detail) && detail.length > 0) {
+    return detail
+      .map(
+        (d: any) =>
+          d?.ctx?.reason || d?.msg || "Error de validación desconocido"
+      )
+      .join("\n");
+  }
+
+  if (typeof detail === "string") {
+    return detail;
+  }
+
+  return message ?? "Error desconocido";
+};
+
+export const formatCurrency = (
+  value: number,
+  options: {
+    thousandSeparator?: string;
+    decimalSeparator?: string;
+    prefix?: string;
+  } = {}
+): string => {
+  const {
+    thousandSeparator = ",",
+    decimalSeparator = ".",
+    prefix = "$",
+  } = options;
+
+  const parts = Math.abs(value).toFixed(2).split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+
+  const formattedValue = `${prefix}${parts.join(decimalSeparator)}`;
+  return value < 0 ? `-${formattedValue}` : formattedValue;
+};
+
+export const formatDate = (date: string | Date | null): string => {
+  if (!date) return "-";
+  try {
+    return format(new Date(date), "dd/MM/yyyy", { locale: es });
+  } catch {
+    return "-";
+  }
+};
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
+export const createSelectOptions = <T extends Record<string, any>>(
+  items: T[] | undefined,
+  config: {
+    valueField: keyof T;
+    labelField: keyof T;
+  }
+): SelectOption[] => {
+  return (
+    items?.map((item) => ({
+      value: String(item[config.valueField]),
+      label: String(item[config.labelField]),
+    })) ?? []
+  );
 };

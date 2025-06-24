@@ -9,27 +9,9 @@ import {
   ListItemText,
   Collapse,
 } from "@mui/material";
-import {
-  ExpandLess,
-  ExpandMore,
-} from "@mui/icons-material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
 import { MenuItem } from "./Types";
-
-const iconMap: { [key: string]: React.ReactNode } = {
-  Inicio: <span className="material-icons"></span>,
-  Sucursal: <span className="material-icons"></span>,
-  Sucursales: <span className="material-icons"></span>,
-  Gestiones: <span className="material-icons"></span>,
-  Reservas: <span className="material-icons"></span>,
-  Proforma: <span className="material-icons"></span>,
-  Proveedores: <span className="material-icons"></span>,
-  Productos: <span className="material-icons"></span>,
-  Servicios: <span className="material-icons"></span>,
-  Configuración: <span className="material-icons"></span>,
-  Perfil: <span className="material-icons"></span>,
-  Seguridad: <span className="material-icons"></span>,
-};
 
 interface RenderMenuItemProps {
   item: MenuItem;
@@ -43,7 +25,9 @@ export function renderMenuItem(
   onClose?: () => void
 ) {
   const pathname = usePathname();
-  const [expandedMenus, setExpandedMenus] = useState<{ [key: string]: boolean }>({});
+  const [expandedMenus, setExpandedMenus] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const handleToggle = (label: string) => {
     setExpandedMenus((prev) => ({ ...prev, [label]: !prev[label] }));
@@ -51,7 +35,7 @@ export function renderMenuItem(
 
   const isActive = pathname === item.path;
   const isExpanded = expandedMenus[item.label];
-  const icon = iconMap[item.label] || item.icon;
+  const icon = item.icon ? <item.icon className="w-5 h-5" /> : null;
 
   if (item.children) {
     return (
@@ -82,32 +66,29 @@ export function renderMenuItem(
           <List component="div" disablePadding>
             {item.children.map((child) => {
               const childActive = pathname === child.path;
-              const childIcon = iconMap[child.label] || child.icon;
+              const childIcon = child.icon ? (
+                <child.icon className="w-5 h-5" />
+              ) : null;
+
               return (
-                <Link
-                  href={child.path!}
-                  key={child.label}
-                  passHref
-                >
-                    <ListItem
-                      {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
-                      className={`text-sm rounded-md mb-2 pl-6 flex items-center transition-colors duration-300 ${
-                        childActive
-                          ? "bg-yellow-300 text-gray-900"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-black"
+                <Link href={child.path!} key={child.label} passHref>
+                  <ListItem
+                    {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
+                    className={`text-sm rounded-md mb-2 pl-6 flex items-center transition-colors duration-300 ${
+                      childActive
+                        ? "bg-yellow-300 text-gray-900"
+                        : "text-gray-600 hover:bg-yellow-100 hover:text-black"
+                    }`}
+                  >
+                    <ListItemIcon
+                      className={`min-w-[36px] ${
+                        childActive ? "text-yellow-700" : "text-gray-500"
                       }`}
                     >
-                      <ListItemIcon
-                        className={`min-w-[36px] ${
-                          childActive ? "text-yellow-700" : "text-gray-500"
-                        }`}
-                      >
-                        {childIcon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={child.label}
-                      />
-                    </ListItem>
+                      {childIcon}
+                    </ListItemIcon>
+                    <ListItemText primary={child.label} />
+                  </ListItem>
                 </Link>
               );
             })}
@@ -118,22 +99,22 @@ export function renderMenuItem(
   }
 
   return (
-    <Link href={item.path!} key={item.label} passHref >
-        <ListItem
-          {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
-          className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
-            isActive
-              ? "bg-yellow-300 text-gray-900"
-              : "text-gray-800 hover:bg-yellow-200 hover:text-black"
-          }`}
+    <Link href={item.path!} key={item.label} passHref>
+      <ListItem
+        {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
+        className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
+          isActive
+            ? "bg-yellow-300 text-gray-900"
+            : "text-gray-800 hover:bg-yellow-200 hover:text-black"
+        }`}
+      >
+        <ListItemIcon
+          className={`${isActive ? "text-yellow-700" : "text-gray-500"}`}
         >
-          <ListItemIcon
-            className={`${isActive ? "text-yellow-700" : "text-gray-500"}`}
-          >
-            {icon}
-          </ListItemIcon>
-          <ListItemText primary={item.label} />
-        </ListItem>
+          {icon}
+        </ListItemIcon>
+        <ListItemText primary={item.label} />
+      </ListItem>
     </Link>
   );
 }

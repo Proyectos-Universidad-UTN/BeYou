@@ -1,31 +1,42 @@
 "use client";
 
+import {
+  Home,
+  Store,
+  Calendar,
+  FileText,
+  Truck,
+  Package,
+  Sparkles,
+  Users,
+  Settings,
+} from "lucide-react";
 import { useIsMobile } from "@/hooks/UseIsMobile";
 import MobileSidebar from "./MobileSidebar";
 import DesktopSidebar from "./DesktopSidebar";
 import { MenuItem } from "./Types";
 
 const menuItems: MenuItem[] = [
-  { label: "Inicio", path: "/" },
-  {
-    label: "Sucursal",
-    children: [{ label: "Sucursales", path: "/sucursales" }],
-  },
+  { label: "Inicio", path: "/", icon: Home },
+  { label: "Sucursal", path: "/sucursales", icon: Store },
   {
     label: "Gestiones",
+    icon: Calendar,
     children: [
-      { label: "Reservas", path: "/gestiones/reservas" },
-      { label: "Proforma", path: "/gestiones/proforma" },
+      { label: "Reservas", path: "/gestiones/reservas", icon: FileText },
+      { label: "Proforma", path: "/gestiones/proforma", icon: FileText },
     ],
   },
-  { label: "Proveedores", path: "/proveedores" },
-  { label: "Productos", path: "/productos" },
-  { label: "Servicios", path: "/servicios" },
+  { label: "Proveedores", path: "/proveedores", icon: Truck },
+  { label: "Productos", path: "/productos", icon: Package },
+  { label: "Servicios", path: "/servicios", icon: Sparkles },
+  { label: "Usuarios", path: "/usuarios", icon: Users },
   {
     label: "Configuración",
+    icon: Settings,
     children: [
-      { label: "Perfil", path: "/configuracion/perfil" },
-      { label: "Seguridad", path: "/configuracion/seguridad" },
+      { label: "Perfil", path: "/configuracion/perfil", icon: Users },
+      { label: "Seguridad", path: "/configuracion/seguridad", icon: Settings },
     ],
   },
 ];
