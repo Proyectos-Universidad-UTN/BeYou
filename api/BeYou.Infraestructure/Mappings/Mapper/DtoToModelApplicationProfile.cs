@@ -20,6 +20,9 @@ public class DtoToModelApplicationProfile : Profile
                 opts.MapFrom<CurrentUserIdResolverModify>();
             });
 
+        CreateMap<RequestUserDto, User>()
+           .IncludeBase<RequestBaseDto, BaseEntity>();
+
         CreateMap<RequestProductDto, Product>()
             .IncludeBase<RequestBaseDto, BaseEntity>();
 

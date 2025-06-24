@@ -1,4 +1,5 @@
-﻿using BeYou.Application.Dtos.Response;
+﻿using BeYou.Application.Dtos.Request;
+using BeYou.Application.Dtos.Response;
 
 namespace BeYou.Application.Services.Interfaces;
 
@@ -39,4 +40,19 @@ public interface IServiceUser
     /// <param name="email">Email to look for</param>
     /// <returns>ResponseUserDto</returns>
     Task<ResponseUserDto> FindByEmailAsync(string email);
+
+    /// <summary>
+    /// Create usuer
+    /// </summary>
+    /// <param name="userDTO">User request model to be added</param>
+    /// <returns>ResponseUserDto</returns>
+    Task<ResponseUserDto> CreateUserAsync(RequestUserDto userDTO);
+
+    /// <summary>
+    /// Update user
+    /// </summary>
+    /// <param name="id">user if</param>
+    /// <param name="userDTO">User request model to be updated</param>
+    /// <returns>ResponseUserDto</returns>
+    Task<ResponseUserDto> UpdateUserAsync(long id, RequestUserDto UserDTO);
 }
