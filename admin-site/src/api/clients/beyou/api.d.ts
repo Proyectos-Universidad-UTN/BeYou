@@ -5814,6 +5814,142 @@ export interface paths {
             };
         };
         put?: never;
+        /** Creates a new user. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: {
+                    "x-api-version"?: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            /** @description The user data to be created. */
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["RequestUserDto"];
+                    "text/json": components["schemas"]["RequestUserDto"];
+                    "application/*+json": components["schemas"]["RequestUserDto"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ResponseUserDto"];
+                        "application/json": components["schemas"]["ResponseUserDto"];
+                        "text/json": components["schemas"]["ResponseUserDto"];
+                    };
+                };
+                /** @description Unprocessable Content */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/User/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Updates an existing user by ID. */
+        put: {
+            parameters: {
+                query?: never;
+                header?: {
+                    "x-api-version"?: string;
+                };
+                path: {
+                    /** @description The ID of the user to update. */
+                    userId: number;
+                };
+                cookie?: never;
+            };
+            /** @description The updated user data. */
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["RequestUserDto"];
+                    "text/json": components["schemas"]["RequestUserDto"];
+                    "application/*+json": components["schemas"]["RequestUserDto"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ResponseUserDto"];
+                        "application/json": components["schemas"]["ResponseUserDto"];
+                        "text/json": components["schemas"]["ResponseUserDto"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+                /** @description Unprocessable Content */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+            };
+        };
         post?: never;
         delete?: never;
         options?: never;
@@ -6612,6 +6748,27 @@ export interface components {
             /** Format: int64 */
             id?: number;
         };
+        RequestUserDto: {
+            cardId?: string | null;
+            firstName?: string | null;
+            lastName?: string | null;
+            /** Format: int32 */
+            telephone?: number;
+            email?: string | null;
+            /** Format: int64 */
+            districtId?: number;
+            address?: string | null;
+            /** Format: date */
+            birthday?: string;
+            password?: string | null;
+            /** Format: int64 */
+            genderId?: number;
+            profilePictureUrl?: string | null;
+            /** Format: int64 */
+            roleId?: number;
+            /** Format: int64 */
+            id?: number;
+        };
         RequestUserLoginDto: {
             email?: string | null;
             password?: string | null;
@@ -7213,7 +7370,6 @@ export interface components {
             address?: string | null;
             /** Format: date */
             birthday?: string;
-            password?: string | null;
             /** Format: int64 */
             genderId?: number;
             profilePictureUrl?: string | null;
