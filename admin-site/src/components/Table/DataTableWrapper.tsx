@@ -1,8 +1,10 @@
-import { DataTable } from "components/Table/DataTable";
-import { SchemaData } from "types/api-basereservation";
-import { ErrorProcess } from "components/Error/ErrorProcess";
-import { CircularLoadingProgress } from "components/LoadingProgress/CircularLoadingProcess";
+"use client"
+
 import { GridColDef, GridEventListener } from "@mui/x-data-grid";
+import { DataTable } from "./DataTable";
+import { SchemaData } from "@/types/api-beyou";
+import { ErrorProcess } from "../Error/ErrorProcess";
+import { CircularLoadingProgress } from "../LoadingProgress/CircularLoadingProcess";
 
 interface DataTableWrapperProps {
     columns: GridColDef[];
