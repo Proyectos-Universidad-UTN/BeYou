@@ -3,7 +3,7 @@ import { ApiError } from "openapi-typescript-fetch";
 import { UseTypedApiClientBY, castRequestBody } from "@/hooks/UseTypedApiClientBY";
 import { UserList } from "@/types/api-beyou"; 
 
-export const UseGetUsers = (): UseQueryResult<UserList, ApiError> => {
+export const UseGetUser = (): UseQueryResult<UserList, ApiError> => {
   const path = "/api/User";
   const method = "get";
 

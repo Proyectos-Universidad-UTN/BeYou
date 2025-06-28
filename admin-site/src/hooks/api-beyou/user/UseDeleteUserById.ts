@@ -24,7 +24,7 @@ export const UseDeleteUser = ({
     onSuccess,
     onError,
     onSettled
-}: UseDeleteUserProps) => {
+}: UseDeleteUserProps = {}) => {
     const path = '/api/User/{userId}';
     const method = 'delete';
 
