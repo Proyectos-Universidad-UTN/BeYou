@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Box, Button, Menu, MenuItem } from "@mui/material";
+import { Box, Typography, Menu, MenuItem } from "@mui/material";
+import { CreateButton } from "@/components/Button/CreateButton";
 import { type GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import DataTableWrapper from "@/components/Table/DataTableWrapper";
 import { OptionsBullet } from "@/components/Table/OptionsBullet";
@@ -12,7 +13,6 @@ import { useSnackbar } from "@/stores/useSnackbar";
 import { UseDeleteUser } from "@/hooks/api-beyou/user/UseDeleteUserById";
 import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
 
-// Mapas para roles y géneros
 const GENDER_MAP: Record<number, string> = {
   1: "Hombre",
   2: "Mujer",
@@ -26,7 +26,7 @@ const ROLE_MAP: Record<number, string> = {
 };
 
 export interface UserTableItem {
-  id: string | number | undefined; 
+  id: string | number | undefined;
   firstName?: string | null;
   lastName?: string | null;
   email?: string | null;
@@ -46,7 +46,6 @@ export const UserTable = ({ users }: UserTableProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<UserTableItem | null>(null);
 
-  // Estado para menú contextual
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedUser, setSelectedUser] = useState<UserTableItem | null>(null);
 
@@ -137,7 +136,20 @@ export const UserTable = ({ users }: UserTableProps) => {
 
   return (
     <>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Typography variant="h6" fontWeight="bold">
+          Lista de Usuarios
+        </Typography>
+        <CreateButton href="/User/new" label="Crear" />
+      </Box>
+
       <DataTableWrapper columns={columns} data={users} />
+
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -167,6 +179,7 @@ export const UserTable = ({ users }: UserTableProps) => {
           Eliminar
         </MenuItem>
       </Menu>
+
       <ConfirmModal
         isModalOpen={openModal}
         toggleIsOpen={handleCloseModal}

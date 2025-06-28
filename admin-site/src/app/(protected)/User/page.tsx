@@ -23,7 +23,7 @@ export default function UserPage() {
     }));
 
   return (
-    <Page header={<PageHeader title="Usuarios" />}>
+    <Page header={<PageHeader title="" />}>
       {isLoading ? (
         <CircularLoadingProgress />
       ) : error ? (

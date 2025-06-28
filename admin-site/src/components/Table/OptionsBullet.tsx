@@ -1,5 +1,5 @@
 import { IconButton } from "@mui/material";
-import ListBullet from "../../assets/format_list_bulleted.svg";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface OptionsBulletProps {
   handleMenuOpen: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -12,8 +12,8 @@ export const OptionsBullet = ({ handleMenuOpen }: OptionsBulletProps) => {
   };
 
   return (
-    <IconButton onClick={handleClick}>
-      <img src={ListBullet} width={4} height={16} alt="Options" />
+    <IconButton onClick={handleClick} size="small">
+      <MoreVertIcon />
     </IconButton>
   );
 };
