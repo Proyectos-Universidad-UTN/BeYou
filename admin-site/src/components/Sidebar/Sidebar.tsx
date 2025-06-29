@@ -30,7 +30,7 @@ const menuItems: MenuItem[] = [
   { label: "Proveedores", path: "/proveedores", icon: Truck },
   { label: "Productos", path: "/productos", icon: Package },
   { label: "Servicios", path: "/servicios", icon: Sparkles },
-  { label: "Usuarios", path: "/usuarios", icon: Users },
+  { label: "Usuarios", path: "/User", icon: Users },
   {
     label: "Configuración",
     icon: Settings,
