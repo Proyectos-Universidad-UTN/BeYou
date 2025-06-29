@@ -153,3 +153,5 @@ export const DataTable = <RowModelT extends GridValidRowModel>({
         />
     )
 }
+
+//NoDataIndicador
