@@ -12,6 +12,7 @@ export type User = components['schemas']['ResponseUserDto']
 export type UserProfile = components['schemas']['ResponseMeDto']
 
 export type UserList = components['schemas']['ResponseUserDto'][]
+export type ProductList = components['schemas']['ResponseProductDto'][]
 
 export type Branch = components['schemas']['ResponseBranchDto']
 export type BranchRequest = components['schemas']['RequestBranchDto']
