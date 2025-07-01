@@ -7391,7 +7391,7 @@ export interface components {
         };
         ResponseVendorDto: {
             name?: string | null;
-            cardId?: string | null;
+            fiscalNumber?: string | null;
             socialReason?: string | null;
             /** Format: int32 */
             telephone?: number;

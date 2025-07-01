@@ -96,9 +96,18 @@ export const transformErrorKeys = (
   return transformedError;
 };
 
-export const getErrorMessage = (error: ApiError) => {
-  const errorDetail = transformErrorKeys(error.data as ErrorDetailsBeYou);
-  return errorDetail.message;
+export const getErrorMessage = (error: unknown): string => {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "data" in error &&
+    typeof (error as any).data === "object"
+  ) {
+    const data = (error as ApiError).data as ErrorDetailsBeYou;
+    const transformed = transformErrorKeys(data);
+    return transformed.message || "Error desconocido";
+  }
+  return "Error desconocido";
 };
 
 export const getDayInSpanish = (day: WeeklyDay | undefined): string => {

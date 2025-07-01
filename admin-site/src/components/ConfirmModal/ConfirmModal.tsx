@@ -1,74 +1,78 @@
 "use client";
 
-import { Box, Button, Typography } from "@mui/material"
-import { Modal } from "../Modal/Modal"
+import { Box, Button, Typography, CircularProgress } from "@mui/material";
+import { Modal } from "../Modal/Modal";
 
 interface ConfirmModalProps {
-    isModalOpen: boolean,
-    toggleIsOpen: () => void,
-    onConfirm: () => void,
-    onCancel: () => void,
-    confirmMessage: string,
-    secondaryMessage: string,
+  isModalOpen: boolean;
+  toggleIsOpen: () => void;
+  onConfirm: () => void;
+  onCancel: () => void;
+  confirmMessage: string;
+  secondaryMessage: string;
+  isLoading?: boolean;
 }
 
 export const ConfirmModal = ({
-    isModalOpen,
-    toggleIsOpen,
-    onConfirm,
-    onCancel,
-    confirmMessage,
-    secondaryMessage
+  isModalOpen,
+  toggleIsOpen,
+  onConfirm,
+  onCancel,
+  confirmMessage,
+  secondaryMessage,
+  isLoading = false,
 }: ConfirmModalProps) => {
-    return (
-        <Modal
-            isOpen={isModalOpen}
-            toggleIsOpen={toggleIsOpen}
-            sx={{
-                width: { xs: '90vw', sm: '40vw' }
-            }}
+  return (
+    <Modal
+      isOpen={isModalOpen}
+      toggleIsOpen={toggleIsOpen}
+      sx={{
+        width: { xs: "90vw", sm: "400px" },
+        borderRadius: 2,
+        p: 3,
+      }}
+    >
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        textAlign="center"
+        gap={2}
+      >
+        <Typography variant="h5" fontWeight="bold" color="text.primary">
+          {confirmMessage}
+        </Typography>
+
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+          {secondaryMessage}
+        </Typography>
+
+        <Box
+          display="flex"
+          gap={2}
+          justifyContent="center"
+          width="100%"
         >
-            <Box>
-                <Box
-                    sx={{
-                        px: { xs: '24px', sm: '50px' },
-                        py: { xs: '80px', sm: '100px' },
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignContent: 'center',
-                        textAlign: 'center'
-                    }}
-                >
-                    <Typography variant="h3" fontWeight={'bold'} sx={{ lineHeight: { xs: '24px', sm: '33px' } }}>
-                        {confirmMessage}
-                    </Typography>
-                    <Typography sx={{ lineHeight: { mt: '26px', color: 'primary.main' } }}>
-                        {secondaryMessage}
-                    </Typography>
-                </Box>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        p: '100px',
-                        justifyContent: {
-                            xs: 'normal',
-                            sm: 'end'
-                        },
-                        borderTop: 1,
-                        borderTopColor: 'grey(300)'
-                    }}
-                >
-                    <Button variant="text" onClick={onCancel}>
-                        Cancelar
-                    </Button>
-                    <Button variant="contained" onClick={onConfirm}>
-                        Confirmar
-                    </Button>
-                </Box>
-            </Box>
-        </Modal>
-    )
-}
+          <Button
+            variant="outlined"
+            onClick={onCancel}
+            disabled={isLoading}
+            fullWidth
+          >
+            Cancelar
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={onConfirm}
+            disabled={isLoading}
+            fullWidth
+            startIcon={isLoading ? <CircularProgress size={18} /> : null}
+          >
+            {isLoading ? "Confirmando..." : "Confirmar"}
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
+  );
+};

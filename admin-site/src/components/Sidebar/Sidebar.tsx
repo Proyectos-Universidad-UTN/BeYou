@@ -27,7 +27,7 @@ const menuItems: MenuItem[] = [
       { label: "Proforma", path: "/gestiones/proforma", icon: FileText },
     ],
   },
-  { label: "Proveedores", path: "/proveedores", icon: Truck },
+  { label: "Proveedores", path: "/Vendor", icon: Truck },
   { label: "Productos", path: "/productos", icon: Package },
   { label: "Servicios", path: "/servicios", icon: Sparkles },
   { label: "Usuarios", path: "/User", icon: Users },
