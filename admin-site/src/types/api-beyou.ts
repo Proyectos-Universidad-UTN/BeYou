@@ -43,3 +43,7 @@ export type TaxRequest = components['schemas']['RequestTaxDto']
 
 export type UnitMeasure = components['schemas']['ResponseUnitMeasureDto']
 export type UnitMeasureRequest = components['schemas']['RequestUnitMeasureDto']
+
+export type Vendor = components['schemas']['ResponseVendorDto'];
+export type VendorRequest = components['schemas']['RequestVendorDto'];
+export type VendorList = components['schemas']['ResponseVendorDto'][]; 

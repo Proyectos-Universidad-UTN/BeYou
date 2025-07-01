@@ -12715,7 +12715,7 @@
             "type": "string",
             "nullable": true
           },
-          "cardId": {
+          "fiscalNumber": {
             "type": "string",
             "nullable": true
           },
