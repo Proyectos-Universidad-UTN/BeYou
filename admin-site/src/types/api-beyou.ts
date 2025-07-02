@@ -12,7 +12,6 @@ export type User = components['schemas']['ResponseUserDto']
 export type UserProfile = components['schemas']['ResponseMeDto']
 
 export type UserList = components['schemas']['ResponseUserDto'][]
-export type ProductList = components['schemas']['ResponseProductDto'][]
 
 export type Branch = components['schemas']['ResponseBranchDto']
 export type BranchRequest = components['schemas']['RequestBranchDto']
@@ -48,3 +47,7 @@ export type UnitMeasureRequest = components['schemas']['RequestUnitMeasureDto']
 export type Vendor = components['schemas']['ResponseVendorDto'];
 export type VendorRequest = components['schemas']['RequestVendorDto'];
 export type VendorList = components['schemas']['ResponseVendorDto'][]; 
+
+export type Product = components['schemas']['ResponseProductDto'];
+export type ProductRequest = components['schemas']['RequestProductDto'];
+export type ProductList = components['schemas']['ResponseProductDto'][];

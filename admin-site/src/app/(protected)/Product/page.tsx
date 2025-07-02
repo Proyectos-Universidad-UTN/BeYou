@@ -26,7 +26,7 @@ export default function ProductPage() {
 
 
   return (
-    <Page header={<PageHeader title="Productos" />}>
+    <Page header={<PageHeader title="" />}>
       {isLoading ? (
         <CircularLoadingProgress />
       ) : error ? (

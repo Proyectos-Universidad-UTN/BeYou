@@ -8,10 +8,10 @@ import DataTableWrapper from "@/components/Table/DataTableWrapper";
 import { OptionsBullet } from "@/components/Table/OptionsBullet";
 import { Edit, Delete } from "@mui/icons-material";
 import { ConfirmModal } from "@/components/ConfirmModal/ConfirmModal";
-import { getErrorMessage } from "@/utils/util";
-import { useSnackbar } from "@/stores/useSnackbar";
 import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
 import { UseDeleteProductById } from "@/hooks/api-beyou/product/UseDeleteProductById";
+import { getErrorMessage } from "@/utils/util";
+import { useSnackbar } from "@/stores/useSnackbar";
 
 const CATEGORY_MAP: Record<number, string> = {
   1: "Ropa Deportiva",
@@ -40,34 +40,32 @@ interface ProductTableProps {
 }
 
 export const ProductTable = ({ products }: ProductTableProps) => {
-  const { openSnackbar } = useSnackbar() as any;
+  const { setMessage } = useSnackbar();
 
-  const { mutate: deleteProduct, isPending: isDeleting } =
-    UseDeleteProductById();
   const [openModal, setOpenModal] = useState(false);
-  const [productToDelete, setProductToDelete] =
-    useState<ProductTableItem | null>(null);
-
+  const [productToDelete, setProductToDelete] = useState<ProductTableItem | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedProduct, setSelectedProduct] =
-    useState<ProductTableItem | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProductTableItem | null>(null);
+
+  const { mutate: deleteProduct, isPending: isDeleting } = UseDeleteProductById({
+    onSuccess: () => {
+      setMessage("Producto eliminado con éxito", "success");
+      setOpenModal(false);
+      setProductToDelete(null);
+    },
+    onError: (error) => {
+      setMessage(getErrorMessage(error), "error");
+    },
+  });
 
   const handleDeleteClick = (product: ProductTableItem) => {
     setProductToDelete(product);
     setOpenModal(true);
   };
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = () => {
     if (productToDelete) {
-      try {
-        await deleteProduct(productToDelete.id);
-        openSnackbar("Producto eliminado con éxito", "success");
-      } catch (error: unknown) {
-        openSnackbar(getErrorMessage(error as any), "error");
-      } finally {
-        setOpenModal(false);
-        setProductToDelete(null);
-      }
+      deleteProduct(productToDelete.id);
     }
   };
 
@@ -106,7 +104,7 @@ export const ProductTable = ({ products }: ProductTableProps) => {
         headerName: "Precio",
         flex: 1,
         minWidth: 120,
-        valueFormatter: (params: { value: number | null | undefined }) =>
+        valueFormatter: (params: { value: number }) =>
           `₡${(params.value ?? 0).toLocaleString("es-CR", {
             minimumFractionDigits: 2,
           })}`,
@@ -116,24 +114,21 @@ export const ProductTable = ({ products }: ProductTableProps) => {
         headerName: "Categoría",
         flex: 1,
         minWidth: 150,
-        valueFormatter: (params: { value: number }) =>
-          CATEGORY_MAP[params.value] || "N/A",
+        valueFormatter: (params) => CATEGORY_MAP[params.value] || "N/A",
       },
       {
         field: "unitMeasureId",
         headerName: "Unidad",
         flex: 0.5,
         minWidth: 100,
-        valueFormatter: (params: { value: number }) =>
-          UNIT_MEASURE_MAP[params.value] || "N/A",
+        valueFormatter: (params) => UNIT_MEASURE_MAP[params.value] || "N/A",
       },
       {
         field: "active",
         headerName: "Activo",
         flex: 0.5,
         minWidth: 100,
-        valueFormatter: (params: { value: boolean }) =>
-          params.value ? "Sí" : "No",
+        valueFormatter: (params) => (params.value ? "Sí" : "No"),
       },
       {
         field: "actions",
@@ -142,9 +137,7 @@ export const ProductTable = ({ products }: ProductTableProps) => {
         filterable: false,
         width: 80,
         renderCell: (params: GridRenderCellParams<ProductTableItem>) => (
-          <OptionsBullet
-            handleMenuOpen={(e) => handleMenuOpen(e, params.row)}
-          />
+          <OptionsBullet handleMenuOpen={(e) => handleMenuOpen(e, params.row)} />
         ),
       },
     ],
@@ -157,12 +150,7 @@ export const ProductTable = ({ products }: ProductTableProps) => {
 
   return (
     <>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6" fontWeight="bold">
           Lista de Productos
         </Typography>
