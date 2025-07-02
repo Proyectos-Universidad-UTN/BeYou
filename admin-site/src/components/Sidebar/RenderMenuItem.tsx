@@ -12,11 +12,13 @@ import {
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
 import { MenuItem } from "./Types";
+import { useSidebarStore } from "@/stores/useSidebarStore"; 
 
 interface RenderMenuItemProps {
   item: MenuItem;
   isSmallScreen: boolean;
   onClose?: () => void;
+  isCollapsed?: boolean; // nuevo parámetro
 }
 
 export function renderMenuItem(
@@ -25,16 +27,15 @@ export function renderMenuItem(
   onClose?: () => void
 ) {
   const pathname = usePathname();
-  const [expandedMenus, setExpandedMenus] = useState<{
-    [key: string]: boolean;
-  }>({});
+  const { isExpanded } = useSidebarStore(); 
+  const [expandedMenus, setExpandedMenus] = useState<{ [key: string]: boolean }>({});
 
   const handleToggle = (label: string) => {
     setExpandedMenus((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
   const isActive = pathname === item.path;
-  const isExpanded = expandedMenus[item.label];
+  const isExpandedItem = expandedMenus[item.label];
   const icon = item.icon ? <item.icon className="w-5 h-5" /> : null;
 
   if (item.children) {
@@ -43,32 +44,28 @@ export function renderMenuItem(
         <ListItem
           onClick={() => handleToggle(item.label)}
           className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
-            isActive || isExpanded
+            isActive || isExpandedItem
               ? "bg-yellow-300 text-gray-900"
-              : "text-gray-800 hover:bg-yellow-200 hover:text-black"
+              : "text-gray-900 hover:bg-yellow-200 hover:text-black"
           }`}
         >
-          <ListItemIcon
-            className={`${
-              isActive || isExpanded ? "text-yellow-700" : "text-gray-500"
-            }`}
-          >
+          <ListItemIcon className={`${isActive ? "text-yellow-700" : "text-gray-800"}`}>
             {icon}
           </ListItemIcon>
-          <ListItemText primary={item.label} />
-          {isExpanded ? (
-            <ExpandLess className="text-yellow-700" />
-          ) : (
-            <ExpandMore className="text-yellow-700" />
+          {isExpanded && <ListItemText primary={item.label} />}
+          {isExpanded && (
+            isExpandedItem ? (
+              <ExpandLess className="text-yellow-700" />
+            ) : (
+              <ExpandMore className="text-yellow-700" />
+            )
           )}
         </ListItem>
-        <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+        <Collapse in={isExpandedItem && isExpanded} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {item.children.map((child) => {
               const childActive = pathname === child.path;
-              const childIcon = child.icon ? (
-                <child.icon className="w-5 h-5" />
-              ) : null;
+              const childIcon = child.icon ? <child.icon className="w-5 h-5" /> : null;
 
               return (
                 <Link href={child.path!} key={child.label} passHref>
@@ -76,18 +73,14 @@ export function renderMenuItem(
                     {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
                     className={`text-sm rounded-md mb-2 pl-6 flex items-center transition-colors duration-300 ${
                       childActive
-                        ? "bg-yellow-300 text-gray-900"
-                        : "text-gray-600 hover:bg-yellow-100 hover:text-black"
+                        ? "bg-yellow-300 text-black"
+                        : "text-black hover:bg-yellow-100 hover:text-black"
                     }`}
                   >
-                    <ListItemIcon
-                      className={`min-w-[36px] ${
-                        childActive ? "text-yellow-700" : "text-gray-500"
-                      }`}
-                    >
+                    <ListItemIcon className={`min-w-[36px] ${childActive ? "text-yellow-700" : "text-black"}`}>
                       {childIcon}
                     </ListItemIcon>
-                    <ListItemText primary={child.label} />
+                    {isExpanded && <ListItemText primary={child.label} />}
                   </ListItem>
                 </Link>
               );
@@ -102,18 +95,16 @@ export function renderMenuItem(
     <Link href={item.path!} key={item.label} passHref>
       <ListItem
         {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
-        className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
+        className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center transition-colors duration-300 ${
           isActive
             ? "bg-yellow-300 text-gray-900"
-            : "text-gray-800 hover:bg-yellow-200 hover:text-black"
+            : "text-gray-900 hover:bg-yellow-200 hover:text-black"
         }`}
       >
-        <ListItemIcon
-          className={`${isActive ? "text-yellow-700" : "text-gray-500"}`}
-        >
+        <ListItemIcon className={`${isActive ? "text-yellow-700" : "text-gray-800"}`}>
           {icon}
         </ListItemIcon>
-        <ListItemText primary={item.label} />
+        {isExpanded && <ListItemText primary={item.label} />}
       </ListItem>
     </Link>
   );

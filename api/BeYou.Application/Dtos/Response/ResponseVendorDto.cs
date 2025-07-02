@@ -6,7 +6,7 @@ public record ResponseVendorDto : BaseEntity
 {
     public string Name { get; set; } = null!;
 
-    public string CardId { get; set; } = null!;
+    public string FiscalNumber { get; set; } = null!;
 
     public string SocialReason { get; set; } = null!;
 
