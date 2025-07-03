@@ -35,7 +35,7 @@ export const UsePutProduct = ({
     },
     onSuccess: async (data, variables) => {
       await queryClient.invalidateQueries({ queryKey: ["GetProducts"] });
-      await queryClient.refetchQueries({ queryKey: ["GetProducts"] }); // <-- Extra refetch
+      await queryClient.refetchQueries({ queryKey: ["GetProducts"] }); 
       onSuccess?.(data, variables);
     },
     onError: (error: ApiError, variables: Product) => {

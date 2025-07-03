@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ApiError } from "openapi-typescript-fetch";
 import { UseTypedApiClientBY, castRequestBody } from "@/hooks/UseTypedApiClientBY";
-import { ProductList, UserList } from "@/types/api-beyou"; 
+import {  Product } from "@/types/api-beyou"; 
 
-export const UseGetProduct = (): UseQueryResult<ProductList, ApiError> => {
+export const UseGetProduct = (): UseQueryResult<Product[], ApiError> => {
   const path = "/api/Product";
   const method = "get";
 
