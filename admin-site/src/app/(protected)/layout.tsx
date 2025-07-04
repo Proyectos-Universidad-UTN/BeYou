@@ -39,7 +39,10 @@ export default function WithLayout({
             <Header onMenuClick={handleSidebarToggle} />
           </div>
           <Snackbar />
-          <main className="flex-1 p-6 bg-gray-50">{children}</main>
+
+          <main className="flex-1 p-6 bg-gray-50 overflow-auto">
+            {children}
+          </main>
         </div>
       </div>
     </ProtectedRoute>
