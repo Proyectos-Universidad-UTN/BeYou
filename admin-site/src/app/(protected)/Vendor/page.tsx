@@ -23,7 +23,7 @@ export default function VendorPage() {
     }));
 
   return (
-    <Page header={<PageHeader title="" />}>
+    <Page >
       {isLoading ? (
         <CircularLoadingProgress />
       ) : error ? (

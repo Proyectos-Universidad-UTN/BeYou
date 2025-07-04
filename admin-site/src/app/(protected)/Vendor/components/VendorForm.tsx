@@ -32,14 +32,13 @@ export const VendorForm = ({
     handleSubmit,
     register,
     formState: { errors },
-    reset, // <- para actualizar campos cuando cambian los defaultValues
+    reset, 
   } = useForm<VendorFormType>({
     defaultValues,
     resolver: yupResolver(VendorSchema),
   });
 
-  // 🔁 Resetear formulario cuando se reciban nuevos valores (ej: al editar)
-  useEffect(() => {
+   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
 

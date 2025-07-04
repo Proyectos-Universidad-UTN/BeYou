@@ -55,7 +55,8 @@ public class ServiceVendor(ICoreService<Vendor> coreService, IMapper mapper, IVa
     /// <inheritdoc />
     public async Task<ICollection<ResponseVendorDto>> ListAllAsync()
     {
-        var vendors = await coreService.UnitOfWork.Repository<Vendor>().ListAllAsync();
+        var spec = new BaseSpecification<Vendor>(x => x.Active);
+        var vendors = await coreService.UnitOfWork.Repository<Vendor>().ListAsync(spec);
 
         return mapper.Map<ICollection<ResponseVendorDto>>(vendors);
     }
@@ -63,23 +64,46 @@ public class ServiceVendor(ICoreService<Vendor> coreService, IMapper mapper, IVa
     /// <inheritdoc />
     public async Task<PagedList<ResponseVendorDto>> ListAllAsync(PaginationParameters paginationParameters)
     {
-        var query = coreService.UnitOfWork.Repository<Vendor>().AsQueryable();
-        var paginatedCollection = await PagedList<Vendor>.PaginatedCollection(query, paginationParameters.PageNumber, paginationParameters.PageSize);
+        var query = coreService.UnitOfWork.Repository<Vendor>()
+            .AsQueryable()
+            .Where(x => x.Active);
+
+        var paginatedCollection = await PagedList<Vendor>.PaginatedCollection(
+            query,
+            paginationParameters.PageNumber,
+            paginationParameters.PageSize
+        );
+
         var vendors = mapper.Map<ICollection<ResponseVendorDto>>(paginatedCollection);
         var count = await query.CountAsync();
 
-        return PagedList<ResponseVendorDto>.ToPagedList(vendors.ToList(), count, paginationParameters.PageNumber, paginationParameters.PageSize);
+        return PagedList<ResponseVendorDto>.ToPagedList(
+            vendors.ToList(),
+            count,
+            paginationParameters.PageNumber,
+            paginationParameters.PageSize
+        );
     }
 
     /// <inheritdoc />
     public async Task<ResponseVendorDto> UpdateVendorAsync(long id, RequestVendorDto vendorDto)
     {
-        if (!await coreService.UnitOfWork.Repository<Vendor>().ExistsAsync(id)) throw new NotFoundException("Proveedor no encontrada.");
+        if (!await coreService.UnitOfWork.Repository<Vendor>().ExistsAsync(id))
+            throw new NotFoundException("Proveedor no encontrado.");
 
-        var vendor = await ValidateVendorAsync(vendorDto);
-        vendor.Id = id;
+        var spec = new BaseSpecification<Vendor>(x => x.Id == id);
+        var existingVendor = await coreService.UnitOfWork.Repository<Vendor>().FirstOrDefaultAsync(spec);
 
-        coreService.UnitOfWork.Repository<Vendor>().Update(vendor);
+        if (existingVendor == null)
+            throw new NotFoundException("Proveedor no encontrado.");
+
+        var updatedVendor = mapper.Map<Vendor>(vendorDto);
+        updatedVendor.Id = id;
+        updatedVendor.Active = existingVendor.Active;
+        updatedVendor.Created = existingVendor.Created;
+        updatedVendor.CreatedBy = existingVendor.CreatedBy;
+
+        coreService.UnitOfWork.Repository<Vendor>().Update(updatedVendor);
         await coreService.UnitOfWork.SaveChangesAsync();
 
         return await FindByIdAsync(id);
