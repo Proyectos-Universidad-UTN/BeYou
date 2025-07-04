@@ -18,7 +18,7 @@ interface RenderMenuItemProps {
   item: MenuItem;
   isSmallScreen: boolean;
   onClose?: () => void;
-  isCollapsed?: boolean; // nuevo parámetro
+  isCollapsed?: boolean; 
 }
 
 export function renderMenuItem(

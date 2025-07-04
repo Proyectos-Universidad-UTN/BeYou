@@ -5,23 +5,25 @@ import { useRouter, usePathname } from "next/navigation";
 import { UseGetVendorById } from "@/hooks/api-beyou/vendor/UseGetVendorById";
 import { UsePutVendor } from "@/hooks/api-beyou/vendor/UsePutVendor";
 import { useSnackbar } from "@/stores/useSnackbar";
+
 import {
   VendorFormType,
   initialVendorValues,
 } from "../components/VendorSchema";
 import { VendorForm } from "../components/VendorForm";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function EditVendorPage() {
   const router = useRouter();
   const { setMessage } = useSnackbar();
 
   const pathname = usePathname();
-  const idStr = pathname?.split("/").pop();  
+  const idStr = pathname?.split("/").pop();
+  const queryClient = useQueryClient();
 
   const [isLoading, setIsLoading] = useState(false);
   const [defaultValues, setDefaultValues] =
     useState<VendorFormType>(initialVendorValues);
-
 
   const {
     data: vendorData,
@@ -29,12 +31,13 @@ export default function EditVendorPage() {
     error,
   } = UseGetVendorById(idStr);
 
- 
   const putVendor = UsePutVendor({
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GetVendors"] });
       setMessage("Proveedor actualizado con éxito", "success");
       router.push("/Vendor");
     },
+
     onError: (error) => {
       setMessage("Error al actualizar proveedor", "error");
       console.error(error);
@@ -47,7 +50,7 @@ export default function EditVendorPage() {
         name: vendorData.name || "",
         fiscalNumber: vendorData.fiscalNumber || "",
         socialReason: vendorData.socialReason || "",
-        telephone: vendorData.telephone ? String(vendorData.telephone) : "", 
+        telephone: vendorData.telephone ? String(vendorData.telephone) : "",
         email: vendorData.email || "",
         districtId: vendorData.districtId || 0,
         address: vendorData.address || "",
@@ -56,14 +59,14 @@ export default function EditVendorPage() {
   }, [vendorData]);
 
   const onSubmit = (data: VendorFormType) => {
-    if (!idStr) return; 
+    if (!idStr) return;
 
     setIsLoading(true);
 
     const payload = {
-      id: Number(idStr),      
+      id: Number(idStr),
       ...data,
-      telephone: Number(data.telephone), 
+      telephone: Number(data.telephone),
     };
 
     putVendor.mutate(payload, {

@@ -13,8 +13,6 @@ export const Page = (props: {
           sx={{
             flex: 1,
             position: "relative",
-            // top: `${APP_BAR_HEIGHT}px`,
-            // ml: { xs: 0, sm: `${NAVIGATION_BAR_WIDTH}px` },
             pb: { xs: "21px", sm: "14px" },
             overflowX: "hidden",
             overflowY: "auto",
@@ -23,7 +21,7 @@ export const Page = (props: {
           {props.header}
           <Box
             px={{ xs: "16px", sm: "48px" }}
-            pt={{ xs: "21px", sm: 4 }}
+            pt={0}
             pb={{ xs: "21px", sm: "32px" }}
           >
             {props.children}
