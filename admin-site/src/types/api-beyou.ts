@@ -47,3 +47,7 @@ export type UnitMeasureRequest = components['schemas']['RequestUnitMeasureDto']
 export type Vendor = components['schemas']['ResponseVendorDto'];
 export type VendorRequest = components['schemas']['RequestVendorDto'];
 export type VendorList = components['schemas']['ResponseVendorDto'][]; 
+
+export type Product = components['schemas']['ResponseProductDto'];
+export type ProductRequest = components['schemas']['RequestProductDto'];
+export type ProductList = components['schemas']['ResponseProductDto'][];
