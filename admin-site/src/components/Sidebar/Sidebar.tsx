@@ -18,7 +18,7 @@ import { MenuItem } from "./Types";
 
 const menuItems: MenuItem[] = [
   { label: "Inicio", path: "/", icon: Home },
-  { label: "Sucursal", path: "/sucursales", icon: Store },
+  { label: "Sucursal", path: "/Branch", icon: Store },
   {
     label: "Gestiones",
     icon: Calendar,
