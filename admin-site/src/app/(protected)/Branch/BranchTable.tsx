@@ -6,7 +6,6 @@ import {
   Typography,
   Menu,
   MenuItem,
-  Button,
 } from "@mui/material";
 import { CreateButton } from "@/components/Button/CreateButton";
 import { type GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
@@ -19,6 +18,8 @@ import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLo
 import { getErrorMessage } from "@/utils/util";
 import { UseDeleteBranch } from "@/hooks/api-beyou/branch/UseDeleteBranchById";
 import { useRouter } from "next/navigation";
+import { ScheduleListModal } from "./components/ScheduleListModal";
+
 
 export interface BranchTableItem {
   id: number;
@@ -43,6 +44,9 @@ export const BranchTable = ({ branches }: BranchTableProps) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedBranch, setSelectedBranch] = useState<BranchTableItem | null>(null);
+
+  const [openScheduleModal, setOpenScheduleModal] = useState(false);
+  const [branchIdForSchedule, setBranchIdForSchedule] = useState<number | null>(null);
 
   const { mutate: deleteBranch, isPending: isDeleting } = UseDeleteBranch({
     onSuccess: () => {
@@ -143,7 +147,8 @@ export const BranchTable = ({ branches }: BranchTableProps) => {
           onClick={() => {
             handleMenuClose();
             if (selectedBranch) {
-              router.push(`/Branch/${selectedBranch.id}/Schedule`);
+              setBranchIdForSchedule(selectedBranch.id);
+              setOpenScheduleModal(true);
             }
           }}
         >
@@ -169,6 +174,15 @@ export const BranchTable = ({ branches }: BranchTableProps) => {
         onCancel={handleCloseDeleteModal}
         confirmMessage="Confirmar Eliminación"
         secondaryMessage={`¿Estás seguro de que quieres eliminar la sucursal ${branchToDelete?.name}? Esta acción no se puede deshacer.`}
+      />
+
+      <ScheduleListModal
+        branchId={branchIdForSchedule}
+        open={openScheduleModal}
+        onClose={() => {
+          setOpenScheduleModal(false);
+          setBranchIdForSchedule(null);
+        }}
       />
     </>
   );
