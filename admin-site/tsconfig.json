@@ -23,7 +23,8 @@
       "@api/*": ["./src/api/*"],
       "@types/*": ["./scr/types/*"],
       "@hooks/*": ["./scr/hooks/*"],
-      "@stores/*": ["./scr/stores/*"]
+      "@stores/*": ["./scr/stores/*"],
+      "@navigation/*": ["./src/navigation/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

@@ -1,45 +1,9 @@
 "use client";
 
-import {
-  Home,
-  Store,
-  Calendar,
-  FileText,
-  Truck,
-  Package,
-  Sparkles,
-  Users,
-  Settings,
-} from "lucide-react";
-import { useIsMobile } from "@/hooks/UseIsMobile";
 import MobileSidebar from "./MobileSidebar";
+import menuItems from "@/navigation/Routes";
 import DesktopSidebar from "./DesktopSidebar";
-import { MenuItem } from "./Types";
-
-const menuItems: MenuItem[] = [
-  { label: "Inicio", path: "/", icon: Home },
-  { label: "Sucursal", path: "/Branch", icon: Store },
-  {
-    label: "Gestiones",
-    icon: Calendar,
-    children: [
-      { label: "Reservas", path: "/gestiones/reservas", icon: FileText },
-      { label: "Proforma", path: "/gestiones/proforma", icon: FileText },
-    ],
-  },
-  { label: "Proveedores", path: "/Vendor", icon: Truck },
-  { label: "Productos", path: "/productos", icon: Package },
-  { label: "Servicios", path: "/servicios", icon: Sparkles },
-  { label: "Usuarios", path: "/User", icon: Users },
-  {
-    label: "Configuración",
-    icon: Settings,
-    children: [
-      { label: "Perfil", path: "/configuracion/perfil", icon: Users },
-      { label: "Seguridad", path: "/configuracion/seguridad", icon: Settings },
-    ],
-  },
-];
+import { useIsMobile } from "@/hooks/UseIsMobile";
 
 interface SidebarProps {
   isOpen?: boolean;

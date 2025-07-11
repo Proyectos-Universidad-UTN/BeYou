@@ -4,7 +4,6 @@ import { Branch, BranchRequest, ErrorDetailsBeYou } from "@/types/api-beyou";
 import { transformErrorKeys } from "@/utils/util";
 import { castRequestBody, UseTypedApiClientBY } from "@/hooks/UseTypedApiClientBY";
 
-
 interface UsePostBranchProps {
     onSuccess?: (
         data: Branch,

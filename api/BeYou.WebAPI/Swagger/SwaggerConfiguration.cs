@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning.ApiExplorer;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace BeYou.WebAPI.Swagger;
 
@@ -15,6 +16,12 @@ public static class SwaggerConfiguration
     /// <param name="services">Service collection</param>
     public static void ConfigureSwagger(this IServiceCollection services)
     {
+        services.AddControllers()
+            .AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            });
+
         services.AddEndpointsApiExplorer();
 
         services.AddSwaggerGen(opts =>

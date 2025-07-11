@@ -3,7 +3,6 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { Box, Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect } from "react";
 import { ErrorProcess } from "@/components/Error/ErrorProcess";
@@ -12,21 +11,20 @@ import { getErrorMessage } from "@/utils/util";
 import { UseGetBranchById } from "@/hooks/api-beyou/branch/UseGetBranchById";
 import Link from "next/link";
 import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
-import { ScheduleTable } from "../../Schedule/components/ScheduleTable";
+import { ScheduleTable } from "./ScheduleTable";
+import { Page } from "@/components/Shared/Page";
+import { PageHeader } from "@/components/Shared/PageHeader";
+import { Button } from "@mui/material";
 
 
 const BranchSchedulePage = () => {
   const router = useRouter();
+  const params = useParams();
   const setSnackbarMessage = useSnackbar((state) => state.setMessage);
 
-  const params = useParams();
-  const branchIdParam = params?.id;
-  const branchId =
-    typeof branchIdParam === "string"
-      ? branchIdParam
-      : Array.isArray(branchIdParam)
-      ? branchIdParam[0]
-      : undefined;
+  const branchIdRaw = params?.id
+  const branchId = branchIdRaw && !isNaN(Number(branchIdRaw)) ? String(branchIdRaw) : undefined
+
 
   const {
     data: branchData,
@@ -42,28 +40,31 @@ const BranchSchedulePage = () => {
     }
   }, [branchId, isError, error, router, setSnackbarMessage]);
 
-  if (isLoading) return <CircularLoadingProgress />;
-  if (isError || !branchData) return <ErrorProcess />;
+  if (isLoading || !branchData) return <CircularLoadingProgress />;
+  if (isError) return <ErrorProcess />;
 
   return (
-    <Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Box>
-          <Typography variant="h5" fontWeight="bold">Horarios de la Sucursal</Typography>
-          <Typography variant="subtitle1">{branchData.name}</Typography>
-        </Box>
-        <Link href={`/Branch/${branchId}/Schedule/Gestion`}>
-          <Button variant="contained" startIcon={<AddIcon />}>
-            Gestión de horario
-          </Button>
-        </Link>
-      </Box>
-
+    <Page
+      header={
+        <PageHeader
+          title="Horarios de la Sucursal"
+          subtitle={branchData.name!}
+          actionButton={
+            <Link href={`/Branch/${branchId}/Schedule/Gestion`}>
+              <Button variant="contained" startIcon={<AddIcon />}>
+                Gestión de horario
+              </Button>
+            </Link>
+          }
+          backPath="/Branch"
+          backText="Sucursales"
+        />
+      }
+    >
       <ScheduleTable
-        branchId={Number(branchId)}
         schedules={branchData.branchSchedules ?? []}
       />
-    </Box>
+    </Page>
   );
 };
 

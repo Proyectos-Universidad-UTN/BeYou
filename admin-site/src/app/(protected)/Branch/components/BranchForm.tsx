@@ -1,107 +1,132 @@
 "use client";
 
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  BranchSchema,
-  type BranchFormType,
-  initialBranchValues,
-} from "./BranchSchema";
-import { TextField, Box } from "@mui/material";
-import { ConfirmButton } from "@/components/Button/ConfirmButton";
-import { CancelButton } from "@/components/Button/CancelButton";
-import { useRouter } from "next/navigation";
 
-interface Props {
+import { Stack } from "@mui/system";
+import { useIsMobile } from "@/hooks/UseIsMobile";
+import { TextField, Box, Alert } from "@mui/material";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { BranchSchema, BranchFormType } from "./BranchSchema";
+import { FormButtons } from "@/components/Shared/FormButtons";
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
+import { FormFieldErrorMessage } from "@/components/FormFieldErrorMessage";
+
+interface BranchFormProps {
   onSubmit: SubmitHandler<BranchFormType>;
   defaultValues?: BranchFormType;
   isLoading?: boolean;
-  isEdit?: boolean;
 }
 
 export const BranchForm = ({
   onSubmit,
-  defaultValues = initialBranchValues,
+  defaultValues,
   isLoading = false,
-  isEdit = false,
-}: Props) => {
-  const router = useRouter();
-
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm<BranchFormType>({
+}: BranchFormProps) => {
+  const isMobile = useIsMobile();
+  const formMethods = useForm<BranchFormType>({
     defaultValues,
     resolver: yupResolver(BranchSchema),
-  });
+  })
 
-  useEffect(() => {
-    reset(defaultValues);
-  }, [defaultValues, reset]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = formMethods;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <TextField
-          label="Nombre de Sucursal"
-          fullWidth
-          {...register("name")}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        />
-        <TextField
-          label="Descripción"
-          fullWidth
-          {...register("description")}
-          error={!!errors.description}
-          helperText={errors.description?.message}
-        />
-        <TextField
-          label="Teléfono"
-          fullWidth
-          {...register("telephone")}
-          error={!!errors.telephone}
-          helperText={errors.telephone?.message}
-        />
-        <TextField
-          label="Correo Electrónico"
-          fullWidth
-          {...register("email")}
-          error={!!errors.email}
-          helperText={errors.email?.message}
-        />
-        <TextField
-          label="Distrito"
-          type="number"
-          fullWidth
-          {...register("districtId")}
-          error={!!errors.districtId}
-          helperText={errors.districtId?.message}
-        />
-        <div className="sm:col-span-2">
-          <TextField
-            label="Dirección"
-            fullWidth
-            multiline
-            rows={2}
-            {...register("address")}
-            error={!!errors.address}
-            helperText={errors.address?.message}
-          />
-        </div>
-      </div>
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Box pb={2}>
+          {Object.keys(errors).length > 0 && (
+            <Alert severity="error">Por favor corrija los errores para continuar</Alert>
+          )}
+        </Box>
+        <Stack spacing={3} maxWidth={isMobile ? '90vw' : '600px'}>
+          <Box>
+            <TextField
+              label="Nombre de Sucursal"
+              fullWidth
+              {...register("name")}
+              error={!!errors.name}
+              helperText={errors.name?.message}
+            />
+            {errors.name?.message && (
+              <FormFieldErrorMessage message={errors.name.message} />
+            )}
+          </Box>
 
-      <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
-        <ConfirmButton
-          type="submit"
-          isLoading={isLoading}
-          label={isEdit ? "Actualizar" : "Confirmar"}
-        />
-        <CancelButton onClick={() => router.push("/Branch")} label="Cancelar" />
-      </Box>
-    </form>
+          <Box>
+            <TextField
+              label="Descripción"
+              fullWidth
+              {...register("description")}
+              error={!!errors.description}
+              helperText={errors.description?.message}
+            />
+            {errors.description?.message && (
+              <FormFieldErrorMessage message={errors.description.message} />
+            )}
+
+          </Box>
+
+          <Box>
+            <TextField
+              label="Teléfono"
+              fullWidth
+              {...register("telephone")}
+              error={!!errors.telephone}
+              helperText={errors.telephone?.message}
+            />
+            {errors.telephone?.message && (
+              <FormFieldErrorMessage message={errors.telephone.message} />
+            )}
+          </Box>
+
+          <Box>
+            <TextField
+              label="Correo Electrónico"
+              fullWidth
+              {...register("email")}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+            {errors.email?.message && (
+              <FormFieldErrorMessage message={errors.email.message} />
+            )}
+          </Box>
+
+          <Box>
+            <TextField
+              label="Distrito"
+              type="number"
+              fullWidth
+              {...register("districtId")}
+              error={!!errors.districtId}
+              helperText={errors.districtId?.message}
+            />
+            {errors.districtId?.message && (
+              <FormFieldErrorMessage message={errors.districtId.message} />
+            )}
+          </Box>
+
+          <Box>
+            <TextField
+              label="Dirección"
+              fullWidth
+              multiline
+              rows={2}
+              {...register("address")}
+              error={!!errors.address}
+              helperText={errors.address?.message}
+            />
+            {errors.address?.message && (
+              <FormFieldErrorMessage message={errors.address.message} />
+            )}
+          </Box>
+
+          <FormButtons backPath="/Branch" loadingIndicator={isLoading} />
+        </Stack>
+      </form>
+    </FormProvider>
   );
 };
