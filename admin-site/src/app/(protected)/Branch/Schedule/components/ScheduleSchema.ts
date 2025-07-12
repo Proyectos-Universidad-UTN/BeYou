@@ -1,11 +1,15 @@
-import { InferType, number, object } from "yup";
+import { InferType, number, object, string } from "yup";
 
 export const ScheduleDefaultValues = {
-    scheduleId: 0,
+  day: 1,
+  startHour: "08:00",
+  endHour: "17:00",
 };
 
 export const ScheduleSchema = object().shape({
-    scheduleId: number().min(1, 'El horario es requerido').required('El horario es requerido'),
-})
+  day: number().min(1).max(7).required("El día es requerido"),
+  startHour: string().required("La hora de inicio es requerida"),
+  endHour: string().required("La hora de finalización es requerida"),
+});
 
-export type ScheduleForm = InferType<typeof ScheduleSchema>
+export type ScheduleForm = InferType<typeof ScheduleSchema>;

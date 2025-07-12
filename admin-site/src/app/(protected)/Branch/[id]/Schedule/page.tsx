@@ -1,5 +1,3 @@
-// /Branch/[id]/Schedule/page.tsx
-
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
@@ -16,15 +14,16 @@ import { Page } from "@/components/Shared/Page";
 import { PageHeader } from "@/components/Shared/PageHeader";
 import { Button } from "@mui/material";
 
-
 const BranchSchedulePage = () => {
   const router = useRouter();
   const params = useParams();
   const setSnackbarMessage = useSnackbar((state) => state.setMessage);
 
-  const branchIdRaw = params?.id
-  const branchId = branchIdRaw && !isNaN(Number(branchIdRaw)) ? String(branchIdRaw) : undefined
-
+  const branchIdRaw = params?.id;
+  const branchId =
+    branchIdRaw && !isNaN(Number(branchIdRaw))
+      ? String(branchIdRaw)
+      : undefined;
 
   const {
     data: branchData,
@@ -50,7 +49,7 @@ const BranchSchedulePage = () => {
           title="Horarios de la Sucursal"
           subtitle={branchData.name!}
           actionButton={
-            <Link href={`/Branch/${branchId}/Schedule/Gestion`}>
+            <Link href={`/Branch/Schedule`}>
               <Button variant="contained" startIcon={<AddIcon />}>
                 Gestión de horario
               </Button>
@@ -61,9 +60,7 @@ const BranchSchedulePage = () => {
         />
       }
     >
-      <ScheduleTable
-        schedules={branchData.branchSchedules ?? []}
-      />
+      <ScheduleTable schedules={branchData.branchSchedules ?? []} />
     </Page>
   );
 };
