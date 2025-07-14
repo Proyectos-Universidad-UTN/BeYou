@@ -19,11 +19,13 @@ const SchedulePage = () => {
       header={
         <PageHeader
           title="Lista de Horarios"
+          backPath="/Branch"
+          backText="Sucursales"
           actionButton={<CreateButton href="/Branch/Schedule/new" />}
         />
       }
     >
-      <ScheduleTable
+      <ScheduleTable 
         schedules={data ?? []}
         isLoading={isLoading}
         isError={isError}

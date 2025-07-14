@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ErrorProcess } from "@/components/Error/ErrorProcess";
 import { useSnackbar } from "@/stores/useSnackbar";
 import { getErrorMessage } from "@/utils/util";
@@ -13,6 +13,7 @@ import { ScheduleTable } from "./ScheduleTable";
 import { Page } from "@/components/Shared/Page";
 import { PageHeader } from "@/components/Shared/PageHeader";
 import { Button } from "@mui/material";
+import { AddExistingSchedulesModal } from "./AddExistingSchedulesModal";
 
 const BranchSchedulePage = () => {
   const router = useRouter();
@@ -32,6 +33,8 @@ const BranchSchedulePage = () => {
     error,
   } = UseGetBranchById(branchId);
 
+  const [openAddModal, setOpenAddModal] = useState(false);
+
   useEffect(() => {
     if (!branchId || isError) {
       setSnackbarMessage(getErrorMessage(error), "error");
@@ -49,11 +52,22 @@ const BranchSchedulePage = () => {
           title="Horarios de la Sucursal"
           subtitle={branchData.name!}
           actionButton={
-            <Link href={`/Branch/Schedule`}>
-              <Button variant="contained" startIcon={<AddIcon />}>
-                Gestión de horario
+            <div className="flex gap-2">
+              <Link href={`/Branch/Schedule`}>
+                <Button variant="contained" startIcon={<AddIcon />}>
+                  Gestión de horario
+                </Button>
+              </Link>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => {
+                  setOpenAddModal(true); 
+                }}
+              >
+                Asignar Horario
               </Button>
-            </Link>
+            </div>
           }
           backPath="/Branch"
           backText="Sucursales"
@@ -61,6 +75,12 @@ const BranchSchedulePage = () => {
       }
     >
       <ScheduleTable schedules={branchData.branchSchedules ?? []} />
+
+      <AddExistingSchedulesModal
+        isOpen={openAddModal}
+        toggleIsOpen={() => setOpenAddModal(false)}
+        branchId={Number(branchId)}
+      />
     </Page>
   );
 };

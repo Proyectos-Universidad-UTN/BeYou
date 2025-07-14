@@ -17,10 +17,10 @@ namespace BeYou.Application.Services.Implementations;
 public class ServiceBranchSchedule(ICoreService<BranchSchedule> coreService, IMapper mapper,
                                     IValidator<BranchSchedule> branchScheduleValidator) : IServiceBranchSchedule
 {
-    private readonly string[] BranchScheduleWithBranch = ["BranchIdNavigation"];
+    private readonly string[] BranchScheduleWithBranch = ["Branch"];
     private readonly string[] BranchScheduleWithBlocks = ["BranchScheduleBlocks"];
-    private readonly string[] BranchScheduleWithBranchScheduleAndBlocks = ["BranchIdNavigation", "ScheduleIdNavigation", "BranchScheduleBlocks"];
-    private readonly string[] BranchScheduleWithScheduleAndBlocks = ["ScheduleIdNavigation", "BranchScheduleBlocks"];
+    private readonly string[] BranchScheduleWithBranchScheduleAndBlocks = ["Branch", "Schedule", "BranchScheduleBlocks"];
+    private readonly string[] BranchScheduleWithScheduleAndBlocks = ["Schedule", "BranchScheduleBlocks"];
 
     /// <inheritdoc />
     public async Task<bool> CreateBranchScheduleAsync(long branchId, IEnumerable<RequestBranchScheduleDto> branchSchedules)

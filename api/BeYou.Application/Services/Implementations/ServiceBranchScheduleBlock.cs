@@ -13,7 +13,7 @@ namespace BeYou.Application.Services.Implementations;
 public class ServiceBranchScheduleBlock(ICoreService<BranchScheduleBlock> coreService,
                                             IValidator<BranchScheduleBlock> blockValidator, IMapper mapper) : IServiceBranchScheduleBlock
 {
-    private readonly string[] BranchScheduleBlockWithBranchSchedule = ["BranchScheduleIdNavigation"];
+    private readonly string[] BranchScheduleBlockWithBranchSchedule = ["BranchSchedule"];
     /// <inheritdoc />
     public async Task<ResponseBranchScheduleBlockDto> CreateBranchScheduleBlockAsync(RequestBranchScheduleBlockDto branchScheduleBlock)
     {
