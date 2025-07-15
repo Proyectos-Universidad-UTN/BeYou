@@ -28,15 +28,29 @@ public class ServiceProduct(ICoreService<Product> coreService, IMapper mapper,
     /// <inheritdoc />
     public async Task<ResponseProductDto> UpdateProductAsync(long id, RequestProductDto productDTO)
     {
-        if (!await coreService.UnitOfWork.Repository<Product>().ExistsAsync(id)) throw new NotFoundException("Product no encontrada.");
+        var spec = new BaseSpecification<Product>(x => x.Id == id);
+        var existingProduct = await coreService.UnitOfWork.Repository<Product>().FirstOrDefaultAsync(spec);
 
-        var product = await ValidateProductAsync(productDTO);
-        product.Id = id;
-        coreService.UnitOfWork.Repository<Product>().Update(product);
+        if (existingProduct == null)
+            throw new NotFoundException("Producto no encontrado.");
+
+        // Validación (si es necesaria, podés validar aquí)
+        await ValidateProductAsync(productDTO);
+
+        // Mapear los nuevos datos sobre la entidad existente
+        mapper.Map(productDTO, existingProduct);
+
+        // Preservar campos críticos
+        existingProduct.Active = existingProduct.Active;
+        existingProduct.Created = existingProduct.Created;
+        existingProduct.CreatedBy = existingProduct.CreatedBy;
+
+        coreService.UnitOfWork.Repository<Product>().Update(existingProduct);
         await coreService.UnitOfWork.SaveChangesAsync();
 
         return await FindByIdAsync(id);
     }
+
 
     /// <inheritdoc />
     public async Task<ResponseProductDto> FindByIdAsync(long id)
