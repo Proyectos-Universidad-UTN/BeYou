@@ -48,9 +48,9 @@ export const AddExistingSchedulesModal = ({
     );
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const payload = selected.map((id) => ({ scheduleId: id }));
-    postSchedules.mutate(payload);
+    await postSchedules.mutate(payload);
   };
 
   return (

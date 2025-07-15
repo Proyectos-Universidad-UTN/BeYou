@@ -28,7 +28,10 @@ public class ServiceBranchSchedule(ICoreService<BranchSchedule> coreService, IMa
         var schedules = await ValidateHorarios(branchId, branchSchedules);
 
         var spec = new BaseSpecification<BranchSchedule>(x => x.BranchId == branchId);
-        var existingBranchSchedules = await coreService.UnitOfWork.Repository<BranchSchedule>().ListAsync(spec, BranchScheduleWithBranch);
+
+        spec.ApplyNoTracking(true); 
+
+        var existingBranchSchedules = await coreService.UnitOfWork.Repository<BranchSchedule>().ListAsync(spec, BranchScheduleWithBlocks);
 
         using var keyedSemaphore = await KeyedSemaphore.LockAsync($"AssignSchedules-{branchId}");
 
@@ -38,40 +41,87 @@ public class ServiceBranchSchedule(ICoreService<BranchSchedule> coreService, IMa
             using var transaction = await coreService.UnitOfWork.BeginTransactionAsync();
             try
             {
-                schedules.ForEach(m =>
-                {
-                    var existing = existingBranchSchedules.FirstOrDefault(x => x.ScheduleId == m.ScheduleId && x.BranchId == m.BranchId);
-
-                    if (existing != null)
-                    {
-                        foreach (var block in existing.BranchScheduleBlocks.ToList())
-                        {
-                            coreService.UnitOfWork.Repository<BranchScheduleBlock>().Delete(block);
-                        }
-
-                        var blocksToAssign = existing.BranchScheduleBlocks
-                            .Select(x => new BranchScheduleBlock
-                            {
-                                StartHour = x.StartHour,
-                                EndHour = x.EndHour,
-                                Active = x.Active
-                            }).ToList();
-
-                        m.BranchScheduleBlocks = blocksToAssign;
-                    }
-                });
-
                 coreService.UnitOfWork.Repository<BranchSchedule>().Delete(existingBranchSchedules);
+
+                var existingBySchedule = existingBranchSchedules.ToDictionary(x => x.ScheduleId);
+
+                foreach (var item in schedules)
+                {
+                    item.Branch = null;
+
+                    if (existingBySchedule.TryGetValue(item.ScheduleId, out var branchSchedule))
+                    {
+                        if (item.BranchScheduleBlocks == null || !item.BranchScheduleBlocks.Any())
+                        {
+                            var existingBlocks = branchSchedule.BranchScheduleBlocks.Select(
+                                x => new BranchScheduleBlock
+                                {
+                                    StartHour = x.StartHour,
+                                    EndHour = x.EndHour,
+                                    Active = x.Active
+                                }).ToList();
+                            item.BranchScheduleBlocks = existingBlocks;
+                        }
+                    }
+
+                    if (item.BranchScheduleBlocks != null && item.BranchScheduleBlocks.Any())
+                    {
+                        foreach (var block in item.BranchScheduleBlocks)
+                        {
+                            block.BranchSchedule = null; 
+                        }
+                    }
+                }
+
+               
+
+                //schedules.ForEach(m =>
+                //{
+                //    var existing = existingBranchSchedules.FirstOrDefault(x => x.ScheduleId == m.ScheduleId && x.BranchId == m.BranchId);
+
+                //    if (existing != null)
+                //    {
+                //        foreach (var block in existing.BranchScheduleBlocks.ToList())
+                //        {
+                //            coreService.UnitOfWork.Repository<BranchScheduleBlock>().Delete(block);
+                //        }
+
+                //        var blocksToAssign = existing.BranchScheduleBlocks
+                //            .Select(x => new BranchScheduleBlock
+                //            {
+                //                StartHour = x.StartHour,
+                //                EndHour = x.EndHour,
+                //                Active = x.Active
+                //            }).ToList();
+
+                //        m.BranchScheduleBlocks = blocksToAssign;
+                //    }
+                //    //m.Branch= null;
+
+                //    //foreach(var block in m.BranchScheduleBlocks)
+                //    //{
+                //    //    block.BranchSchedule = null; 
+                //    //}
+                //});
+
+                //coreService.UnitOfWork.Repository<BranchSchedule>().Delete(existingBranchSchedules);
                 await coreService.UnitOfWork.Repository<BranchSchedule>().AddRangeAsync(schedules);
                 await coreService.UnitOfWork.SaveChangesAsync();
 
                 await transaction.CommitAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                throw new BeYouException("Se ha presentado un error al momento de asignar los horarios en la sucursal.");
+
+                var errorDetail = $"Error: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    errorDetail += $"\nInner: {ex.InnerException.Message}";
+                }
+
+                throw new BeYouException($"Se ha presentado un error al momento de asignar los horarios en la sucursal.\nDetalles: {errorDetail}");
             }
         });
 

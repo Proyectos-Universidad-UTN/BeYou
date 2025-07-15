@@ -42,7 +42,7 @@ export const UsePostBranchSchedules = ({
         },
         onSuccess: async (data: boolean, variables: BranchScheduleRequest[]) => {
             await queryClient.invalidateQueries({
-                queryKey: ['GetBranchSchedule']
+                queryKey: ['GetBranchSchedules',branchId.toString()]
             })
             onSuccess?.(data, variables)
         },

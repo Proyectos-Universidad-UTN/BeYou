@@ -16,7 +16,6 @@ export const UseGetBranchSchedules = (branchId: string | undefined) => {
       const { data } = await getBranchSchedules(
         castRequestBody({ branchId: Number(branchId) }, path, method)
       );
-      console.log("Horarios API:", data);
       return data;
     },
     retry: false,
