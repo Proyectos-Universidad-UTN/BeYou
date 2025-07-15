@@ -31,9 +31,7 @@ export default function WithLayout({
         </div>
 
         <div
-          className={`flex flex-col flex-1 transition-all duration-300 ${
-            isExpanded ? "ml-64" : "ml-16"
-          }`}
+          className={`flex flex-col flex-1 transition-all duration-300 sm:ml-16`}
         >
           <div className="sticky top-0 z-40 bg-[#f9fbfd] transition-all duration-300">
             <Header onMenuClick={handleSidebarToggle} />

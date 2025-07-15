@@ -16,16 +16,15 @@ public class ServiceBranch(ICoreService<Branch> coreService, IMapper mapper,
                             IValidator<Branch> branchValidator,
                             IServiceUserAuthorization serviceUserAuthorization) : IServiceBranch
 {
-    private readonly string[] BranchWithAddress = ["DistrictIdNavigation", "CantonIdNavigation", "ProvinceIdNavigation"];
+    private readonly string[] BranchWithAddress = ["District", "Canton", "Province"];
     private readonly string[] BranchDefaults = [
-        "DistrictIdNavigation",
-        "DistrictIdNavigation.CantonIdNavigation",
-        "DistrictIdNavigation.CantonIdNavigation.ProvinceIdNavigation",
+        "District",
+        "District.Canton",
+        "District.Canton.Province",
         "BranchSchedules",
-        "BranchSchedules.ScheduleIdNavigation",
+        "BranchSchedules.Schedule",
         "BranchSchedules.BranchScheduleBlocks",
     ];
-
 
     /// <inheritdoc />
     public async Task<ResponseBranchDto> CreateBranchAsync(RequestBranchDto branchDTO)

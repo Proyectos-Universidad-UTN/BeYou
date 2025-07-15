@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import React, { useState } from "react";
@@ -12,13 +13,14 @@ import {
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
 import { MenuItem } from "./Types";
-import { useSidebarStore } from "@/stores/useSidebarStore"; 
+import { useSidebarStore } from "@/stores/useSidebarStore";
+import { startsWith } from "lodash";
 
 interface RenderMenuItemProps {
   item: MenuItem;
   isSmallScreen: boolean;
   onClose?: () => void;
-  isCollapsed?: boolean; 
+  isCollapsed?: boolean;
 }
 
 export function renderMenuItem(
@@ -27,14 +29,15 @@ export function renderMenuItem(
   onClose?: () => void
 ) {
   const pathname = usePathname();
-  const { isExpanded } = useSidebarStore(); 
+  const { isExpanded } = useSidebarStore();
   const [expandedMenus, setExpandedMenus] = useState<{ [key: string]: boolean }>({});
 
   const handleToggle = (label: string) => {
     setExpandedMenus((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
-  const isActive = pathname === item.path;
+  console.log('ruta', pathname, item.path)
+  const isActive = startsWith(pathname, item.path);
   const isExpandedItem = expandedMenus[item.label];
   const icon = item.icon ? <item.icon className="w-5 h-5" /> : null;
 
@@ -43,11 +46,10 @@ export function renderMenuItem(
       <React.Fragment key={item.label}>
         <ListItem
           onClick={() => handleToggle(item.label)}
-          className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
-            isActive || isExpandedItem
-              ? "bg-yellow-300 text-gray-900"
-              : "text-gray-900 hover:bg-yellow-200 hover:text-black"
-          }`}
+          className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${isActive || isExpandedItem
+            ? "bg-yellow-300 text-gray-900"
+            : "text-gray-900 hover:bg-yellow-200 hover:text-black"
+            }`}
         >
           <ListItemIcon className={`${isActive ? "text-yellow-700" : "text-gray-800"}`}>
             {icon}
@@ -64,18 +66,17 @@ export function renderMenuItem(
         <Collapse in={isExpandedItem && isExpanded} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {item.children.map((child) => {
-              const childActive = pathname === child.path;
+              const childActive = startsWith(pathname, child.path);
               const childIcon = child.icon ? <child.icon className="w-5 h-5" /> : null;
 
               return (
                 <Link href={child.path!} key={child.label} passHref>
                   <ListItem
                     {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
-                    className={`text-sm rounded-md mb-2 pl-6 flex items-center transition-colors duration-300 ${
-                      childActive
-                        ? "bg-yellow-300 text-black"
-                        : "text-black hover:bg-yellow-100 hover:text-black"
-                    }`}
+                    className={`text-sm rounded-md mb-2 pl-6 flex items-center transition-colors duration-300 ${childActive
+                      ? "bg-yellow-300 text-black"
+                      : "text-black hover:bg-yellow-100 hover:text-black"
+                      }`}
                   >
                     <ListItemIcon className={`min-w-[36px] ${childActive ? "text-yellow-700" : "text-black"}`}>
                       {childIcon}
@@ -95,11 +96,10 @@ export function renderMenuItem(
     <Link href={item.path!} key={item.label} passHref>
       <ListItem
         {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
-        className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center transition-colors duration-300 ${
-          isActive
-            ? "bg-yellow-300 text-gray-900"
-            : "text-gray-900 hover:bg-yellow-200 hover:text-black"
-        }`}
+        className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center transition-colors duration-300 ${isActive
+          ? "bg-yellow-300 text-gray-900"
+          : "text-gray-900 hover:bg-yellow-200 hover:text-black"
+          }`}
       >
         <ListItemIcon className={`${isActive ? "text-yellow-700" : "text-gray-800"}`}>
           {icon}

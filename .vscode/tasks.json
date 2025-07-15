@@ -1,0 +1,33 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"command": "dotnet",
+			"type": "process",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"args": [
+				"build",
+				"${workspaceFolder}/api/BeYou.sln",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "open-browser",
+			"command": "open",
+			"args": [
+				"http://localhost:5191/swagger"
+			],
+			"type": "process",
+			"dependsOn": [
+				"build"
+			],
+			"problemMatcher": []
+		}
+	]
+}

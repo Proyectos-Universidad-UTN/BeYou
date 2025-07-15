@@ -23,11 +23,11 @@ export const PageHeader = ({
     backPath,
     actionButton
 }: PageHeaderProps) => {
-    const isMobile  = useIsMobile()
+    const isMobile = useIsMobile()
     return (
         <Box>
             <Box
-                py={4}
+                py={1}
                 px={6}
             >
                 {!isNil(backPath) && (
@@ -66,7 +66,7 @@ export const PageHeader = ({
                             textAlign: isMobile ? 'center' : 'left',
                         }}
                     >
-                        <Typography variant="h2" >{title}</Typography>
+                        <Typography variant="h6" >{title}</Typography>
                         <Box>
                             {!isNil(subtitle) && (
                                 <Typography variant="subtitle2" >{subtitle}</Typography>

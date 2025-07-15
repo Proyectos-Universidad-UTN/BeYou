@@ -52,7 +52,7 @@ export const ModalHeader = ({
         <Box sx={commonSxModalProps} ref={ref}>
             <Box px={{ xs: 1, sm: 4 }} py={{ xs: 2, sm: 3 }} width="100%">
                 {isPresent(title) && (
-                    <Typography variant="h2" fontWeight='bold'>
+                    <Typography variant="h4" fontWeight='bold'>
                         {title}
                     </Typography>
                 )}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Utility functions for data formatting, validation, error handling, and date manipulation.
  * 

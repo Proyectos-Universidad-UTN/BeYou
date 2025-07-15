@@ -1,6 +1,8 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/stores/useSnackbar";
 import { ErrorDetailsBeYou } from "@/types/api-beyou";
-import { useRouter } from "next/router";
 
 export const UseMutationCallbacks = (
   successMessage: string,

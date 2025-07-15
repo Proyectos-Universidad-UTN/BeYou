@@ -55,18 +55,18 @@ export const DataTable = <RowModelT extends GridValidRowModel>({
   }
 
   // Si deseas que se vea versión móvil, puedes descomentar esto:
-  // if (isMobile && !forceDesktopTableInMobile) {
-  //   return (
-  //     <MobileDataTable
-  //       columns={columns}
-  //       rows={rows}
-  //       onRowClick={onRowClick}
-  //       checkboxSelection={checkboxSelection}
-  //       rowSelectionModel={rowSelectionModel}
-  //       onRowSelectionModelChange={onRowSelectionModelChange}
-  //     />
-  //   );
-  // }
+  if (isMobile && !forceDesktopTableInMobile) {
+    return (
+      <MobileDataTable
+        columns={columns}
+        rows={rows}
+        onRowClick={onRowClick}
+        checkboxSelection={checkboxSelection}
+        rowSelectionModel={rowSelectionModel}
+        onRowSelectionModelChange={onRowSelectionModelChange}
+      />
+    );
+  }
 
   const modifiedColumns = columns.map((col) => {
     if (!col.renderCell) {

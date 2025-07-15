@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, ButtonProps, CircularProgress } from "@mui/material";
 
 interface ConfirmButtonProps extends ButtonProps {

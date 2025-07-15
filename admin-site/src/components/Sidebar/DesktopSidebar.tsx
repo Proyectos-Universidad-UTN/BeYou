@@ -20,7 +20,14 @@ export default function DesktopSidebar({ menuItems }: DesktopSidebarProps) {
         isExpanded ? "w-64" : "w-16"
       } bg-pink-200`}
     >
+      <div className="px-4 py-4">
+        {isExpanded && (
+          <h2 className="text-xl font-bold text-gray-800">Dashboard</h2>
+        )}
+      </div>
+
       <List>{menuItems.map((item) => renderMenuItem(item, false))}</List>
     </div>
   );
 }
+
