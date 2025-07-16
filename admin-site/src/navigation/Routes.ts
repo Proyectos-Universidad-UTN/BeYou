@@ -22,6 +22,7 @@ const menuItems: MenuItem[] = [
         children: [
             { label: "Perfil", path: "/configuracion/perfil", icon: Users },
             { label: "Seguridad", path: "/configuracion/seguridad", icon: Settings },
+            { label: "Horarios", path: "/Schedule", icon: Settings },
         ],
     },
 ];

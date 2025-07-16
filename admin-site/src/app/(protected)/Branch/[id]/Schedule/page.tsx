@@ -54,9 +54,7 @@ const BranchSchedulePage = () => {
           actionButton={
             <div className="flex gap-2">
               <Link href={`/Branch/Schedule`}>
-                <Button variant="contained" startIcon={<AddIcon />}>
-                  Gestión de horario
-                </Button>
+              
               </Link>
               <Button
                 variant="outlined"
