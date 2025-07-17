@@ -1,43 +1,47 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { removePhoneMask } from "@/utils/util";
+import { Page } from "@/components/Shared/Page";
+import { PageHeader } from "@/components/Shared/PageHeader";
 import { VendorForm } from "../components/VendorForm";
+import { initialVendorValues, VendorFormType } from "../components/VendorSchema";
 import { UsePostVendor } from "@/hooks/api-beyou/vendor/UsePostVendor";
-import { VendorFormType, initialVendorValues } from "../components/VendorSchema";
-import { useSnackbar } from "@/stores/useSnackbar";
+import { UseMutationCallbacks } from "@/hooks/UseMutationCallbacks";
 
-export default function NewVendorPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const { setMessage } = useSnackbar();
+const NewVendorPage = () => {
+  const [loading, setLoading] = useState(false);
 
-  const postVendor = UsePostVendor({
-    onSuccess: () => {
-      setMessage("Proveedor creado exitosamente", "success");
-      router.push("/Vendor");
-    },
-    onError: (error) => {
-      setMessage("Error al crear proveedor", "error");
-      console.error(error);
-    },
-  });
+  const closeLoading = () => setLoading(false);
 
-  const onSubmit = (data: VendorFormType) => {
-    setIsLoading(true);
-    postVendor.mutate(data, {
-      onSettled: () => setIsLoading(false),
+  const { mutate: postVendor } = UsePostVendor(
+    UseMutationCallbacks("Proveedor creado exitosamente", "/Vendor", closeLoading)
+  );
+
+  const handleSubmit = (data: VendorFormType) => {
+    setLoading(true);
+    postVendor({
+      ...data,
+      telephone: removePhoneMask(data.telephone),
     });
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">Crear nuevo proveedor</h1>
+    <Page
+      header={
+        <PageHeader
+          title="Crear Proveedor"
+          subtitle="Agrega un nuevo proveedor al sistema"
+        />
+      }
+    >
       <VendorForm
-        onSubmit={onSubmit}
         defaultValues={initialVendorValues}
-        isLoading={isLoading}
+        onSubmit={handleSubmit}
+        isLoading={loading}
       />
-    </div>
+    </Page>
   );
-}
+};
+
+export default NewVendorPage;

@@ -13,7 +13,7 @@ const menuItems: MenuItem[] = [
         ],
     },
     { label: "Proveedores", path: "/Vendor", icon: Truck },
-    { label: "Productos", path: "/productos", icon: Package },
+    { label: "Productos", path: "/Product", icon: Package },
     { label: "Servicios", path: "/servicios", icon: Sparkles },
     { label: "Usuarios", path: "/User", icon: Users },
     {

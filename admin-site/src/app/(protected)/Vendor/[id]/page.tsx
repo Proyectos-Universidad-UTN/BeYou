@@ -1,91 +1,111 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@mui/material";
+import { Page } from "@/components/Shared/Page";
+import { PageHeader } from "@/components/Shared/PageHeader";
+import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
+import { removePhoneMask, getErrorMessage } from "@/utils/util";
+import { useSnackbar } from "@/stores/useSnackbar";
+import { UseMutationCallbacks } from "@/hooks/UseMutationCallbacks";
 import { UseGetVendorById } from "@/hooks/api-beyou/vendor/UseGetVendorById";
 import { UsePutVendor } from "@/hooks/api-beyou/vendor/UsePutVendor";
-import { useSnackbar } from "@/stores/useSnackbar";
-
+import { VendorForm } from "../components/VendorForm";
 import {
   VendorFormType,
+  VendorSchema,
   initialVendorValues,
 } from "../components/VendorSchema";
-import { VendorForm } from "../components/VendorForm";
-import { useQueryClient } from "@tanstack/react-query";
+import { VendorDeleteModalConfirmation } from "./VendorDeleteModalConfirmation";
 
-export default function EditVendorPage() {
+
+const EditVendorPage = () => {
   const router = useRouter();
-  const { setMessage } = useSnackbar();
+  const params = useParams();
+  const setSnackbarMessage = useSnackbar((state) => state.setMessage);
+  const [loading, setLoading] = useState(false);
+  const [openModalConfirmation, setOpenModalConfirmation] = useState(false);
 
-  const pathname = usePathname();
-  const idStr = pathname?.split("/").pop();
-  const queryClient = useQueryClient();
+  const vendorIdRaw = params?.id;
+  const vendorId = vendorIdRaw && !isNaN(Number(vendorIdRaw)) ? String(vendorIdRaw) : undefined;
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [defaultValues, setDefaultValues] =
-    useState<VendorFormType>(initialVendorValues);
+  const closeLoading = () => setLoading(false);
 
   const {
     data: vendorData,
-    isLoading: loadingVendor,
+    isLoading,
+    isError,
     error,
-  } = UseGetVendorById(idStr);
+  } = UseGetVendorById(vendorId);
 
-  const putVendor = UsePutVendor({
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GetVendors"] });
-      setMessage("Proveedor actualizado con éxito", "success");
-      router.push("/Vendor");
-    },
-
-    onError: (error) => {
-      setMessage("Error al actualizar proveedor", "error");
-      console.error(error);
-    },
-  });
+  const { mutate: putVendor } = UsePutVendor(
+    UseMutationCallbacks("Proveedor actualizado exitosamente", "/Vendor", closeLoading)
+  );
 
   useEffect(() => {
-    if (vendorData) {
-      setDefaultValues({
-        name: vendorData.name || "",
-        fiscalNumber: vendorData.fiscalNumber || "",
-        socialReason: vendorData.socialReason || "",
-        telephone: vendorData.telephone ? String(vendorData.telephone) : "",
-        email: vendorData.email || "",
-        districtId: vendorData.districtId || 0,
-        address: vendorData.address || "",
-      });
+    if (isError) {
+      setSnackbarMessage(getErrorMessage(error), "error");
+      router.replace("/Vendor");
     }
-  }, [vendorData]);
+  }, [isError, error, setSnackbarMessage, router]);
 
-  const onSubmit = (data: VendorFormType) => {
-    if (!idStr) return;
-
-    setIsLoading(true);
-
-    const payload = {
-      id: Number(idStr),
+  const handleSubmit = (data: VendorFormType) => {
+    setLoading(true);
+    putVendor({
       ...data,
-      telephone: Number(data.telephone),
-    };
-
-    putVendor.mutate(payload, {
-      onSettled: () => setIsLoading(false),
+      id: Number(vendorId),
+      telephone: removePhoneMask(data.telephone),
     });
   };
 
-  if (loadingVendor) return <p>Cargando proveedor...</p>;
-  if (error) return <p>Error al cargar proveedor.</p>;
+  if (isLoading) return <CircularLoadingProgress />;
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">Editar Proveedor</h1>
+    <Page
+      header={
+        <PageHeader
+          title={`Editar Proveedor Nº ${vendorData?.id}`}
+          subtitle="Actualiza los datos del proveedor"
+          backPath="/Vendor"
+          backText="Proveedores"
+          actionButton={
+            <Button
+              className="!bg-red-500 hover:bg-red-600"
+              variant="contained"
+              size="large"
+              fullWidth
+              onClick={() => setOpenModalConfirmation(true)}
+            >
+              Eliminar
+            </Button>
+          }
+        />
+      }
+    >
       <VendorForm
-        onSubmit={onSubmit}
-        defaultValues={defaultValues}
-        isLoading={isLoading}
+        defaultValues={{
+          name: vendorData?.name || "",
+          fiscalNumber: vendorData?.fiscalNumber || "",
+          socialReason: vendorData?.socialReason || "",
+          telephone: String(vendorData?.telephone || ""),
+          email: vendorData?.email || "",
+          districtId: vendorData?.districtId || 0,
+          address: vendorData?.address || "",
+        }}
+        onSubmit={handleSubmit}
+        isLoading={loading}
         isEdit={true}
       />
-    </div>
+
+      <VendorDeleteModalConfirmation
+        isModalOpen={openModalConfirmation}
+        toggleIsOpen={() => setOpenModalConfirmation(!openModalConfirmation)}
+        vendorId={vendorData?.id ?? 0}
+        title={vendorData?.name ?? ""}
+      />
+    </Page>
   );
-}
+};
+
+export default EditVendorPage;
