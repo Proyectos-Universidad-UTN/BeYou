@@ -10,7 +10,11 @@ interface MobileSidebarProps {
   menuItems: MenuItem[];
 }
 
-export default function MobileSidebar({ isOpen, onClose, menuItems }: MobileSidebarProps) {
+export default function MobileSidebar({
+  isOpen,
+  onClose,
+  menuItems,
+}: MobileSidebarProps) {
   const header = (
     <div className="font-bold text-xl text-center py-4 text-yellow-700 bg-pink-300 tracking-wide border-b" />
   );
@@ -22,10 +26,16 @@ export default function MobileSidebar({ isOpen, onClose, menuItems }: MobileSide
       onClose={onClose}
       className="md:hidden"
       classes={{ paper: "w-64" }}
-      PaperProps={{ className: "bg-pink-300 w-3/4" }}
+      slotProps={{
+        paper: {
+          className: "bg-pink-300 w-3/4",
+        },
+      }}
     >
       {header}
-      <List>{menuItems.map((item) => renderMenuItem(item, true, onClose))}</List>
+      <List>
+        {menuItems.map((item) => renderMenuItem(item, true, onClose))}
+      </List>
     </Drawer>
   );
 }
