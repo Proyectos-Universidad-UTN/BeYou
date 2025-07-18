@@ -25,17 +25,18 @@ export default function MobileSidebar({
       open={isOpen}
       onClose={onClose}
       className="md:hidden"
-      classes={{ paper: "w-64" }}
       slotProps={{
         paper: {
-          className: "bg-pink-300 w-3/4",
+          className: "w-3/4", 
         },
       }}
     >
-      {header}
-      <List>
-        {menuItems.map((item) => renderMenuItem(item, true, onClose))}
-      </List>
+      <div className="bg-pink-200 h-full flex flex-col">
+        {header}
+        <List className="flex-1 overflow-y-auto">
+          {menuItems.map((item) => renderMenuItem(item, true, onClose))}
+        </List>
+      </div>
     </Drawer>
   );
 }
