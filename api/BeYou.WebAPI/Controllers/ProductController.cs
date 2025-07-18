@@ -5,6 +5,7 @@ using BeYou.WebAPI.Configuration;
 using BeYou.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BeYou.Application.Services.Implementations;
 
 namespace BeYou.WebAPI.Controllers;
 
@@ -81,5 +82,20 @@ public class ProductController(IServiceProduct serviceProduct) : ControllerBase
         ArgumentNullException.ThrowIfNull(product);
         var result = await serviceProduct.UpdateProductAsync(productId, product);
         return StatusCode(StatusCodes.Status200OK, result);
+    }
+
+    /// <summary>
+    /// Deletes a branch by its ID.
+    /// </summary>
+    /// <param name="productId">The ID of the branch to delete.</param>
+    /// <returns>The deleted branch.</returns>
+    [HttpDelete("{productId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDetailsBeYou))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetailsBeYou))]
+    public async Task<IActionResult> DeleteProductAsync(byte productId)
+    {
+        var product = await serviceProduct.DeleteProductAsync(productId);
+        return StatusCode(StatusCodes.Status200OK, product);
     }
 }

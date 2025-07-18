@@ -3,17 +3,15 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@mui/material";
-
 import { Page } from "@/components/Shared/Page";
 import { PageHeader } from "@/components/Shared/PageHeader";
 import { useSnackbar } from "@/stores/useSnackbar";
 import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
-
 import { UseGetProductById } from "@/hooks/api-beyou/product/UseGetProductById";
 import { UsePutProduct } from "@/hooks/api-beyou/product/UsePutProduct";
-
 import { ProductForm } from "../components/ProductForm";
 import { ProductFormType, initialProductValues } from "../components/ProductSchema";
+import { ProductDeleteModalConfirmation } from "./ProductDeleteModalConfirmation";
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -105,13 +103,12 @@ export default function EditProductPage() {
         isEdit={true}
       />
 
-      {/* Aquí puedes agregar tu modal de confirmación para eliminar producto si lo tienes */}
-      {/* <ProductDeleteModalConfirmation
+      <ProductDeleteModalConfirmation
           isModalOpen={openModalConfirmation}
           toggleIsOpen={() => setOpenModalConfirmation(!openModalConfirmation)}
           productId={Number(productId)}
           title={defaultValues.name}
-      /> */}
+      /> 
     </Page>
   );
 }

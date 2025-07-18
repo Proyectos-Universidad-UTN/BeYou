@@ -70,7 +70,7 @@ public class ServiceProduct(ICoreService<Product> coreService, IMapper mapper,
     {
         if (!excludeProductsInventory)
         {
-            var products = await coreService.UnitOfWork.Repository<Product>().ListAllAsync();
+            var products = await coreService.UnitOfWork.Repository<Product>().ListAllAsync(ProductWithCategory);
             return mapper.Map<ICollection<ResponseProductDto>>(products);
         }
 
@@ -85,6 +85,18 @@ public class ServiceProduct(ICoreService<Product> coreService, IMapper mapper,
         var productsFiltered = await coreService.UnitOfWork.Repository<Product>().ListAsync(query, ProductWithCategory);
 
         return mapper.Map<ICollection<ResponseProductDto>>(productsFiltered);
+    }
+
+    public async Task<bool> DeleteProductAsync(long id)
+    {
+        if (!await coreService.UnitOfWork.Repository<Product>().ExistsAsync(id)) throw new NotFoundException("Producto no encontrado.");
+
+        var spec = new BaseSpecification<Product>(x => x.Id == id);
+        var product = await coreService.UnitOfWork.Repository<Product>().FirstOrDefaultAsync(spec);
+        product!.Active = false;
+
+        coreService.UnitOfWork.Repository<Product>().Update(product);
+        return await coreService.UnitOfWork.SaveChangesAsync() != 0;
     }
 
     /// <summary>
