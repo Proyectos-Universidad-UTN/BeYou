@@ -12,7 +12,7 @@ const ProductColumns: GridColDef[] = [
     flex: 1,
     minWidth: 140,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <span>{params.row.category?.id || "—"}</span>
+      <span>{params.row.category?.name || "—"}</span>
     ),
   },
   //   {
