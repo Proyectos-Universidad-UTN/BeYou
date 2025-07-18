@@ -2,8 +2,8 @@
 
 import { List } from "@mui/material";
 import { MenuItem } from "./Types";
-import { renderMenuItem } from "./RenderMenuItem";
 import { useSidebarStore } from "@/stores/useSidebarStore"; 
+import { renderMenuItem } from "./RenderMenuItem";
 
 interface DesktopSidebarProps {
   menuItems: MenuItem[];
