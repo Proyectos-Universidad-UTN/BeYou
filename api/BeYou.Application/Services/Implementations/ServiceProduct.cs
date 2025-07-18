@@ -13,6 +13,9 @@ namespace BeYou.Application.Services.Implementations;
 public class ServiceProduct(ICoreService<Product> coreService, IMapper mapper,
                                   IValidator<Product> productValidator) : IServiceProduct
 {
+
+    private readonly string[] ProductWithCategory = ["Category"];
+
     /// <inheritdoc />
     public async Task<ResponseProductDto> CreateProductAsync(RequestProductDto productDTO)
     {
@@ -79,7 +82,7 @@ public class ServiceProduct(ICoreService<Product> coreService, IMapper mapper,
 
         var query = coreService.UnitOfWork.Repository<Product>().AsQueryable().Except(queryExcluded);
 
-        var productsFiltered = await coreService.UnitOfWork.Repository<Product>().ListAsync(query);
+        var productsFiltered = await coreService.UnitOfWork.Repository<Product>().ListAsync(query, ProductWithCategory);
 
         return mapper.Map<ICollection<ResponseProductDto>>(productsFiltered);
     }

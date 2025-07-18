@@ -30,9 +30,12 @@ export interface ProductTableItem {
   brand: string;
   price: number;
   sku: string;
-  categoryId: number;
+  category?: {
+  id: number;
+  name: string;
+  };
+
   unitMeasureId: number;
-  active: boolean;
 }
 
 interface ProductTableProps {
@@ -122,13 +125,6 @@ export const ProductTable = ({ products }: ProductTableProps) => {
         flex: 0.5,
         minWidth: 100,
         valueFormatter: (params) => UNIT_MEASURE_MAP[params.value] || "N/A",
-      },
-      {
-        field: "active",
-        headerName: "Activo",
-        flex: 0.5,
-        minWidth: 100,
-        valueFormatter: (params) => (params.value ? "Sí" : "No"),
       },
       {
         field: "actions",

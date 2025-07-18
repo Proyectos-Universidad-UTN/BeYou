@@ -1,32 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@mui/material";
+
+import { Page } from "@/components/Shared/Page";
+import { PageHeader } from "@/components/Shared/PageHeader";
+import { useSnackbar } from "@/stores/useSnackbar";
+import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
+
 import { UseGetProductById } from "@/hooks/api-beyou/product/UseGetProductById";
 import { UsePutProduct } from "@/hooks/api-beyou/product/UsePutProduct";
-import { useSnackbar } from "@/stores/useSnackbar";
-import {
-  ProductFormType,
-  initialProductValues,
-} from "../components/ProductSchema";
+
 import { ProductForm } from "../components/ProductForm";
+import { ProductFormType, initialProductValues } from "../components/ProductSchema";
 
 export default function EditProductPage() {
   const router = useRouter();
+  const params = useParams();
+  const productIdRaw = params?.id;
+  const productId = productIdRaw && !isNaN(Number(productIdRaw)) ? String(productIdRaw) : undefined;
+
   const { setMessage } = useSnackbar();
 
-  const pathname = usePathname();
-  const idStr = pathname?.split("/").pop();  
+  const [loading, setLoading] = useState(false);
+  const [openModalConfirmation, setOpenModalConfirmation] = useState(false);
+  const [defaultValues, setDefaultValues] = useState<ProductFormType>(initialProductValues);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [defaultValues, setDefaultValues] =
-    useState<ProductFormType>(initialProductValues);
-
-  const {
-    data: productData,
-    isLoading: loadingProduct,
-    error,
-  } = UseGetProductById(idStr);
+  const { data: productData, isLoading, isError, error } = UseGetProductById(productId);
 
   const putProduct = UsePutProduct({
     onSuccess: () => {
@@ -36,8 +37,16 @@ export default function EditProductPage() {
     onError: (error) => {
       setMessage("Error al actualizar producto", "error");
       console.error(error);
+      setLoading(false);
     },
   });
+
+  useEffect(() => {
+    if (isError) {
+      setMessage(error?.message ?? "Error al cargar producto", "error");
+      router.replace("/Product");
+    }
+  }, [isError, error, router, setMessage]);
 
   useEffect(() => {
     if (productData) {
@@ -48,39 +57,61 @@ export default function EditProductPage() {
         sku: productData.sku || "",
         categoryId: productData.categoryId || 1,
         unitMeasureId: productData.unitMeasureId || 1,
-        active: productData.active || false,
+        active: productData.active ?? false,
         description: productData.description || "",
       });
     }
   }, [productData]);
 
-  const onSubmit = (data: ProductFormType) => {
-    if (!idStr) return; 
-
-    setIsLoading(true);
-
-    const payload = {
-      id: Number(idStr),
+  const handleSubmit = (data: ProductFormType) => {
+    if (!productId) return;
+    setLoading(true);
+    putProduct.mutate({
+      id: Number(productId),
       ...data,
-    };
-
-    putProduct.mutate(payload, {
-      onSettled: () => setIsLoading(false),
+    }, {
+      onSettled: () => setLoading(false),
     });
   };
 
-  if (loadingProduct) return <p>Cargando producto...</p>;
-  if (error) return <p>Error al cargar producto.</p>;
+  if (isLoading) return <CircularLoadingProgress />;
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">Editar Producto</h1>
+    <Page
+      header={
+        <PageHeader
+          title={`Editar Producto Nº ${productId}`}
+          subtitle="Actualiza los datos del producto"
+          backPath="/Product"
+          backText="Productos"
+          actionButton={
+            <Button
+              variant="contained"
+              color="error"
+              size="large"
+              fullWidth
+              onClick={() => setOpenModalConfirmation(true)}
+            >
+              Eliminar
+            </Button>
+          }
+        />
+      }
+    >
       <ProductForm
-        onSubmit={onSubmit}
         defaultValues={defaultValues}
-        isLoading={isLoading}
+        onSubmit={handleSubmit}
+        isLoading={loading}
         isEdit={true}
       />
-    </div>
+
+      {/* Aquí puedes agregar tu modal de confirmación para eliminar producto si lo tienes */}
+      {/* <ProductDeleteModalConfirmation
+          isModalOpen={openModalConfirmation}
+          toggleIsOpen={() => setOpenModalConfirmation(!openModalConfirmation)}
+          productId={Number(productId)}
+          title={defaultValues.name}
+      /> */}
+    </Page>
   );
 }
