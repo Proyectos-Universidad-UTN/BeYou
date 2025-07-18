@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import { InferType } from "yup";
+import { Product } from "@/types/api-beyou";
 
 export const initialProductValues = {
   name: "",
@@ -34,5 +35,23 @@ export const ProductSchema = yup.object({
     .required(),
   active: yup.boolean().required(),
 });
+
+export const ConvertToProductSchema = (
+  product: Product | null | undefined
+): ProductFormType => {
+  if (!product) {
+    return initialProductValues;
+  }
+  return {
+    name: product.name ?? "",
+    description: product.description ?? "",
+    brand: product.brand ?? "",
+    price: product.price ?? 0,
+    sku: product.sku ?? "",
+    categoryId: product.categoryId ?? 0,
+    unitMeasureId: product.unitMeasureId ?? 0,
+    active: product.active ?? true,
+  };
+};
 
 export type ProductFormType = InferType<typeof ProductSchema>;

@@ -12,16 +12,16 @@ const ProductColumns: GridColDef[] = [
     flex: 1,
     minWidth: 140,
     renderCell: (params: GridRenderCellParams<Product>) => (
-      <span>{params.row.category?.name || "—"}</span>
+      <span>{params.row.category?.id || "—"}</span>
     ),
   },
-//   {
-//     field: "unitOfMeasure",
-//     headerName: "Unidad",
-//     flex: 1,
-//     minWidth: 140,
-//     valueGetter: (params) => params.row.unitOfMeasure?.name || "—",
-//   },
+  //   {
+  //     field: "unitOfMeasure",
+  //     headerName: "Unidad",
+  //     flex: 1,
+  //     minWidth: 140,
+  //     valueGetter: (params) => params.row.unitOfMeasure?.name || "—",
+  //   },
   {
     field: "price",
     headerName: "Precio",
