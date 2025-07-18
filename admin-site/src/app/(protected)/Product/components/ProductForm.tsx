@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -14,6 +14,8 @@ import {
   MenuItem,
   FormControlLabel,
   Switch,
+  Alert,
+  Stack,
 } from "@mui/material";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CancelButton } from "@/components/Button/CancelButton";
@@ -44,6 +46,11 @@ export const ProductForm = ({
 }: Props) => {
   const router = useRouter();
 
+  const formMethods = useForm<ProductFormType>({
+    defaultValues,
+    resolver: yupResolver(ProductSchema),
+  });
+
   const {
     handleSubmit,
     register,
@@ -51,112 +58,136 @@ export const ProductForm = ({
     reset,
     watch,
     setValue,
-  } = useForm<ProductFormType>({
-    defaultValues,
-    resolver: yupResolver(ProductSchema),
-  });
+  } = formMethods;
 
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <TextField
-          label="Nombre"
-          fullWidth
-          {...register("name")}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        />
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Box pb={2}>
+          {Object.keys(errors).length > 0 && (
+            <Alert severity="error">
+              Por favor corrija los errores para continuar
+            </Alert>
+          )}
+        </Box>
 
-        <TextField
-          label="Marca"
-          fullWidth
-          {...register("brand")}
-          error={!!errors.brand}
-          helperText={errors.brand?.message}
-        />
-
-        <TextField
-          label="Precio"
-          type="number"
-          fullWidth
-          {...register("price")}
-          error={!!errors.price}
-          helperText={errors.price?.message}
-        />
-
-        <TextField
-          label="SKU"
-          fullWidth
-          {...register("sku")}
-          error={!!errors.sku}
-          helperText={errors.sku?.message}
-        />
-
-        <TextField
-          label="Categoría"
-          select
-          fullWidth
-          {...register("categoryId")}
-          error={!!errors.categoryId}
-          helperText={errors.categoryId?.message}
-        >
-          {CATEGORY_OPTIONS.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <TextField
-          label="Unidad de Medida"
-          select
-          fullWidth
-          {...register("unitMeasureId")}
-          error={!!errors.unitMeasureId}
-          helperText={errors.unitMeasureId?.message}
-        >
-          {UNIT_MEASURE_OPTIONS.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <FormControlLabel
-          control={
-            <Switch
-              checked={watch("active")}
-              onChange={(e) => setValue("active", e.target.checked)}
+        <Stack spacing={3} maxWidth="600px">
+          <Box>
+            <TextField
+              label="Nombre"
+              fullWidth
+              {...register("name")}
+              error={!!errors.name}
+              helperText={errors.name?.message}
             />
-          }
-          label="Activo"
-        />
+          </Box>
 
-        <div className="sm:col-span-2">
-          <TextField
-            label="Descripción"
-            fullWidth
-            multiline
-            rows={3}
-            {...register("description")}
-            error={!!errors.description}
-            helperText={errors.description?.message}
-          />
-        </div>
-      </div>
+          <Box>
+            <TextField
+              label="Marca"
+              fullWidth
+              {...register("brand")}
+              error={!!errors.brand}
+              helperText={errors.brand?.message}
+            />
+          </Box>
 
-      <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
-        <ConfirmButton
-          type="submit"
-          isLoading={isLoading}
-          label={isEdit ? "Actualizar" : "Confirmar"}
-        />
-        <CancelButton onClick={() => router.push("/Product")} label="Cancelar" />
-      </Box>
-    </form>
+          <Box>
+            <TextField
+              label="Precio"
+              type="number"
+              fullWidth
+              {...register("price")}
+              error={!!errors.price}
+              helperText={errors.price?.message}
+            />
+          </Box>
+
+          <Box>
+            <TextField
+              label="SKU"
+              fullWidth
+              {...register("sku")}
+              error={!!errors.sku}
+              helperText={errors.sku?.message}
+            />
+          </Box>
+
+          <Box>
+            <TextField
+              label="Categoría"
+              select
+              fullWidth
+              {...register("categoryId")}
+              error={!!errors.categoryId}
+              helperText={errors.categoryId?.message}
+            >
+              {CATEGORY_OPTIONS.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+
+          <Box>
+            <TextField
+              label="Unidad de Medida"
+              select
+              fullWidth
+              {...register("unitMeasureId")}
+              error={!!errors.unitMeasureId}
+              helperText={errors.unitMeasureId?.message}
+            >
+              {UNIT_MEASURE_OPTIONS.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+
+          <Box>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={watch("active")}
+                  onChange={(e) => setValue("active", e.target.checked)}
+                />
+              }
+              label="Activo"
+            />
+          </Box>
+
+          <Box>
+            <TextField
+              label="Descripción"
+              fullWidth
+              multiline
+              rows={3}
+              {...register("description")}
+              error={!!errors.description}
+              helperText={errors.description?.message}
+            />
+          </Box>
+
+          <Box display="flex" justifyContent="flex-end" gap={2}>
+            <ConfirmButton
+              type="submit"
+              isLoading={isLoading}
+              label={isEdit ? "Actualizar" : "Confirmar"}
+            />
+            <CancelButton
+              onClick={() => router.push("/Product")}
+              label="Cancelar"
+            />
+          </Box>
+        </Stack>
+      </form>
+    </FormProvider>
   );
 };

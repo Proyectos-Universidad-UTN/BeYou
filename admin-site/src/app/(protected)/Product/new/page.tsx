@@ -7,6 +7,8 @@ import { UsePostProduct } from "@/hooks/api-beyou/product/UsePostProduct";
 import { ProductFormType, initialProductValues } from "../components/ProductSchema";
 import { useSnackbar } from "@/stores/useSnackbar";
 import { ProductForm } from "../components/ProductForm";
+import { Page } from "@/components/Shared/Page";
+import { PageHeader } from "@/components/Shared/PageHeader";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -31,13 +33,19 @@ export default function NewProductPage() {
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">Crear nuevo producto</h1>
+    <Page
+      header={
+        <PageHeader
+          title="Crear Producto"
+          subtitle="Agrega un nuevo producto"
+        />
+      }
+    >
       <ProductForm
         onSubmit={onSubmit}
         defaultValues={initialProductValues}
         isLoading={isLoading}
       />
-    </div>
+    </Page>
   );
 }

@@ -1,16 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "openapi-typescript-fetch";
 import { UseTypedApiClientBY, castRequestBody } from "@/hooks/UseTypedApiClientBY";
+import { transformErrorKeys } from "@/utils/util";
+import { ErrorDetailsBeYou } from "@/types/api-beyou";
+
+interface UseDeleteProductByIdProps {
+  onSuccess?: (data: boolean, variables: number) => void;
+  onError?: (error: ErrorDetailsBeYou, variables: number) => void;
+  onSettled?: (
+    data: boolean | undefined,
+    error: ErrorDetailsBeYou | null,
+    variables: number
+  ) => void;
+}
 
 export const UseDeleteProductById = ({
   onSuccess,
   onError,
   onSettled,
-}: {
-  onSuccess?: () => void;
-  onError?: (error: ApiError) => void;
-  onSettled?: () => void;
-} = {}) => {
+}: UseDeleteProductByIdProps = {}) => {
   const path = "/api/Product/{productId}";
   const method = "delete";
 
@@ -20,20 +28,22 @@ export const UseDeleteProductById = ({
   return useMutation({
     mutationKey: ["DeleteProduct"],
     mutationFn: async (productId: number) => {
-      const { data } = await deleteProduct(
-        castRequestBody({ productId }, path, method)
-      );
+      const { data } = await deleteProduct(castRequestBody({ productId }, path, method));
       return data;
     },
-    onSuccess: async () => {
+    onSuccess: async (data: boolean, variables: number) => {
       await queryClient.invalidateQueries({ queryKey: ["GetProducts"] });
-      onSuccess?.();
+      onSuccess?.(data, variables);
     },
-    onError: (error: ApiError) => {
-      onError?.(error);
+    onError: (error: ApiError, variables) => {
+      onError?.(transformErrorKeys(error.data) as ErrorDetailsBeYou, variables);
     },
-    onSettled: () => {
-      onSettled?.();
+    onSettled: (data, error, variables) => {
+      onSettled?.(
+        data,
+        error ? (transformErrorKeys((error as ApiError).data) as ErrorDetailsBeYou) : null,
+        variables
+      );
     },
   });
 };

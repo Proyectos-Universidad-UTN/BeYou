@@ -35,4 +35,6 @@ public interface IServiceProduct
     /// <param name="productDTO">Product request model to be updated</param>
     /// <returns>ResponseProductDto</returns>
     Task<ResponseProductDto> UpdateProductAsync(long id, RequestProductDto productDTO);
+
+    Task<bool> DeleteProductAsync(long id);
 }
