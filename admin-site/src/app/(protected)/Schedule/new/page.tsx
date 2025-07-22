@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { Page } from "@/components/Shared/Page";
 import { PageHeader } from "@/components/Shared/PageHeader";
-import { ScheduleFormComponent } from "../../(protected)/Branch/Schedule/components/ScheduleForm";
 import {
   ScheduleDefaultValues,
   ScheduleForm,
-} from "../../(protected)/Branch/Schedule/components/ScheduleSchema";
+} from "../../Branch/Schedule/components/ScheduleSchema";
 import { UseMutationCallbacks } from "@/hooks/UseMutationCallbacks";
 import { UsePostSchedule } from "@/hooks/api-beyou/schedule/UsePostSchedule";
+import { ScheduleFormComponent } from "../../Branch/Schedule/components/ScheduleForm";
 
 const NewSchedulePage = () => {
   const [loading, setLoading] = useState(false);
