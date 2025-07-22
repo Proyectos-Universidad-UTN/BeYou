@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { Page } from "@/components/Shared/Page";
 import { PageHeader } from "@/components/Shared/PageHeader";
 import { BlockForm } from "../components/BlockForm";
@@ -17,14 +17,22 @@ const NewBlockPage = () => {
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
-  const scheduleId = searchParams.get("scheduleId");
+  const params = useParams();
+
+  // branchId viene del path /Branch/[id]/Schedule/Block/new
+  const branchId = params.id;
+
+  // scheduleId lo pasamos por query param: ?scheduleId=123
+  const scheduleId = searchParams.get("id");
 
   const setSnackbarMessage = useSnackbar((state) => state.setMessage);
 
   const { mutate: postBlock } = UsePostScheduleBlock({
-    onSuccess: (_, __) => {
+    onSuccess: () => {
       setSnackbarMessage("Bloqueo creado exitosamente", "success");
-      router.push(`/Schedule/${scheduleId}/Block`);
+      router.push(
+        `/Branch/${branchId}/Schedule/Block?scheduleId=${scheduleId}`
+      );
     },
     onError: (error) => {
       setSnackbarMessage(getErrorMessage(error), "error");
@@ -36,7 +44,13 @@ const NewBlockPage = () => {
   });
 
   const handleSubmit = (data: BlockFormType) => {
-    if (!scheduleId) return;
+    if (!scheduleId) {
+      setSnackbarMessage(
+        "El ID de la programación (scheduleId) es requerido",
+        "error"
+      );
+      return;
+    }
     setLoading(true);
     postBlock({
       ...data,
@@ -44,22 +58,28 @@ const NewBlockPage = () => {
     });
   };
 
+  // Ruta para regresar a la lista de bloqueos del schedule
+  const backPath = `/Branch/${branchId}/Schedule/Block?scheduleId=${scheduleId}`;
+
   return (
     <Page
       header={
         <PageHeader
           title="Crear Bloqueo de Horario"
           subtitle="Agrega un nuevo bloqueo a la programación"
+          backPath={backPath}
+          backText="Bloqueos"
         />
       }
     >
       <BlockForm
         defaultValues={{
           ...BlockDefaultValues,
-          branchScheduleId: Number(scheduleId),
+          branchScheduleId: Number(scheduleId ?? 0),
         }}
         onSubmit={handleSubmit}
         isLoading={loading}
+        backPath={backPath}
       />
     </Page>
   );

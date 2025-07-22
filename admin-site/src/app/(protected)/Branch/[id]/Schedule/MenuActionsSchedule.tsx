@@ -7,32 +7,26 @@ import { Menu, MenuItem } from "@mui/material";
 import { OptionsBullet } from "@/components/Table/OptionsBullet";
 
 interface MenuActionsScheduleProps {
-  id: number;
+  id: number; // este es scheduleId
 }
 
 export const MenuActionsSchedule = ({ id }: MenuActionsScheduleProps) => {
   const router = useRouter();
   const params = useParams();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
 
-  const handleMenuOpen = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    id: number
-  ) => {
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
-    setSelectedRowId(id);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedRowId(null);
   };
 
   return (
     <>
-      <OptionsBullet handleMenuOpen={(e) => handleMenuOpen(e, id)} />
+      <OptionsBullet handleMenuOpen={handleMenuOpen} />
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -44,7 +38,7 @@ export const MenuActionsSchedule = ({ id }: MenuActionsScheduleProps) => {
         <MenuItem
           onClick={() => {
             handleMenuClose();
-            router.push(`/Branch/${params.id}/Schedule/Block?id=${selectedRowId}`);
+            router.push(`/Branch/${params.id}/Schedule/${id}/Block`);
           }}
         >
           <Lock fontSize="small" style={{ marginRight: 8 }} />

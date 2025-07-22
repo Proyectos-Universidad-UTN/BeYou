@@ -1,28 +1,34 @@
 "use client";
 
-import { Stack } from "@mui/system";
-import { useIsMobile } from "@/hooks/UseIsMobile";
-import { TextField, Box, Alert } from "@mui/material";
+import { Box, Alert, Stack, TextField } from "@mui/material";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { BlockSchema, BlockForm as BlockFormType, BlockDefaultValues } from "./BlockSchema"; // Import BlockDefaultValues
-import { FormButtons } from "@/components/Shared/FormButtons";
-import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
+import {
+  BlockForm as BlockFormType,
+  BlockSchema,
+  BlockDefaultValues,
+} from "./BlockSchema";
+import { useIsMobile } from "@/hooks/UseIsMobile";
 import { FormFieldErrorMessage } from "@/components/FormFieldErrorMessage";
+import { FormButtons } from "@/components/Shared/FormButtons";
 
 interface BlockFormProps {
   onSubmit: SubmitHandler<BlockFormType>;
   defaultValues?: BlockFormType;
   isLoading?: boolean;
+  backPath?: string;
 }
 
-export const BlockForm = ({
+export const BlockFormComponent = ({
   onSubmit,
-  defaultValues,
+  defaultValues = BlockDefaultValues,
   isLoading = false,
+  backPath = "/Branch/Schedule",
 }: BlockFormProps) => {
   const isMobile = useIsMobile();
+
   const formMethods = useForm<BlockFormType>({
-    defaultValues: defaultValues || BlockDefaultValues, 
+    defaultValues,
     resolver: yupResolver(BlockSchema),
   });
 
@@ -37,27 +43,24 @@ export const BlockForm = ({
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Box pb={2}>
           {Object.keys(errors).length > 0 && (
-            <Alert severity="error">Por favor corrija los errores para continuar</Alert>
+            <Alert severity="error">
+              Por favor corrija los errores para continuar
+            </Alert>
           )}
         </Box>
-        <Stack spacing={3} maxWidth={isMobile ? '90vw' : '600px'}>
-          <Box sx={{ display: 'none' }}> 
-            <TextField
-              label="Branch Schedule ID"
-              fullWidth
-              {...register("branchScheduleId")}
-              error={!!errors.branchScheduleId}
-              helperText={errors.branchScheduleId?.message}
-            />
-            {errors.branchScheduleId?.message && (
-              <FormFieldErrorMessage message={errors.branchScheduleId.message} />
-            )}
-          </Box>
 
+        <Stack spacing={3} maxWidth={isMobile ? "90vw" : "600px"}>
+          {/* branchScheduleId hidden */}
+          <input type="hidden" {...register("branchScheduleId")} />
+
+          {/* Hora inicio */}
           <Box>
             <TextField
-              label="Hora de Inicio"
+              label="Hora de inicio"
+              type="time"
               fullWidth
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ step: 1800 }} // 30 minutos
               {...register("startHour")}
               error={!!errors.startHour}
               helperText={errors.startHour?.message}
@@ -67,10 +70,14 @@ export const BlockForm = ({
             )}
           </Box>
 
+          {/* Hora fin */}
           <Box>
             <TextField
-              label="Hora de Fin"
+              label="Hora de finalización"
+              type="time"
               fullWidth
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ step: 1800 }} // 30 minutos
               {...register("endHour")}
               error={!!errors.endHour}
               helperText={errors.endHour?.message}
@@ -80,7 +87,7 @@ export const BlockForm = ({
             )}
           </Box>
 
-          <FormButtons backPath="/Branch" loadingIndicator={isLoading} /> 
+          <FormButtons backPath={backPath} loadingIndicator={isLoading} />
         </Stack>
       </form>
     </FormProvider>
