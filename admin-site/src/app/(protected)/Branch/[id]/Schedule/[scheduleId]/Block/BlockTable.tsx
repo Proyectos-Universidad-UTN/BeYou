@@ -1,11 +1,11 @@
 "use client";
 
-import { BlockForm } from "./components/BlockSchema";
 import DataTableWrapper from "@/components/Table/DataTableWrapper";
 import BlockColumns from "./BlockColumns";
+import { BranchScheduleBlock } from "@/types/api-beyou";
 
 interface BlockTableProps {
-  blocks: BlockForm[];
+  blocks?: BranchScheduleBlock[];
 }
 
 export const BlockTable = ({ blocks }: BlockTableProps) => {
@@ -14,7 +14,7 @@ export const BlockTable = ({ blocks }: BlockTableProps) => {
       sortFieldName="ID"
       sort="desc"
       columns={BlockColumns}
-      data={blocks}
+      data={blocks?? []} 
     />
   );
 };

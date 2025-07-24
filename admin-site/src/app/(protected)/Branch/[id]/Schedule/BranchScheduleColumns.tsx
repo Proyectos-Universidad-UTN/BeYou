@@ -33,7 +33,7 @@ const BranchScheduleColumns: GridColDef[] = [
     filterable: false,
     width: 120,
     renderCell: (params: GridRenderCellParams<BranchSchedule>) => {
-      return <MenuActionsSchedule id={params.row.scheduleId!} />;
+      return <MenuActionsSchedule id={params.row.id!} />;
     },
   },
 ];

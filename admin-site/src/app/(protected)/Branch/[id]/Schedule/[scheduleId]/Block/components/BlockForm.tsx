@@ -50,17 +50,15 @@ export const BlockFormComponent = ({
         </Box>
 
         <Stack spacing={3} maxWidth={isMobile ? "90vw" : "600px"}>
-          {/* branchScheduleId hidden */}
           <input type="hidden" {...register("branchScheduleId")} />
 
-          {/* Hora inicio */}
           <Box>
             <TextField
               label="Hora de inicio"
               type="time"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              inputProps={{ step: 1800 }} // 30 minutos
+              inputProps={{ step: 1800 }} 
               {...register("startHour")}
               error={!!errors.startHour}
               helperText={errors.startHour?.message}
@@ -70,14 +68,13 @@ export const BlockFormComponent = ({
             )}
           </Box>
 
-          {/* Hora fin */}
           <Box>
             <TextField
               label="Hora de finalización"
               type="time"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              inputProps={{ step: 1800 }} // 30 minutos
+              inputProps={{ step: 1800 }} 
               {...register("endHour")}
               error={!!errors.endHour}
               helperText={errors.endHour?.message}

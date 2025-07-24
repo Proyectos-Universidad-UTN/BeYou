@@ -36,15 +36,15 @@ public class BranchScheduleBlockController(IServiceBranchScheduleBlock serviceBl
     /// <summary>
     /// Get blocks by schedule
     /// </summary>
-    /// <param name="scheduleId">Schedule id</param>
+    /// <param name="branchScheduleId">BranchSchedule id</param>
     /// <returns>IActionResult</returns>
-    [HttpGet("~/api/Schedule/{scheduleId}/Block")]
+    [HttpGet("~/api/BranchSchedule/{branchScheduleId}/Block")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<ResponseBranchScheduleBlockDto>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDetailsBeYou))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetailsBeYou))]
-    public async Task<IActionResult> ListAllByBranchAsync(byte scheduleId)
+    public async Task<IActionResult> ListAllByBranchScheduleAsync(byte branchScheduleId)
     {
-        var schedules = await serviceBlock.ListAllByBranchScheduleAsync(scheduleId);
+        var schedules = await serviceBlock.ListAllByBranchScheduleAsync(branchScheduleId);
         return StatusCode(StatusCodes.Status200OK, schedules);
     }
 

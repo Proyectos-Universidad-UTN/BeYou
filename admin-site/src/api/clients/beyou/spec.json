@@ -1601,7 +1601,7 @@
         }
       }
     },
-    "/api/Schedule/{scheduleId}/Block": {
+    "/api/BranchSchedule/{branchScheduleId}/Block": {
       "get": {
         "tags": [
           "BranchScheduleBlock"
@@ -1609,9 +1609,9 @@
         "summary": "Get blocks by schedule",
         "parameters": [
           {
-            "name": "scheduleId",
+            "name": "branchScheduleId",
             "in": "path",
-            "description": "Schedule id",
+            "description": "BranchSchedule id",
             "required": true,
             "schema": {
               "type": "integer",
@@ -5660,6 +5660,93 @@
           },
           "422": {
             "description": "Unprocessable Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetailsBeYou"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetailsBeYou"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetailsBeYou"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetailsBeYou"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetailsBeYou"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetailsBeYou"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Deletes a branch by its ID.",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "The ID of the branch to delete.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "x-api-version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
             "content": {
               "text/plain": {
                 "schema": {
