@@ -43,7 +43,6 @@ export const ProductMenuActions = ({ id }: ProductMenuActionsProps) => {
                 </MenuItem>
                 <MenuItem onClick={() => {
                     handleMenuClose();
-                    // Lógica para eliminar o mostrar modal
                     alert(`Eliminar producto con ID: ${id}`);
                 }}>
                     <Delete fontSize="small" style={{ marginRight: 8 }} />
