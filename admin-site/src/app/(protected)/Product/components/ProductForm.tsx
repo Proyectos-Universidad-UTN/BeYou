@@ -64,6 +64,9 @@ export const ProductForm = ({
     reset(defaultValues);
   }, [defaultValues, reset]);
 
+  const categoryId = watch("categoryId");
+  const unitMeasureId = watch("unitMeasureId");
+
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -122,7 +125,8 @@ export const ProductForm = ({
               label="Categoría"
               select
               fullWidth
-              {...register("categoryId")}
+              value={categoryId}
+              onChange={(e) => setValue("categoryId", Number(e.target.value))}
               error={!!errors.categoryId}
               helperText={errors.categoryId?.message}
             >
@@ -139,7 +143,8 @@ export const ProductForm = ({
               label="Unidad de Medida"
               select
               fullWidth
-              {...register("unitMeasureId")}
+              value={unitMeasureId}
+              onChange={(e) => setValue("unitMeasureId", Number(e.target.value))}
               error={!!errors.unitMeasureId}
               helperText={errors.unitMeasureId?.message}
             >
