@@ -18,26 +18,6 @@ export const ScheduleTable = ({ schedules }: ScheduleTableProps) => {
       data={schedules}
     />
   )
-  // return (
-  //   <TableContainer component={Paper}>
-  //     <Table aria-label="Horarios sucursal">
-  //       <TableHead>
-  //         <TableRow>
-  //           <TableCell>Día</TableCell>
-  //           <TableCell>Hora Inicio</TableCell>
-  //           <TableCell>Hora Fin</TableCell>
-  //         </TableRow>
-  //       </TableHead>
-  //       <TableBody>
-  //         {schedules.map((schedule) => (
-  //          <TableRow key={`${schedule.id ?? schedule.schedule?.id ?? Math.random()}`}>
-  //             <TableCell>{schedule.schedule?.startHour ?? "-"}</TableCell>
-  //             <TableCell>{schedule.schedule?.endHour ?? "-"}</TableCell>
-  //           </TableRow>
-  //         ))}
-  //       </TableBody>
-  //     </Table>
-  //   </TableContainer>
-  // );
+ 
 };
 

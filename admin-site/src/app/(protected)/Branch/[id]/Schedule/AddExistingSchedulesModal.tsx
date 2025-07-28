@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Checkbox,
   FormControlLabel,
   Stack,
   Button,
   CircularProgress,
+  Typography,
+  Box,
 } from "@mui/material";
-import { Modal } from "@/components/Modal/Modal";
-import { ModalHeader } from "@/components/Modal/ModalHeader";
-import { ModalBody } from "@/components/Modal/ModalBody";
-import { ModalFooter } from "@/components/Modal/ModalFooter";
 import { UseGetSchedules } from "@/hooks/api-beyou/schedule/UseGetSchedules";
 import { UsePostBranchSchedules } from "@/hooks/api-beyou/branch/schedule/UsePostBranchSchedules";
 import { useSnackbar } from "@/stores/useSnackbar";
@@ -22,14 +24,27 @@ interface Props {
   branchId: number;
 }
 
-export const AddExistingSchedulesModal = ({
-  isOpen,
-  toggleIsOpen,
-  branchId,
-}: Props) => {
+
+const dayNames = [
+  "", 
+  "Lunes",
+  "Martes",
+  "Miércoles",
+  "Jueves",
+  "Viernes",
+  "Sábado",
+  "Domingo",
+];
+
+export const AddExistingSchedulesModal = ({ isOpen, toggleIsOpen, branchId }: Props) => {
   const { data: schedules, isLoading } = UseGetSchedules();
   const [selected, setSelected] = useState<number[]>([]);
   const setSnackbarMessage = useSnackbar((state) => state.setMessage);
+
+
+  useEffect(() => {
+    if (!isOpen) setSelected([]);
+  }, [isOpen]);
 
   const postSchedules = UsePostBranchSchedules({
     branchId,
@@ -54,30 +69,58 @@ export const AddExistingSchedulesModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} toggleIsOpen={toggleIsOpen} showIconClose>
-      <ModalHeader title="Asignar Horario" toggleIsOpen={toggleIsOpen} showIconClose />
-      <ModalBody heightModal="60">
+    <Dialog open={isOpen} onClose={toggleIsOpen} maxWidth="sm" fullWidth>
+      <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.5rem" }}>
+        Asignar Horarios
+      </DialogTitle>
+      <DialogContent dividers>
         {isLoading ? (
-          <CircularProgress />
+          <Box display="flex" justifyContent="center" py={4}>
+            <CircularProgress />
+          </Box>
         ) : (
-          <Stack spacing={1}>
+          <Stack spacing={2}>
+            {schedules?.length === 0 && (
+              <Typography variant="body1" color="text.secondary">
+                No hay horarios disponibles.
+              </Typography>
+            )}
             {schedules?.map((schedule) => (
-              <FormControlLabel
+              <Box
                 key={schedule.id}
-                control={
-                  <Checkbox
-                    checked={selected.includes(schedule.id!)}
-                    onChange={() => toggle(schedule.id!)}
-                  />
-                }
-                label={`${schedule.day} | ${schedule.startHour} - ${schedule.endHour}`}
-              />
+                sx={{
+                  p: 2,
+                  borderRadius: 1,
+                  border: "1px solid",
+                  borderColor: selected.includes(schedule.id!) ? "primary.main" : "divider",
+                  backgroundColor: selected.includes(schedule.id!) ? "rgba(25, 118, 210, 0.1)" : "transparent",
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "rgba(25, 118, 210, 0.15)" },
+                }}
+                onClick={() => toggle(schedule.id!)}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={selected.includes(schedule.id!)}
+                      onChange={() => toggle(schedule.id!)}
+                    />
+                  }
+                  label={
+                    <Typography>
+                      <strong>{dayNames[schedule.day ?? 0]}</strong> — {schedule.startHour} - {schedule.endHour}
+                    </Typography>
+                  }
+                />
+              </Box>
             ))}
           </Stack>
         )}
-      </ModalBody>
-      <ModalFooter>
-        <Button onClick={toggleIsOpen}>Cancelar</Button>
+      </DialogContent>
+      <DialogActions sx={{ px: 3, py: 2 }}>
+        <Button onClick={toggleIsOpen} color="inherit">
+          Cancelar
+        </Button>
         <Button
           variant="contained"
           onClick={handleSave}
@@ -85,7 +128,7 @@ export const AddExistingSchedulesModal = ({
         >
           {postSchedules.status === "pending" ? "Asignando..." : "Asignar horarios"}
         </Button>
-      </ModalFooter>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   );
 };

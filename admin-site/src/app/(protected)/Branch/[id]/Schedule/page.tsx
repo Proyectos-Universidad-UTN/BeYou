@@ -49,7 +49,7 @@ const BranchSchedulePage = () => {
     <Page
       header={
         <PageHeader
-          title="Horarios de la Sucursal"
+          title="Horarios de la Sucursal."
           subtitle={branchData.name!}
           actionButton={
             <div className="flex gap-2">

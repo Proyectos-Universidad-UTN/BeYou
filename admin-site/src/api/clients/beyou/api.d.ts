@@ -1013,7 +1013,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Schedule/{scheduleId}/Block": {
+    "/api/BranchSchedule/{branchScheduleId}/Block": {
         parameters: {
             query?: never;
             header?: never;
@@ -1028,8 +1028,8 @@ export interface paths {
                     "x-api-version"?: string;
                 };
                 path: {
-                    /** @description Schedule id */
-                    scheduleId: number;
+                    /** @description BranchSchedule id */
+                    branchScheduleId: number;
                 };
                 cookie?: never;
             };
@@ -3677,7 +3677,56 @@ export interface paths {
             };
         };
         post?: never;
-        delete?: never;
+        /** Deletes a branch by its ID. */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: {
+                    "x-api-version"?: string;
+                };
+                path: {
+                    /** @description The ID of the branch to delete. */
+                    productId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": boolean;
+                        "application/json": boolean;
+                        "text/json": boolean;
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
