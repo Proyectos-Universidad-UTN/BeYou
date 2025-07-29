@@ -51,3 +51,8 @@ export type VendorList = components['schemas']['ResponseVendorDto'][];
 export type Product = components['schemas']['ResponseProductDto'];
 export type ProductRequest = components['schemas']['RequestProductDto'];
 export type ProductList = components['schemas']['ResponseProductDto'][];
+
+export type Reservation = components['schemas']['ResponseReservationDto'];
+
+export type ReservationDetail = components['schemas']['ResponseReservationDto'];
+
