@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Schedule } from "@mui/icons-material";
+import { Edit, Delete } from "@mui/icons-material";
 import { Menu, MenuItem } from "@mui/material";
 import { OptionsBullet } from "@/components/Table/OptionsBullet";
-import { AddCircle } from "@mui/icons-material";
 
 interface MenuActionsProps {
   id: number;
@@ -44,21 +43,20 @@ export const MenuActions = ({ id }: MenuActionsProps) => {
         <MenuItem
           onClick={() => {
             handleMenuClose();
-            router.push(`/Branch/${selectedRowId}/Schedule`);
+            router.push(`/Inventory/edit/${selectedRowId}`);
           }}
         >
-          <Schedule fontSize="small" style={{ marginRight: 8 }} />
-          Horario
+          <Edit fontSize="small" style={{ marginRight: 8 }} />
+          Editar
         </MenuItem>
-
         <MenuItem
           onClick={() => {
             handleMenuClose();
-            router.push(`/Branch/${selectedRowId}/Inventory`);
+            router.push(`/Inventory/delete/${selectedRowId}`);
           }}
         >
-          <AddCircle fontSize="small" style={{ marginRight: 8 }} />
-            Inventario
+          <Delete fontSize="small" style={{ marginRight: 8 }} />
+          Eliminar
         </MenuItem>
       </Menu>
     </>
