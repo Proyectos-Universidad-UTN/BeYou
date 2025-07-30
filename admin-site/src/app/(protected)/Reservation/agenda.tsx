@@ -8,14 +8,14 @@ import { Box, Typography } from "@mui/material";
 import { UseGetReservations } from "@/hooks/api-beyou/reservation/UseGetReservations";
 import { Modal } from "@/components/Modal/Modal";
 import { Reservation } from "@/types/api-beyou";
-import { useState } from "react"; // Importar useState
+import { useState } from "react"; 
 
-// Importar el nuevo componente
+
 import { ReservationDetailModal } from "./components/ReservationDetailModal";
 import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
 
 export const Agenda = () => {
-  const { data, isLoading, error, refetch } = UseGetReservations(); // Añadir refetch aquí
+  const { data, isLoading, error, refetch } = UseGetReservations(); 
 
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedReservationId, setSelectedReservationId] = useState<string | null>(null);
@@ -49,7 +49,7 @@ export const Agenda = () => {
       return {
         id: reservation.id?.toString(),
         title: eventTitle,
-        start: `${reservation.date}T${reservation.hour}`, // FullCalendar espera un formato ISO para fecha y hora
+        start: `${reservation.date}T${reservation.hour}`, 
         backgroundColor: getEventColor(reservation.status ?? undefined),
         borderColor: getEventColor(reservation.status ?? undefined),
       };
@@ -65,9 +65,8 @@ export const Agenda = () => {
     setSelectedReservationId(null);
   };
 
-  // Función para refrescar los datos del calendario después de una edición/eliminación
   const handleReservationChanged = () => {
-    refetch(); // Vuelve a cargar las reservas para actualizar el calendario
+    refetch(); 
   };
 
 
@@ -98,12 +97,12 @@ export const Agenda = () => {
         eventClick={handleEventClick}
       />
 
-+      <Modal isOpen={isDetailModalOpen} toggleIsOpen={handleCloseDetailModal}> {/* <-- CAMBIO AQUÍ */}
++      <Modal isOpen={isDetailModalOpen} toggleIsOpen={handleCloseDetailModal}> 
         {selectedReservationId && (
           <ReservationDetailModal
             reservationId={selectedReservationId}
             onClose={handleCloseDetailModal}
-            onReservationChanged={handleReservationChanged} // Pasar la función de refresco
+            onReservationChanged={handleReservationChanged} 
           />
         )}
       </Modal>

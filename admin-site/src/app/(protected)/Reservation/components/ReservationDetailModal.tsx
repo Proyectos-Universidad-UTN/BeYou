@@ -1,89 +1,59 @@
-// src/app/(protected)/Reservation/components/ReservationDetailModal.tsx
 "use client";
 
-import { Box, Typography, Button, CircularProgress, DialogActions } from "@mui/material";
-import { UseGetDetailReservationById } from "@/hooks/api-beyou/detailReservation/UseGetDetailReservationById"; // Usaremos este hook
-import { UsePutReservation } from "@/hooks/api-beyou/reservation/UsePutReservation";
-import { UseDeleteReservation } from "@/hooks/api-beyou/reservation/UseDeleteReservation";
-import { useState } from "react";
-import { useSnackbar } from "@/stores/useSnackbar";
-import { getErrorMessage } from "@/utils/util";
-import { Reservation } from "@/types/api-beyou"; // Interfaz de la API
-import { ReservationFormType } from "./ReservationSchema";
+import { UseGetReservationById } from "@/hooks/api-beyou/reservation/UseGetReservationById";
+import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Divider,
+  Button,
+  Stack,
+} from "@mui/material";
+import {
+  CalendarToday,
+  AccessTime,
+  Person,
+  CheckCircleOutline,
+  Edit as EditIcon,
+  Close as CloseIcon,
+} from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
-interface ReservationDetailModalProps {
-  reservationId: string; // El ID que viene del evento del calendario
+interface Props {
+  reservationId: string;
   onClose: () => void;
-  onReservationChanged: () => void; // Para que el calendario pueda refrescarse
+  onReservationChanged?: () => void;
 }
 
 export const ReservationDetailModal = ({
   reservationId,
   onClose,
   onReservationChanged,
-}: ReservationDetailModalProps) => {
-  const { openSnackbar } = useSnackbar(); // Asumo que ya corregiste el tipado de useSnackbar
+}: Props) => {
+  const {
+    data: reservation,
+    isLoading,
+    error,
+  } = UseGetReservationById(reservationId);
 
-  // Cargar la reserva
-  const { data: reservation, isLoading, error, refetch } = UseGetDetailReservationById(reservationId);
+  const router = useRouter();
 
-  // Hooks para mutaciones
-  const { mutate: updateReservation, isPending: isUpdating } = UsePutReservation();
-  const { mutate: deleteReservation, isPending: isDeleting } = UseDeleteReservation();
-
-  // Estado para el modal de confirmación de eliminación
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
-
-  // Manejador del submit del formulario
-  const handleSubmit = (formData: ReservationFormType) => {
-    const reservationToUpdate: Reservation = {
-        ...formData,
-        id: parseInt(reservationId), // Asegurar que el ID esté en el payload para el PUT
-        // customerName no se debería enviar en el PUT/POST si solo se usa para display
-        // Si la API lo requiere, asegúrate que formData.customerName tenga valor
-        // Los arreglos reservationQuestion y reservationDetails deberán ser manejados si son parte del PUT
-        reservationQuestion: formData.reservationQuestion,
-        reservationDetails: formData.reservationDetails,
-    } as Reservation; // Casteo temporal, ajusta los tipos para que esto no sea necesario
-
-    updateReservation(reservationToUpdate, {
-      onSuccess: () => {
-        openSnackbar("Reserva actualizada con éxito", "success");
-        onReservationChanged(); // Notificar al calendario para que refresque
-        onClose(); // Cerrar el modal
-      },
-      onError: (err) => {
-        openSnackbar(`Error al actualizar reserva: ${getErrorMessage(err)}`, "error");
-      },
-    });
+  const STATUS_LABELS: Record<string, string> = {
+    P: "Pendiente",
+    C: "Confirmada",
+    X: "Cancelada",
   };
 
-  // Manejador para iniciar la eliminación
-  const handleDeleteClick = () => {
-    setIsConfirmDeleteModalOpen(true);
-  };
-
-  // Manejador para confirmar la eliminación
-  const handleConfirmDelete = () => {
-    deleteReservation(reservationId, { // Asegúrate de que tu hook delete recibe el ID correcto
-      onSuccess: () => {
-        openSnackbar("Reserva eliminada con éxito", "success");
-        onReservationChanged(); // Notificar al calendario para que refresque
-        onClose(); // Cerrar el modal principal
-        setIsConfirmDeleteModalOpen(false); // Cerrar el modal de confirmación
-      },
-      onError: (err) => {
-        openSnackbar(`Error al eliminar reserva: ${getErrorMessage(err)}`, "error");
-        setIsConfirmDeleteModalOpen(false);
-      },
-    });
+  const handleEdit = () => {
+    router.push(`/Reservation/${reservation?.id}`);
   };
 
   if (isLoading) {
     return (
-      <Box p={4} display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="200px">
-        <CircularProgress />
-        <Typography mt={2}>Cargando detalles de la reserva...</Typography>
+      <Box display="flex" justifyContent="center" alignItems="center" py={6}>
+        <CircularLoadingProgress />
       </Box>
     );
   }
@@ -91,64 +61,100 @@ export const ReservationDetailModal = ({
   if (error || !reservation) {
     return (
       <Box p={4}>
-        <Typography color="error">Error al cargar la reserva o reserva no encontrada.</Typography>
-        <DialogActions>
-            <Button onClick={onClose} variant="outlined">Cerrar</Button>
-        </DialogActions>
+        <Typography color="error">No se pudo cargar la reserva.</Typography>
+        <Box mt={2} textAlign="right">
+          <Button
+            onClick={onClose}
+            variant="contained"
+            startIcon={<CloseIcon />}
+          >
+            Cerrar
+          </Button>
+        </Box>
       </Box>
     );
   }
 
-  const defaultFormValues: ReservationFormType = {
-    id: reservation.id,
-    customerName: reservation.customerName,
-    customerId: reservation.customerId,
-    date: reservation.date, // Formato "YYYY-MM-DD" esperado
-    hour: reservation.hour, // Formato "HH:mm" esperado
-    branchId: reservation.branchId,
-    status: reservation.status,
-    reservationQuestion: reservation.reservationQuestion,
-    reservationDetails: reservation.reservationDetails,
-  };
-
-
   return (
-    <Box p={4}>
-      <Typography variant="h5" mb={3}>
-        Detalle y Edición de Reserva
-      </Typography>
-      <ReservationForm
-        defaultValues={defaultFormValues}
-        onSubmit={handleSubmit}
-        isLoading={isUpdating}
-        isEdit={true}
-        // Pasamos datos mock o reales para los selectores si tuvieran
-        customers={[{ id: reservation.customerId, name: reservation.customerName }]} // Solo el cliente de esta reserva por ahora
-        branches={[{ id: reservation.branchId, name: `Sucursal ${reservation.branchId}` }]} // Mock
-        services={[{ id: 1, name: "Manicura" }, { id: 2, name: "Pedicura" }]} // Mock de servicios
-      />
-      <DialogActions sx={{ mt: 2 }}>
-        <Button onClick={onClose} variant="outlined">
-          Cerrar
-        </Button>
-        <Button
-          onClick={handleDeleteClick}
-          color="error"
-          variant="contained"
-          disabled={isDeleting || isUpdating}
+    <Card className="rounded-2xl shadow-xl dark:bg-zinc-900">
+      <CardContent className="p-6 space-y-4">
+        <Typography
+          variant="h5"
+          className="text-center font-semibold text-zinc-800 dark:text-white"
         >
-          Eliminar Reserva
-        </Button>
-      </DialogActions>
+          Detalle de la Reserva
+        </Typography>
 
-      <ConfirmModal
-        open={isConfirmDeleteModalOpen}
-        onClose={() => setIsConfirmDeleteModalOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title="Confirmar Eliminación"
-        message={`¿Estás seguro de que quieres eliminar la reserva de ${reservation.customerName} el ${reservation.date} a las ${reservation.hour}? Esta acción no se puede deshacer.`}
-        isLoading={isDeleting}
-      />
-    </Box>
+        <Typography
+          variant="body2"
+          className="text-center text-zinc-500 dark:text-zinc-400"
+        >
+          Consulta rápida de la información
+        </Typography>
+
+        <Divider className="my-2" />
+
+        <Stack spacing={2}>
+          <Box className="flex items-center justify-between">
+            <Box className="flex items-center gap-2">
+              <Person className="text-blue-500" />
+              <Typography className="text-sm font-medium">Cliente</Typography>
+            </Box>
+            <Typography className="text-sm text-zinc-700 dark:text-zinc-100">
+              {reservation.customerName}
+            </Typography>
+          </Box>
+
+          <Box className="flex items-center justify-between">
+            <Box className="flex items-center gap-2">
+              <CalendarToday className="text-green-500" fontSize="small" />
+              <Typography className="text-sm font-medium">Fecha</Typography>
+            </Box>
+            <Typography className="text-sm">{reservation.date}</Typography>
+          </Box>
+
+          <Box className="flex items-center justify-between">
+            <Box className="flex items-center gap-2">
+              <AccessTime className="text-purple-500" fontSize="small" />
+              <Typography className="text-sm font-medium">Hora</Typography>
+            </Box>
+            <Typography className="text-sm">{reservation.hour}</Typography>
+          </Box>
+
+          <Box className="flex items-center justify-between">
+            <Box className="flex items-center gap-2">
+              <CheckCircleOutline
+                className="text-orange-500"
+                fontSize="small"
+              />
+              <Typography className="text-sm font-medium">Estado</Typography>
+            </Box>
+            <Typography className="text-sm capitalize">
+             {STATUS_LABELS[reservation.status ?? ""] || reservation.status || "Desconocido"}
+            </Typography>
+          </Box>
+        </Stack>
+
+        <Box className="pt-6 flex justify-end gap-4">
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleEdit}
+            startIcon={<EditIcon />}
+          >
+            Editar
+          </Button>
+
+          <Button
+            onClick={onClose}
+            variant="contained"
+            color="primary"
+            startIcon={<CloseIcon />}
+          >
+            Cerrar
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
