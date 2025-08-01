@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { use, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { CircularLoadingProgress } from "@/components/LoadingProgress/CircularLoadingProcess";
 import { ReservationForm } from "../components/ReservationForm";
 import { UseGetReservationById } from "@/hooks/api-beyou/reservation/UseGetReservationById";
@@ -11,18 +11,17 @@ import {
   initialReservationValues,
   ReservationFormType,
 } from "../components/ReservationSchema";
+import { UseGetCustomer } from "@/hooks/api-beyou/customer/UseGetCustomer"; // Importar tu hook
 
-interface Props {
-  params: Promise<{ id: string }>;
-}
-
-const EditReservationPage = ({ params }: Props) => {
-  const resolvedParams = use(params);
-  const { id } = resolvedParams;
-
+const EditReservationPage = () => {
+  const params = useParams();
   const router = useRouter();
 
+  let id = params?.id;
+  if (Array.isArray(id)) id = id[0];
+
   const { data: reservation, isLoading, error } = UseGetReservationById(id);
+  const { data: customers } = UseGetCustomer(); // Obtenés los clientes
 
   const [loading, setLoading] = useState(false);
 
@@ -34,39 +33,47 @@ const EditReservationPage = ({ params }: Props) => {
   const validStatuses = ["P", "C", "X"] as const;
 
   const { mutate: updateReservation } = UsePutReservation(
-    UseMutationCallbacks(
-      "Reserva actualizada correctamente",
-      "/Reservation",
-      onSuccess
-    )
+    UseMutationCallbacks("Reserva actualizada correctamente", "/Reservation", onSuccess)
   );
 
+  if (!id) return <div>No se encontró ID de la reserva</div>;
+
   const defaultValues: ReservationFormType = reservation
-  ? {
-      customerId: reservation.customerId ?? 0,
-      customerName: null, 
-      date: reservation.date ?? "",
-      hour: reservation.hour ?? "",
-      status: validStatuses.includes(reservation.status as any)
-        ? (reservation.status as "P" | "C" | "X")
-        : "P",
-      branchId: reservation.branchId ?? 0,
-      reservationQuestion: reservation.reservationQuestions || [],
-      reservationDetails: reservation.reservationDetails || [],
-      id: reservation.id ?? 0,
-    }
-  : initialReservationValues;
+    ? {
+        customerId: reservation.customerId ?? 0,
+        customerName: reservation.customerName ?? "",
+        date: reservation.date ?? "",
+        hour: reservation.hour ?? "",
+        status: validStatuses.includes(reservation.status as any)
+          ? (reservation.status as "P" | "C" | "X")
+          : "P",
+        branchId: reservation.branchId ?? 0,
+        reservationQuestion: reservation.reservationQuestions || [],
+        reservationDetails: reservation.reservationDetails || [],
+        id: reservation.id ?? 0,
+      }
+    : initialReservationValues;
 
   const handleSubmit = (data: ReservationFormType) => {
-    console.log("🔍 Datos enviados al PUT:", data); // ← ESTE CONSOLE
+    const selectedCustomer = customers?.find((c) => c.id === data.customerId);
+    const fullName = selectedCustomer
+      ? `${selectedCustomer.firstName} ${selectedCustomer.lastName}`
+      : "";
+
+    const payload = {
+      ...data,
+      id: Number(id),
+      customerName: fullName,
+    };
+
+    console.log("🔍 Datos enviados al PUT:", payload);
+
     setLoading(true);
-    updateReservation(data);
+    updateReservation(payload);
   };
 
   if (isLoading) return <CircularLoadingProgress />;
-
-  if (error || !reservation)
-    return <div>Error al cargar la reserva para editar.</div>;
+  if (error || !reservation) return <div>Error al cargar la reserva para editar.</div>;
 
   return (
     <div>

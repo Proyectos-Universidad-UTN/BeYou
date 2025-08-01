@@ -6330,20 +6330,13 @@
         "summary": "Update an existing reservation",
         "parameters": [
           {
-            "name": "serviceId",
-            "in": "query",
-            "description": "Service id",
+            "name": "reservationId",
+            "in": "path",
+            "description": "Reservation id",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
-            }
-          },
-          {
-            "name": "reservationId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           },
           {

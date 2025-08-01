@@ -26,6 +26,8 @@ public class ServiceReservation(ICoreService<Reservation> coreService, IServiceB
     public async Task<ResponseReservationDto> CreateReservationAsync(RequestReservationDto reservationDTO)
     {
         var reservation = await ValidateReservationAsync(reservationDTO);
+        
+        reservation.Active = true;
 
         var result = await coreService.UnitOfWork.Repository<Reservation>().AddAsync(reservation);
         await coreService.UnitOfWork.SaveChangesAsync();
@@ -38,16 +40,26 @@ public class ServiceReservation(ICoreService<Reservation> coreService, IServiceB
     /// <inheritdoc />
     public async Task<ResponseReservationDto> UpdateReservationAsync(long id, RequestReservationDto reservationDTO)
     {
-        if (!await coreService.UnitOfWork.Repository<Reservation>().ExistsAsync(id)) throw new NotFoundException("Reserva no encontrada.");
+        if (!await coreService.UnitOfWork.Repository<Reservation>().ExistsAsync(id))
+            throw new NotFoundException("Reserva no encontrada.");
+
+        var existing = await coreService.UnitOfWork.Repository<Reservation>().GetByIdAsync(id);
 
         var reservation = await ValidateReservationAsync(reservationDTO);
         reservation.Id = id;
+
+        reservation.Active = existing.Active;
+
+        var spec = new BaseSpecification<Reservation>(x => x.Id == id);
+        var existingReservation = await coreService.UnitOfWork.Repository<Reservation>().FirstOrDefaultAsync(spec);
+        reservation.Active = existingReservation?.Active ?? true;
 
         coreService.UnitOfWork.Repository<Reservation>().Update(reservation);
         await coreService.UnitOfWork.SaveChangesAsync();
 
         return await FindByIdAsync(id);
     }
+
 
     /// <inheritdoc />
     public async Task<ResponseReservationDto> FindByIdAsync(long id)

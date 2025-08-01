@@ -99,7 +99,7 @@ public class ReservationController(IServiceReservation serviceReservation) : Con
     /// <summary>
     /// Update an existing reservation
     /// </summary>
-    /// <param name="serviceId">Service id</param>
+    /// <param name="reservationId">Reservation id</param>
     /// <param name="reservation">Reservation request model to be updated</param>
     /// <returns>IActionResult</returns>
     [HttpPut("{reservationId}")]
@@ -107,11 +107,11 @@ public class ReservationController(IServiceReservation serviceReservation) : Con
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDetailsBeYou))]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity, Type = typeof(ErrorDetailsBeYou))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetailsBeYou))]
-    public async Task<IActionResult> UpdateReservationAsync(int serviceId, [FromBody] RequestReservationDto reservation)
+    public async Task<IActionResult> UpdateReservationAsync(int reservationId, [FromBody] RequestReservationDto reservation)
     {
-        //retorna una excepçión is es nulo
         ArgumentNullException.ThrowIfNull(reservation);
-        var result = await serviceReservation.UpdateReservationAsync(serviceId, reservation);
+        var result = await serviceReservation.UpdateReservationAsync(reservationId, reservation);
         return StatusCode(StatusCodes.Status200OK, result);
     }
+
 }

@@ -4082,15 +4082,13 @@ export interface paths {
         /** Update an existing reservation */
         put: {
             parameters: {
-                query?: {
-                    /** @description Service id */
-                    serviceId?: number;
-                };
+                query?: never;
                 header?: {
                     "x-api-version"?: string;
                 };
                 path: {
-                    reservationId: string;
+                    /** @description Reservation id */
+                    reservationId: number;
                 };
                 cookie?: never;
             };
