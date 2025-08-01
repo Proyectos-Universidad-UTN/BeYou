@@ -1495,7 +1495,59 @@ export interface paths {
             };
         };
         put?: never;
-        post?: never;
+        /** Creates a new customer. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: {
+                    "x-api-version"?: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["RequestCustomerDto"];
+                    "text/json": components["schemas"]["RequestCustomerDto"];
+                    "application/*+json": components["schemas"]["RequestCustomerDto"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ResponseCustomerDto"];
+                        "application/json": components["schemas"]["ResponseCustomerDto"];
+                        "text/json": components["schemas"]["ResponseCustomerDto"];
+                    };
+                };
+                /** @description Unprocessable Content */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -1559,7 +1611,72 @@ export interface paths {
                 };
             };
         };
-        put?: never;
+        /** Updates an existing customer by its ID. */
+        put: {
+            parameters: {
+                query?: never;
+                header?: {
+                    "x-api-version"?: string;
+                };
+                path: {
+                    customerId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["RequestCustomerDto"];
+                    "text/json": components["schemas"]["RequestCustomerDto"];
+                    "application/*+json": components["schemas"]["RequestCustomerDto"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ResponseCustomerDto"];
+                        "application/json": components["schemas"]["ResponseCustomerDto"];
+                        "text/json": components["schemas"]["ResponseCustomerDto"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+                /** @description Unprocessable Content */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ErrorDetailsBeYou"];
+                        "application/json": components["schemas"]["ErrorDetailsBeYou"];
+                        "text/json": components["schemas"]["ErrorDetailsBeYou"];
+                    };
+                };
+            };
+        };
         post?: never;
         /** Deletes a customer by its ID. */
         delete: {
@@ -6565,6 +6682,18 @@ export interface components {
             branchId?: number;
             /** Format: int64 */
             scheduleId?: number;
+        };
+        RequestCustomerDto: {
+            firstName?: string | null;
+            lastName?: string | null;
+            email?: string | null;
+            /** Format: int32 */
+            telephone?: number;
+            /** Format: int64 */
+            districtId?: number;
+            address?: string | null;
+            /** Format: int64 */
+            id?: number;
         };
         RequestHolidayDto: {
             name?: string | null;
