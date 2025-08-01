@@ -76,5 +76,7 @@ public class DtoToModelApplicationProfile : Profile
         CreateMap<RequestOrderDetailDto, OrderDetail>();
         CreateMap<RequestReservationDetailDto, ReservationDetail>();
         CreateMap<RequestUserBranchDto, UserBranch>();
+        CreateMap<RequestCustomerDto, Customer>()
+    .IncludeBase<RequestBaseDto, BaseEntity>();
     }
 }

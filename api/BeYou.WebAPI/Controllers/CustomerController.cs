@@ -4,6 +4,7 @@ using BeYou.WebAPI.Configuration;
 using BeYou.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BeYou.Application.Dtos.Request;
 
 namespace BeYou.WebAPI.Controllers;
 
@@ -45,6 +46,37 @@ public class CustomerController(IServiceCustomer serviceCustomer) : ControllerBa
         var customer = await serviceCustomer.DeleteCustomerAsync(customerId);
         return StatusCode(StatusCodes.Status200OK, customer);
     }
+
+
+    /// <summary>
+    /// Creates a new customer.
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ResponseCustomerDto))]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity, Type = typeof(ErrorDetailsBeYou))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetailsBeYou))]
+    public async Task<IActionResult> CreateCustomerAsync([FromBody] RequestCustomerDto customer)
+    {
+        ArgumentNullException.ThrowIfNull(customer);
+        var result = await serviceCustomer.CreateCustomerAsync(customer);
+        return StatusCode(StatusCodes.Status201Created, result);
+    }
+
+    /// <summary>
+    /// Updates an existing customer by its ID.
+    /// </summary>
+    [HttpPut("{customerId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseCustomerDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDetailsBeYou))]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity, Type = typeof(ErrorDetailsBeYou))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetailsBeYou))]
+    public async Task<IActionResult> UpdateCustomerAsync(short customerId, [FromBody] RequestCustomerDto customer)
+    {
+        ArgumentNullException.ThrowIfNull(customer);
+        var result = await serviceCustomer.UpdateCustomerAsync(customerId, customer);
+        return StatusCode(StatusCodes.Status200OK, result);
+    }
+
 
     /// <summary>
     /// Retrieves a specific customer by its ID.
