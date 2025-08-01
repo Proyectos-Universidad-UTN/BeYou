@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -14,9 +14,12 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+
 import { UseGetSchedules } from "@/hooks/api-beyou/schedule/UseGetSchedules";
+import { UseGetBranchSchedules } from "@/hooks/api-beyou/branch/schedule/UseGetBranchSchedules";
 import { UsePostBranchSchedules } from "@/hooks/api-beyou/branch/schedule/UsePostBranchSchedules";
 import { useSnackbar } from "@/stores/useSnackbar";
+import { BranchScheduleRequest } from "@/types/api-beyou";
 
 interface Props {
   isOpen: boolean;
@@ -24,9 +27,8 @@ interface Props {
   branchId: number;
 }
 
-
 const dayNames = [
-  "", 
+  "",
   "Lunes",
   "Martes",
   "Miércoles",
@@ -36,37 +38,86 @@ const dayNames = [
   "Domingo",
 ];
 
-export const AddExistingSchedulesModal = ({ isOpen, toggleIsOpen, branchId }: Props) => {
-  const { data: schedules, isLoading } = UseGetSchedules();
+export const AddExistingSchedulesModal = ({
+  isOpen,
+  toggleIsOpen,
+  branchId,
+}: Props) => {
+  const { data: allSchedules, isLoading: isLoadingAll } = UseGetSchedules();
+  const { data: assignedSchedules, isLoading: isLoadingAssigned } =
+    UseGetBranchSchedules(branchId.toString());
+
   const [selected, setSelected] = useState<number[]>([]);
   const setSnackbarMessage = useSnackbar((state) => state.setMessage);
 
-
   useEffect(() => {
-    if (!isOpen) setSelected([]);
-  }, [isOpen]);
+    if (isOpen && Array.isArray(assignedSchedules)) {
+      const assignedIds = assignedSchedules
+        .map((s) => s.scheduleId)
+        .filter((id): id is number => typeof id === "number");
+      setSelected(assignedIds);
+    } else if (!isOpen) {
+      setSelected([]);
+    }
+  }, [isOpen, assignedSchedules]);
+
+  const assignedScheduleIds = useMemo(
+    () =>
+      Array.isArray(assignedSchedules)
+        ? assignedSchedules
+            .map((s) => s.scheduleId)
+            .filter((id): id is number => typeof id === "number")
+        : [],
+    [assignedSchedules]
+  );
+
+  const toggle = useCallback((id: number) => {
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+    );
+  }, []);
 
   const postSchedules = UsePostBranchSchedules({
     branchId,
     onSuccess: () => {
-      setSnackbarMessage("Horarios asignados correctamente", "success");
+      setSnackbarMessage("✅ Horarios asignados correctamente", "success");
       toggleIsOpen();
     },
-    onError: () => {
-      setSnackbarMessage("Error al asignar horarios", "error");
+    onError: (error) => {
+      console.error("❌ Error al asignar horarios:", error);
+      setSnackbarMessage("❌ Error al asignar horarios", "error");
     },
   });
 
-  const toggle = (id: number) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+  const handleSave = useCallback(async () => {
+    const newSchedulesToAssign = selected.filter(
+      (id) => !assignedScheduleIds.includes(id)
     );
-  };
+    const payload: BranchScheduleRequest[] = newSchedulesToAssign.map((id) => ({
+      scheduleId: id,
+      branchId,
+      branchScheduleBlocks: [], // 👈 esto evita que EF Core asuma null y requiera bloques
+    }));
+    if (payload.length > 0) {
+      try {
+        await postSchedules.mutateAsync(payload);
+      } catch (err) {
+        console.error("🚨 Error en mutateAsync:", err);
+      }
+    } else {
+      setSnackbarMessage("ℹ️ No hay horarios nuevos para asignar", "info");
+      toggleIsOpen();
+    }
+  }, [
+    selected,
+    assignedScheduleIds,
+    postSchedules,
+    setSnackbarMessage,
+    toggleIsOpen,
+    branchId,
+  ]);
 
-  const handleSave = async () => {
-    const payload = selected.map((id) => ({ scheduleId: id }));
-    await postSchedules.mutate(payload);
-  };
+  const isLoading = isLoadingAll || isLoadingAssigned;
 
   return (
     <Dialog open={isOpen} onClose={toggleIsOpen} maxWidth="sm" fullWidth>
@@ -80,40 +131,51 @@ export const AddExistingSchedulesModal = ({ isOpen, toggleIsOpen, branchId }: Pr
           </Box>
         ) : (
           <Stack spacing={2}>
-            {schedules?.length === 0 && (
+            {(!allSchedules || allSchedules.length === 0) && (
               <Typography variant="body1" color="text.secondary">
                 No hay horarios disponibles.
               </Typography>
             )}
-            {schedules?.map((schedule) => (
-              <Box
-                key={schedule.id}
-                sx={{
-                  p: 2,
-                  borderRadius: 1,
-                  border: "1px solid",
-                  borderColor: selected.includes(schedule.id!) ? "primary.main" : "divider",
-                  backgroundColor: selected.includes(schedule.id!) ? "rgba(25, 118, 210, 0.1)" : "transparent",
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "rgba(25, 118, 210, 0.15)" },
-                }}
-                onClick={() => toggle(schedule.id!)}
-              >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={selected.includes(schedule.id!)}
-                      onChange={() => toggle(schedule.id!)}
-                    />
-                  }
-                  label={
-                    <Typography>
-                      <strong>{dayNames[schedule.day ?? 0]}</strong> — {schedule.startHour} - {schedule.endHour}
-                    </Typography>
-                  }
-                />
-              </Box>
-            ))}
+            {allSchedules?.map((schedule, idx) => {
+              const id = schedule.id;
+              if (typeof id !== "number") return null;
+
+              return (
+                <Box
+                  key={id}
+                  onClick={() => toggle(id)}
+                  sx={{
+                    p: 2,
+                    borderRadius: 1,
+                    border: "1px solid",
+                    borderColor: selected.includes(id)
+                      ? "primary.main"
+                      : "divider",
+                    backgroundColor: selected.includes(id)
+                      ? "rgba(25, 118, 210, 0.1)"
+                      : "transparent",
+                    cursor: "pointer",
+                    "&:hover": {
+                      backgroundColor: "rgba(25, 118, 210, 0.15)",
+                    },
+                  }}
+                >
+                  <FormControlLabel
+                    control={<Checkbox checked={selected.includes(id)} />}
+                    label={
+                      <Typography>
+                        <strong>
+                          {dayNames[(schedule.day as number) ?? 0]}
+                        </strong>{" "}
+                        — {schedule.startHour ?? "--:--"} -{" "}
+                        {schedule.endHour ?? "--:--"}
+                      </Typography>
+                    }
+                    sx={{ width: "100%", margin: 0 }}
+                  />
+                </Box>
+              );
+            })}
           </Stack>
         )}
       </DialogContent>
@@ -124,9 +186,12 @@ export const AddExistingSchedulesModal = ({ isOpen, toggleIsOpen, branchId }: Pr
         <Button
           variant="contained"
           onClick={handleSave}
-          disabled={selected.length === 0 || postSchedules.status === "pending"}
+          disabled={
+            selected.length === assignedScheduleIds.length ||
+            postSchedules.isPending
+          }
         >
-          {postSchedules.status === "pending" ? "Asignando..." : "Asignar horarios"}
+          {postSchedules.isPending ? "Asignando..." : "Asignar horarios"}
         </Button>
       </DialogActions>
     </Dialog>
