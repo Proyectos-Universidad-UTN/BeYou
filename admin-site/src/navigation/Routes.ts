@@ -8,8 +8,8 @@ const menuItems: MenuItem[] = [
         label: "Gestiones",
         icon: Calendar,
         children: [
-            { label: "Reservas", path: "/gestiones/reservas", icon: FileText },
-            { label: "Proforma", path: "/gestiones/proforma", icon: FileText },
+            { label: "Reservas", path: "/Reservation", icon: FileText },
+            { label: "Inventario", path: "/gestiones/proforma", icon: FileText },
         ],
     },
     { label: "Proveedores", path: "/Vendor", icon: Truck },
