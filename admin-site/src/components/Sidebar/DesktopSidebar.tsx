@@ -2,7 +2,7 @@
 
 import { List } from "@mui/material";
 import { MenuItem } from "./Types";
-import { useSidebarStore } from "@/stores/useSidebarStore"; 
+import { useSidebarStore } from "@/stores/useSidebarStore";
 import { renderMenuItem } from "./RenderMenuItem";
 
 interface DesktopSidebarProps {
@@ -10,7 +10,7 @@ interface DesktopSidebarProps {
 }
 
 export default function DesktopSidebar({ menuItems }: DesktopSidebarProps) {
-  const { isExpanded, setIsExpanded } = useSidebarStore(); 
+  const { isExpanded, setIsExpanded } = useSidebarStore();
 
   return (
     <div
@@ -18,7 +18,7 @@ export default function DesktopSidebar({ menuItems }: DesktopSidebarProps) {
       onMouseLeave={() => setIsExpanded(false)}
       className={`fixed top-0 left-0 h-full z-50 transition-all duration-300 ${
         isExpanded ? "w-64" : "w-16"
-      } bg-pink-200`}
+      } bg-gradient-to-b from-pink-300 to-pink-200`}
     >
       <div className="px-4 py-4">
         {isExpanded && (
@@ -27,7 +27,13 @@ export default function DesktopSidebar({ menuItems }: DesktopSidebarProps) {
       </div>
 
       <List>{menuItems.map((item) => renderMenuItem(item, false))}</List>
+      <div
+        className={`absolute bottom-4 left-0 w-full px-4 text-center transition-opacity duration-300 ${
+          isExpanded ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <p className="text-sm text-gray-400">© 2025. All rights reserved.</p>
+      </div>
     </div>
   );
 }
-

@@ -38,20 +38,20 @@ export function renderMenuItem(
     setExpandedMenus((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
-  console.log("ruta", pathname, item.path);
   const isActive = startsWith(pathname, item.path);
   const isExpandedItem = expandedMenus[item.label];
   const icon = item.icon ? <item.icon className="w-5 h-5" /> : null;
 
+  // Elemento con hijos (submenú)
   if (item.children) {
     return (
       <React.Fragment key={item.label}>
         <ListItem
           onClick={() => handleToggle(item.label)}
-          className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition-colors duration-300 ${
+          className={`cursor-pointer px-4 py-2 rounded-xl transition-colors duration-300 mb-1 flex items-center justify-between ${
             isActive || isExpandedItem
-              ? "bg-yellow-300 text-gray-900"
-              : "text-gray-900 hover:bg-yellow-200 hover:text-black"
+              ? "bg-yellow-300/90 text-black shadow-md"
+              : "text-gray-800 hover:bg-yellow-100/80 hover:text-black"
           }`}
         >
           <ListItemIcon
@@ -59,6 +59,7 @@ export function renderMenuItem(
           >
             {icon}
           </ListItemIcon>
+
           {(isExpanded || isSmallScreen) && (
             <ListItemText primary={item.label} />
           )}
@@ -70,6 +71,7 @@ export function renderMenuItem(
               <ExpandMore className="text-yellow-700" />
             ))}
         </ListItem>
+
         <Collapse
           in={isExpandedItem && (isExpanded || isSmallScreen)}
           timeout="auto"
@@ -86,9 +88,9 @@ export function renderMenuItem(
                 <Link href={child.path!} key={child.label} passHref>
                   <ListItem
                     {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
-                    className={`text-sm rounded-md mb-2 pl-6 flex items-center transition-colors duration-300 ${
+                    className={`text-sm rounded-xl px-4 py-2 mb-2 flex items-center transition-colors duration-300 ${
                       childActive
-                        ? "bg-yellow-300 text-black"
+                        ? "bg-yellow-300 text-black shadow-sm"
                         : "text-black hover:bg-yellow-100 hover:text-black"
                     }`}
                   >
@@ -113,14 +115,15 @@ export function renderMenuItem(
     );
   }
 
+  // Elemento sin hijos
   return (
     <Link href={item.path!} key={item.label} passHref>
       <ListItem
         {...(isSmallScreen && onClose ? { onClick: onClose } : {})}
-        className={`cursor-pointer px-4 py-3 rounded-lg mb-1 flex items-center transition-colors duration-300 ${
+        className={`cursor-pointer px-4 py-2 rounded-xl mb-1 flex items-center transition-colors duration-300 ${
           isActive
-            ? "bg-yellow-300 text-gray-900"
-            : "text-gray-900 hover:bg-yellow-200 hover:text-black"
+            ? "bg-yellow-300/90 text-black shadow-md"
+            : "text-gray-800 hover:bg-yellow-100/80 hover:text-black"
         }`}
       >
         <ListItemIcon
@@ -128,7 +131,10 @@ export function renderMenuItem(
         >
           {icon}
         </ListItemIcon>
-        {(isExpanded || isSmallScreen) && <ListItemText primary={item.label} />}
+
+        {(isExpanded || isSmallScreen) && (
+          <ListItemText primary={item.label} />
+        )}
       </ListItem>
     </Link>
   );
