@@ -18,22 +18,22 @@ import {
 // Servicios de Spa, ajustados a la información
 const spaServices = [
   {
-    name: "Manicura y Pedicura",
+    name: "Productos para Uñas",
     description:
-      "Servicios completos para el cuidado y belleza de tus manos y pies.",
+      "Encuentra todo lo que necesitas para crear diseños únicos y profesionales en uñas.",
     icon: Palette,
   },
   {
     name: "Cuidado Facial y Corporal",
     description:
-      "Tratamientos personalizados para una piel radiante y saludable.",
+      "Prodcutos para el cuido corporal.",
     icon: Sparkles,
   },
   {
-    name: "Depilación y Spa",
+    name: "Productos para Emprendedoras",
     description:
-      "Resultados suaves y duraderos junto a servicios de relajación.",
-    icon: HeartHandshake,
+      "Insumos y herramientas ideales para iniciar o potenciar tu negocio de belleza.",
+    icon: ShoppingBag,
   },
 ];
 
