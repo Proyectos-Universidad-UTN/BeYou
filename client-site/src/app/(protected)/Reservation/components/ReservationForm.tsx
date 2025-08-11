@@ -1,43 +1,92 @@
-// components/ReservationForm.tsx
 "use client";
 
-import { Button, Stack, TextField, Typography } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 import {
-  ReservationSchema,
-  ReservationFormType,
-  initialReservationValues,
-} from "./ReservationSchema";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-type Props = {
-  selectedDate: string;
-};
+  Button,
+  Stack,
+  TextField,
+  Typography,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
+import emailjs from "@emailjs/browser";
+import { useSnackbar } from "notistack";
+import { useRouter } from "next/navigation";
 
 const formTheme = createTheme({
-  palette: {
-    primary: { main: "#C55D96" },
-  },
+  palette: { primary: { main: "#C55D96" } },
 });
 
-export const ReservationForm = ({ selectedDate }: Props) => {
-  const { handleSubmit, control, formState: { errors } } = useForm<ReservationFormType>({
-    resolver: yupResolver(ReservationSchema),
-    defaultValues: {
-      ...initialReservationValues,
-      date: selectedDate,
-    },
+type Props = {
+  selectedDateISO: string;
+  selectedDateDisplay: string;
+};
+
+export const ReservationForm = ({ selectedDateISO, selectedDateDisplay }: Props) => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    hour: "",
   });
 
-  const onSubmit = (data: ReservationFormType) => {
-    console.log("Formulario enviado", data);
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!selectedDateISO) {
+      enqueueSnackbar("❗ Por favor selecciona una fecha en el calendario.", { variant: "warning" });
+      return;
+    }
+
+    const templateParams = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      date: selectedDateISO,
+      hour: formData.hour,
+    };
+
+    try {
+      await emailjs.send(
+        "service_zr46oqa",
+        "template_wqfuo9x",
+        templateParams,
+        "7WgZwh3I0LN2kRXly"
+      );
+      enqueueSnackbar("✅ Reserva enviada con éxito", { variant: "success" });
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        address: "",
+        hour: "",
+      });
+
+      // Redirigir a la página principal después de 2 segundos
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    } catch (error) {
+      enqueueSnackbar("❌ Hubo un problema al enviar la reserva", { variant: "error" });
+    }
   };
 
   return (
     <ThemeProvider theme={formTheme}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit}
         className="p-8 bg-white shadow-md rounded-xl border border-gray-100"
       >
         <Stack spacing={3}>
@@ -45,25 +94,62 @@ export const ReservationForm = ({ selectedDate }: Props) => {
             Formulario de Reservación
           </Typography>
 
-          {selectedDate && (
+          {selectedDateDisplay && (
             <Typography variant="body1" sx={{ fontWeight: "bold", color: "#C55D96" }}>
-              📅 La fecha seleccionada es el {selectedDate}
+              📅 La fecha seleccionada es el {selectedDateDisplay}
             </Typography>
           )}
 
-          <Controller
+          <TextField
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            label="Nombre"
+            fullWidth
+            required
+          />
+          <TextField
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            label="Apellidos"
+            fullWidth
+            required
+          />
+          <TextField
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            label="Correo electrónico"
+            fullWidth
+            required
+          />
+          <TextField
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            label="Teléfono"
+            fullWidth
+            required
+          />
+          <TextField
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            label="Dirección"
+            fullWidth
+            required
+          />
+          <TextField
             name="hour"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Hora de la Cita"
-                placeholder="Ej: 14:30"
-                fullWidth
-                error={!!errors.hour}
-                helperText={errors.hour?.message}
-              />
-            )}
+            value={formData.hour}
+            onChange={handleChange}
+            label="Hora de la Cita"
+            type="time"
+            inputProps={{ step: 1 }}
+            fullWidth
+            required
           />
 
           <Button

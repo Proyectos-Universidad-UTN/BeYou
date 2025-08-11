@@ -12,6 +12,7 @@
     "api-beyou:update-local-win": "curl -s http://localhost:5062/swagger/v1/swagger.json -o ./src/api/clients/beyou/spec.json && powershell -Command \"(Get-Content ./src/api/clients/beyou/spec.json) -replace '; x-api-version=[0-9]*', '' | Set-Content ./src/api/clients/beyou/spec.json\" && npx openapi-typescript ./src/api/clients/beyou/spec.json -o ./src/api/clients/beyou/api.d.ts --bare"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fullcalendar/core": "^6.1.18",
@@ -27,7 +28,7 @@
     "@mui/x-date-pickers": "^8.6.0",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
-    "@tanstack/react-query": "^5.80.6",
+    "@tanstack/react-query": "^5.84.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -38,6 +39,8 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.536.0",
     "next": "15.3.3",
+    "nodemailer": "^7.0.5",
+    "notistack": "^3.0.2",
     "openapi-typescript": "^7.8.0",
     "openapi-typescript-fetch": "^2.2.0",
     "react": "^19.0.0",
@@ -54,6 +57,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.17",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19",
     "@types/yup": "^0.29.14",

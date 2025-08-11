@@ -4,6 +4,11 @@ import * as yup from "yup";
 export interface ReservationFormType {
   customerId: number;
   customerName: string | null;
+  firstName: string;   // Nuevo
+  lastName: string;    // Nuevo
+  email: string;       // Nuevo
+  phone: string;       // Nuevo
+  address: string;     // Nuevo
   date: string;
   hour: string;
   status: "P" | "C" | "X";
@@ -14,8 +19,13 @@ export interface ReservationFormType {
 }
 
 export const initialReservationValues: ReservationFormType = {
-  customerId: 8,
-  customerName: "Contacto",
+  customerId: 0,
+  customerName: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  address: "",
   date: "",
   hour: "",
   status: "P",
@@ -31,6 +41,15 @@ export const ReservationSchema = yup.object().shape({
     .required("Debe seleccionar un cliente")
     .min(1, "Seleccione un cliente válido"),
   customerName: yup.string().nullable().default(""),
+
+  // Campos de cliente
+  firstName: yup.string().required("El nombre es obligatorio"),
+  lastName: yup.string().required("Los apellidos son obligatorios"),
+  email: yup.string().email("Correo inválido").required("El correo es obligatorio"),
+  phone: yup.string().required("El teléfono es obligatorio"),
+  address: yup.string().required("La dirección es obligatoria"),
+
+  // Fecha y hora
   date: yup
     .string()
     .required("La fecha es obligatoria")
@@ -38,7 +57,9 @@ export const ReservationSchema = yup.object().shape({
   hour: yup
     .string()
     .required("La hora es obligatoria")
-    .matches(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, "Formato: HH:mm:ss"),
+    .matches(/^([0-1]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/, "Formato: HH:mm o HH:mm:ss"),
+
+  // Estado
   status: yup
     .string()
     .oneOf(["P", "C", "X"], "Estado inválido")

@@ -8,14 +8,14 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
 export default function ReservationPage() {
-  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedDateISO, setSelectedDateISO] = useState<string>("");
+  const [selectedDateDisplay, setSelectedDateDisplay] = useState<string>("");
 
   const handleDateSelect = (date: string) => {
-    // La solución está aquí:
-    // Creamos la fecha directamente con la zona horaria local para evitar el desfase
+    setSelectedDateISO(date); // para backend
     const selected = new Date(date + "T00:00:00");
     const formattedDate = format(selected, "d 'de' MMMM", { locale: es });
-    setSelectedDate(formattedDate);
+    setSelectedDateDisplay(formattedDate); // para UI mostrar
   };
 
   return (
@@ -32,7 +32,10 @@ export default function ReservationPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <ReservationCalendar onDateSelect={handleDateSelect} />
-          <ReservationForm selectedDate={selectedDate} />
+          <ReservationForm 
+            selectedDateISO={selectedDateISO} 
+            selectedDateDisplay={selectedDateDisplay} 
+          />
         </div>
       </Container>
     </div>
