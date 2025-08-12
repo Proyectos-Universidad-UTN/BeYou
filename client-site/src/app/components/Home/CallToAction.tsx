@@ -8,7 +8,15 @@ export default function CourseCallToAction() {
   const router = useRouter();
 
   return (
-    <section className="py-20 text-center bg-gradient-to-r from-[#F7A8D3] to-[#7B68EE] text-white">
+    <section
+      className="py-20 text-center text-white"
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(247,168,211,0.6), rgba(123,104,238,0.6)), url('/assets/fondo.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <Container maxWidth="lg">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
           ¡Capacítate y domina el arte de las uñas!
