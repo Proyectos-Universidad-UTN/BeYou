@@ -2,6 +2,7 @@
 
 import { Container, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { ROUTES } from "@/navigation/Routes";
 
 const products = [
@@ -9,22 +10,22 @@ const products = [
     id: 1,
     name: "Kit de Uñas Deluxe",
     description: "Todo lo que necesitas para un look profesional en casa.",
-    price: "$45.00",
-    imageUrl: "https://placehold.co/400x300/F4D7DF/523249?text=Producto+1",
+    price: "₡ 15000.00",
+    imageUrl: "/assets/producto1.jpg",
   },
   {
     id: 2,
     name: "Esmalte de Larga Duración",
     description: "Colores vibrantes que resisten el paso del tiempo.",
-    price: "$12.50",
-    imageUrl: "https://placehold.co/400x300/F4D7DF/523249?text=Producto+2",
+    price: "₡ 2000.00",
+    imageUrl: "/assets/producto2.jpg",
   },
   {
     id: 3,
     name: "Crema Hidratante",
     description: "Nutre e hidrata tu piel con nuestra fórmula exclusiva.",
-    price: "$25.00",
-    imageUrl: "https://placehold.co/400x300/F4D7DF/523249?text=Producto+3",
+    price: "₡ 2500.00",
+    imageUrl: "/assets/producto3.jpg",
   },
 ];
 
@@ -38,7 +39,8 @@ export default function ProductsSection() {
           Productos Destacados
         </h2>
         <p className="text-gray-600 mb-12 max-w-2xl mx-auto">
-          Descubre nuestra línea de productos exclusivos, diseñados para el cuidado personal.
+          Descubre nuestra línea de productos exclusivos, diseñados para el
+          cuidado personal.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {products.map((product) => (
@@ -46,11 +48,19 @@ export default function ProductsSection() {
               key={product.id}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="w-full h-48 object-cover"
-              />
+              <div className="relative w-full overflow-hidden">
+                <Image
+                  src={product.imageUrl}
+                  alt={product.name}
+                  width={400}
+                  height={300}
+                  style={{
+                    objectFit: "contain",
+                    transition: "transform 0.3s ease",
+                  }}
+                  className="hover:scale-110"
+                />
+              </div>
               <div className="p-6 text-left">
                 <h3 className="text-xl font-semibold text-[#523249]">
                   {product.name}
@@ -62,13 +72,7 @@ export default function ProductsSection() {
                   <span className="text-2xl font-bold text-purple-600">
                     {product.price}
                   </span>
-                  <Button
-                    variant="contained"
-                    onClick={() => router.push(ROUTES.PRODUCTOS)}
-                    sx={{ bgcolor: "#7B68EE", "&:hover": { bgcolor: "#6a5ad6" } }}
-                  >
-                    Comprar
-                  </Button>
+                 
                 </div>
               </div>
             </div>

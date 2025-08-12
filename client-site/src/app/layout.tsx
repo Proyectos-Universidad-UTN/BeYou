@@ -1,6 +1,9 @@
+// src/app/layout.tsx
+import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import QueryProvider from "./QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,21 +16,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BeYou Spa",
+  title: "BeYou",
   description: "Tu espacio para la belleza y el bienestar",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <QueryProvider>{children}</QueryProvider>
 
         {/* Botón flotante de WhatsApp */}
         <a
@@ -36,6 +35,7 @@ export default function RootLayout({
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all duration-300"
         >
+          {/* SVG icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="28"

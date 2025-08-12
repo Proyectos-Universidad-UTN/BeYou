@@ -28,29 +28,29 @@ const arrayWrapperMiddleware: Middleware = async (url, init, next) => {
 };
 
 export const UseTypedApiClientBY = <
-    PathT extends keyof paths,
-    MethodT extends keyof paths[PathT],
+  PathT extends keyof paths,
+  MethodT extends keyof paths[PathT],
 >({
-    path,
-    method,
-    disableAuth = false,
+  path,
+  method,
+  disableAuth = false,
+  token,
 }: {
-    path: PathT;
-    method: MethodT;
-    disableAuth?: boolean;
+  path: PathT;
+  method: MethodT;
+  disableAuth?: boolean;
+  token?: string;
 }): TypedFetch<paths[PathT][MethodT]> => {
-    const {getAccessToken} = useTokenStore();
-    const fetcher = Fetcher.for<paths>();
-    fetcher.configure({
-        baseUrl: process.env.NEXT_PUBLIC_API_BEYOU_BASE_URL,
-        init: {
-            headers: getHeaders(disableAuth, getAccessToken() ?? ''),
-        },
-        use: [arrayWrapperMiddleware, createAuthMiddleware(process.env.NEXT_PUBLIC_API_BEYOU_BASE_URL!)],
-        
-    });
+  const fetcher = Fetcher.for<paths>();
+  fetcher.configure({
+    baseUrl: process.env.NEXT_PUBLIC_API_BEYOU_BASE_URL,
+    init: {
+      headers: getHeaders(disableAuth, token ?? ''),
+    },
+    use: [arrayWrapperMiddleware, createAuthMiddleware(process.env.NEXT_PUBLIC_API_BEYOU_BASE_URL!)],
+  });
 
-    return fetcher.path(path).method(method).create({}) as TypedFetch<paths[PathT][MethodT]>;
+  return fetcher.path(path).method(method).create({}) as TypedFetch<paths[PathT][MethodT]>;
 };
 
 export const castRequestBody = <
