@@ -13,7 +13,7 @@ export default function Hero() {
       className="relative h-[60vh] md:h-[80vh] flex flex-col justify-center items-center text-center px-4 overflow-hidden"
       style={{
         backgroundImage:
-          "linear-gradient(to right, rgba(247,168,211,0.6), rgba(123,104,238,0.6)), url('/assets/fondo2.jpg')",
+          "linear-gradient(to right, rgba(247,168,211,0.6), rgba(123,104,238,0.6)), url('/assets/fondo2.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
